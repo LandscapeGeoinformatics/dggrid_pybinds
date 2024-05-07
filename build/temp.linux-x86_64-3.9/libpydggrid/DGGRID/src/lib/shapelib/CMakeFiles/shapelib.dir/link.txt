@@ -1,0 +1,1 @@
+/usr/bin/cc -fPIC -O3 -DNDEBUG -shared -Wl,-soname,libshapelib.so -o ../../../../../../lib.linux-x86_64-3.9/libshapelib.so CMakeFiles/shapelib.dir/lib/dbfopen.c.o CMakeFiles/shapelib.dir/lib/safileio.c.o CMakeFiles/shapelib.dir/lib/sbnsearch.c.o CMakeFiles/shapelib.dir/lib/shpopen.c.o CMakeFiles/shapelib.dir/lib/shptree.c.o CMakeFiles/shapelib.dir/lib/shputils.c.o 

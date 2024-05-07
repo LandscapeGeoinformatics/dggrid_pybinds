@@ -1,0 +1,71 @@
+# MakeIncludes
+# Version 7.1 - Kevin Sahr, 3/15/21
+
+### this flag controls whether or not DGGRID will use GDAL
+# set to TRUE or FALSE
+BUILD_WITH_GDAL = TRUE
+#BUILD_WITH_GDAL = FALSE
+
+###### if BUILD_WITH_GDAL is FALSE you shouldn't need to 
+######      change below this line
+
+# set the gdal library and header file locations if using GDAL
+ifeq ($(BUILD_WITH_GDAL),TRUE)
+   ### these GDAL location variables must be correctly set ###
+   # location of GDAL header files
+   GDAL_HDR_DIR = /opt/local/include
+   #GDAL_HDR_DIR = /usr/include/gdal
+
+   # full path to the libgdal library file
+   # we advise using a shared library (.so, .dylib, etc.)
+   GDAL_LIB = /opt/local/lib/libgdal.dylib
+   #GDAL_LIB = /usr/lib/libgdal.so
+
+   # Note: Some users have reported problems trying to build with gdal 
+   # libraries installed by other software systems. If you have problems
+   # we advise installing the library directly from gdal.org (on MacOS 
+   # we recommend installing via MacPorts.org or brew.sh).
+
+###### you shouldn't need to change below this line ######
+   # this flag sets the conditional compilation
+   GDAL_FLAG = -DUSE_GDAL
+   # format the locations for use in building
+   GDAL_ADD_INC = -I$(GDAL_HDR_DIR)
+else
+   # not using GDAL, leave blank
+   GDAL_HDR_DIR =
+   GDAL_LIB =
+   GDAL_FLAG =
+   GDAL_ADD_INC =
+endif
+
+### most users won't need to change anything below ###
+
+# compilers
+CCOMP = gcc 
+CPPCOMP = g++ 
+
+# flags for debugging vs. production
+DEBUG_CC_FLAGS = -g -O0 -Wall -fno-inline -fno-eliminate-unused-debug-types -W
+DEBUG_VERBOSE_CC_FLAGS = -g -O0 -Wall -fno-inline -fno-eliminate-unused-debug-types -pedantic -Wimplicit-fallthrough -W -Wextra
+MEMCHECK_CC_FLAGS = -g -O1 -fsanitize=undefined -fno-omit-frame-pointer -fsanitize=address -Wall -pedantic
+SHIP_CC_FLAGS = -O3 -Wall -pedantic
+
+# choose which to use; comment out the ones you don't want
+ADD_CC_FLAGS = $(SHIP_CC_FLAGS)
+#ADD_CC_FLAGS = $(DEBUG_CC_FLAGS)
+#ADD_CC_FLAGS = $(MEMCHECK_CC_FLAGS)
+#ADD_CC_FLAGS = -g -O0 -Wall -W -fsanitize=undefined -fno-omit-frame-pointer -fsanitize=address -Wall -pedantic
+
+### the variables below are used by the Makefiles ###
+# any extra C++ flags
+ADD_CPP_FLAGS = $(ADD_CC_FLAGS) $(GDAL_FLAG) -std=c++11
+
+# external include search paths 
+ADD_INC_DIRS = $(GDAL_ADD_INC)
+
+# external libraries to link when linking a standard dglib executable
+ADD_LD_LIBS = $(GDAL_LIB) 
+#ADD_LD_LIBS = $(GDAL_LIB) $(MEMCHECK_CC_FLAGS)
+
+DOMAKE = $(MAKE) -f Makefile.noCMake

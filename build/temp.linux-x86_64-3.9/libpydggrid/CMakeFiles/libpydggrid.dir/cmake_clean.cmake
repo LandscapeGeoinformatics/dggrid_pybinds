@@ -1,0 +1,35 @@
+file(REMOVE_RECURSE
+  "../../lib.linux-x86_64-3.9/libpydggrid.cpython-39-x86_64-linux-gnu.so"
+  "../../lib.linux-x86_64-3.9/libpydggrid.pdb"
+  "CMakeFiles/libpydggrid.dir/main.cpp.o"
+  "CMakeFiles/libpydggrid.dir/main.cpp.o.d"
+  "CMakeFiles/libpydggrid.dir/src/library.cpp.o"
+  "CMakeFiles/libpydggrid.dir/src/library.cpp.o.d"
+  "CMakeFiles/libpydggrid.dir/src/pydggrid/DgHexSF.cpp.o"
+  "CMakeFiles/libpydggrid.dir/src/pydggrid/DgHexSF.cpp.o.d"
+  "CMakeFiles/libpydggrid.dir/src/pydggrid/OpBasic.cpp.o"
+  "CMakeFiles/libpydggrid.dir/src/pydggrid/OpBasic.cpp.o.d"
+  "CMakeFiles/libpydggrid.dir/src/pydggrid/SubOpBasic.cpp.o"
+  "CMakeFiles/libpydggrid.dir/src/pydggrid/SubOpBasic.cpp.o.d"
+  "CMakeFiles/libpydggrid.dir/src/pydggrid/SubOpBasicMulti.cpp.o"
+  "CMakeFiles/libpydggrid.dir/src/pydggrid/SubOpBasicMulti.cpp.o.d"
+  "CMakeFiles/libpydggrid.dir/src/pydggrid/SubOpDGG.cpp.o"
+  "CMakeFiles/libpydggrid.dir/src/pydggrid/SubOpDGG.cpp.o.d"
+  "CMakeFiles/libpydggrid.dir/src/pydggrid/SubOpGen.cpp.o"
+  "CMakeFiles/libpydggrid.dir/src/pydggrid/SubOpGen.cpp.o.d"
+  "CMakeFiles/libpydggrid.dir/src/pydggrid/SubOpGenHelper.cpp.o"
+  "CMakeFiles/libpydggrid.dir/src/pydggrid/SubOpGenHelper.cpp.o.d"
+  "CMakeFiles/libpydggrid.dir/src/pydggrid/SubOpIn.cpp.o"
+  "CMakeFiles/libpydggrid.dir/src/pydggrid/SubOpIn.cpp.o.d"
+  "CMakeFiles/libpydggrid.dir/src/pydggrid/SubOpMain.cpp.o"
+  "CMakeFiles/libpydggrid.dir/src/pydggrid/SubOpMain.cpp.o.d"
+  "CMakeFiles/libpydggrid.dir/src/pydggrid/SubOpOut.cpp.o"
+  "CMakeFiles/libpydggrid.dir/src/pydggrid/SubOpOut.cpp.o.d"
+  "CMakeFiles/libpydggrid.dir/src/pydggrid/clipper.cpp.o"
+  "CMakeFiles/libpydggrid.dir/src/pydggrid/clipper.cpp.o.d"
+)
+
+# Per-language clean rules from dependency scanning.
+foreach(lang CXX)
+  include(CMakeFiles/libpydggrid.dir/cmake_clean_${lang}.cmake OPTIONAL)
+endforeach()

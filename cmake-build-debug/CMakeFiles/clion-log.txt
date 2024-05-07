@@ -1,0 +1,5 @@
+/opt/clion/bin/cmake/linux/bin/cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_MAKE_PROGRAM=/opt/clion/bin/ninja/linux/ninja -G Ninja /opt/source/ut/libpydggrid
+-- pybind11 v2.13.0 dev1
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /opt/source/ut/libpydggrid/cmake-build-debug

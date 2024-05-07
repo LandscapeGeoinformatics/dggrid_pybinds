@@ -1,0 +1,62 @@
+# Prerequisites
+*.d
+*.depends
+
+# Build directory
+build/
+
+# Compiled Object files
+*.slo
+*.lo
+*.o
+*.obj
+
+# Precompiled Headers
+*.gch
+*.pch
+
+# Compiled Dynamic libraries
+*.so
+*.dylib
+*.dll
+
+# Fortran module files
+*.mod
+*.smod
+
+# Compiled Static libraries
+*.lai
+*.la
+*.a
+*.lib
+
+# Executables
+*.exe
+*.out
+*.app
+src/apps/appex/appex
+src/apps/dggrid/dggrid
+src/apps/dgglife/dgglife
+src/apps/liferfs/liferfs
+src/apps/oglhier/oglhier
+src/apps/oglhierdgg/oglhierdgg
+
+# examples output files
+examples*/*/outputfiles/*
+!examples*/*/outputfiles/.keep
+
+# miscellaneous
+g
+gg
+g2
+g1
+out
+goop
+JUNK
+junk
+.*.swp
+.DS_Store
+.gdb_history
+
+.idea/
+cmake-build-debug/

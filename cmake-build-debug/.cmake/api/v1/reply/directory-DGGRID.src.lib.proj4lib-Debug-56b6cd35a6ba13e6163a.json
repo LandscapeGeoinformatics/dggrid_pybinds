@@ -1,0 +1,14 @@
+{
+	"backtraceGraph" : 
+	{
+		"commands" : [],
+		"files" : [],
+		"nodes" : []
+	},
+	"installers" : [],
+	"paths" : 
+	{
+		"build" : "DGGRID/src/lib/proj4lib",
+		"source" : "DGGRID/src/lib/proj4lib"
+	}
+}
