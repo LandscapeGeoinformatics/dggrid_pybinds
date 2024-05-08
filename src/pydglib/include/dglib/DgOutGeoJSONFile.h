@@ -66,7 +66,11 @@ class DgOutGeoJSONFile : public DgOutLocTextFile
 
     std::vector<unsigned char> getData() override
     {
-        postamble();
+        if (!this->postAmbled)
+        {
+            postamble();
+            this->postAmbled = true;
+        }
         return DgOutLocTextFile::getData();
     }
 
@@ -85,7 +89,7 @@ class DgOutGeoJSONFile : public DgOutLocTextFile
       }
 
    private:
-
+        bool postAmbled = false;
       // GeoJSON helpers:
       void preamble();
       void postamble();

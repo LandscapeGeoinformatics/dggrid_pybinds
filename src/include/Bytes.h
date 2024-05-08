@@ -169,6 +169,7 @@ namespace pydggrid
                 memcpy(stringData, elements.data(), stringSize);
                 stringData[stringSize] = '\0';
                 std::string stringElement(stringData);
+                std::cout << stringElement << std::endl;
                 this->index += stringSize;
                 return stringElement;
             }

@@ -1,6 +1,15 @@
+# Version 0.0.2
 # Change Log
 
-- 0.0.1 Initial Release
+- 0.0.1 
+  - Initial Release
+
+
+- 0.0.2
+  - gridgenCellClip, gridgenDiamond, gridgenPureKML unit tests
+  - geojson and kml postamble fixes
+  - various bugfixes
+
 
 # Installation
 
@@ -43,5 +52,8 @@ Tested Meta Files
 - grigenGeoJSON
 - seqnums
 - z3Nums
+- gridgenCellClip
+- gridgenDiamond
+- gridgenPureKML
 
 ** This library has not been tested with MacOS systems

@@ -79,23 +79,28 @@ class Object:
             else:
                 self._data = geopandas.GeoDataFrame()
         elif read_mode == ReadMode.SHAPEFILE:
-            index: int = 0
             shape_file: str = ""
             ext_array: List[str] = ["shp", "dbf", "prj", "sbn", "sbx", "shx"]
+            # noinspection PyUnresolvedReferences,PyProtectedMember
+            temp_file = os.path.join(tempfile.gettempdir(), f"{next(tempfile._get_candidate_names())}")
             for extension in ext_array:
-                # noinspection PyUnresolvedReferences,PyProtectedMember
-                temp_file = os.path.join(tempfile.gettempdir(), f"{next(tempfile._get_candidate_names())}")
                 extension = "".join([chr(c) for c in data[0:3]])
                 file_name: str = f"{temp_file}.{extension}"
                 shape_file = file_name if extension == "shp" else shape_file
                 data = data[3:]
                 #
+                byte_size: int = int.from_bytes(bytearray(data[:4]), "little")
+                data = data[4:]
+                #
                 file = open(file_name, "wb")
-                file.write(bytearray(data[3:]))
+                file.write(bytearray(data[:byte_size]))
                 file.close()
                 print(file_name)
-            print(shape_file)
-            sys.exit(0)
+                data = data[byte_size:]
+            self._type = geopandas.GeoDataFrame
+            self._data = geopandas.GeoDataFrame.from_file(shape_file)
+            self._data = self._data.rename(columns ={"global_id": "id"})
+            self._text = str(self._data)
         elif read_mode == ReadMode.NONE:
             return
         else:

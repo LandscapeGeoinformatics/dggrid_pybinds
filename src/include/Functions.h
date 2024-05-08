@@ -212,7 +212,6 @@ namespace pydggrid::Functions
             char b;
             std::vector<unsigned char> elements;
             std::ifstream in(filename, std::ios::binary);
-            std::cout << std::filesystem::file_size(filename) << std::endl;
             if(in.is_open())
             {
                 while(in.good())

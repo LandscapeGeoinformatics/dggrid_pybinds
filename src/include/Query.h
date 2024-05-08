@@ -66,8 +66,8 @@ namespace pydggrid
                 this->operation->cleanup();
                 if (this->isOutFile("cell"))
                     { this->response["cells"] = this->getData("cell"); }
-                if (this->isOutFile("points"))
-                    { this->response["point"] = this->getData("point"); }
+                if (this->isOutFile("point"))
+                    { this->response["points"] = this->getData("point"); }
                 if (this->isOutFile("collection"))
                     { this->response["collection"] = this->getData("collection"); }
                 //
@@ -392,7 +392,7 @@ namespace pydggrid
                 std::string file_f = Functions::string_format("%s_output_file_name", vectorID.c_str());
                 if (this->parameters.find(field_f) != this->parameters.end())
                 {
-                    return Functions::readBinary(file_f.c_str());
+                    return Functions::readBinary(this->parameters[file_f].c_str());
                 }
                 //
                 field_f = Functions::string_format("%s_output_type", vectorID.c_str());

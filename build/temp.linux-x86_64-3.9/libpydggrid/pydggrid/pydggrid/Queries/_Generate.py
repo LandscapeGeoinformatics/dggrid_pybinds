@@ -3,10 +3,10 @@ from typing import Any, List, Dict
 
 import libpydggrid
 
-from pydggrid.Input import Auto, InputTemplate, Sequence, ShapeFile, Array, GDAL, AIGen
+from pydggrid.Input import Auto, InputTemplate, Sequence, ShapeFile, Array, GDAL, AIGen, Cells
 from pydggrid.Objects import Collection
 from pydggrid.Types import Operation, ClipType, ReadMode, CellOutput, ChildrenOutput, NeighborOutput, \
-    GDALFormat, PointOutput
+    InputAddress, PointOutput
 from pydggrid.Queries._Custom import Query as BaseQuery
 
 
@@ -75,6 +75,8 @@ class Query(BaseQuery):
                 self.clip = GDAL()
             elif type_t == ClipType.AIGEN:
                 self.clip = AIGen()
+            elif type_t == ClipType.COARSE_CELLS:
+                self.clip = Cells()
             else:
                 raise AttributeError(f"Requested clip type({clip_type}) is not supported")
         self.Meta.save("clip_subset_type", clip_type)
@@ -87,6 +89,7 @@ class Query(BaseQuery):
         Runs a unit test to pybinds11 layer
         :return: Test response string
         """
+        self._alter_payload()
         return libpydggrid.UnitTest_ReadPayload(self.Meta.dict(), self.clip.__bytes__())
 
     # Override
@@ -96,6 +99,7 @@ class Query(BaseQuery):
         Runs a unit test to pybinds11 layer
         :return: Test response string
         """
+        self._alter_payload()
         dictionary: Dict[str, str] = self.Meta.dict()
         payload: bytearray = bytearray(self.clip.__bytes__())
         return libpydggrid.UnitTest_ReadQuery(dictionary, list(payload))
@@ -107,6 +111,7 @@ class Query(BaseQuery):
         Runs a unit test to pybinds11 layer
         :return: Test response string
         """
+        self._alter_payload()
         dictionary: Dict[str, str] = self.Meta.dict()
         payload: bytearray = bytearray(self.clip.__bytes__())
         return libpydggrid.UnitTest_RunQuery(dictionary, list(payload))
@@ -118,6 +123,7 @@ class Query(BaseQuery):
         :param byte_data byte payload, if left blank Input.__bytes__() will be used
         :return: None
         """
+        self._alter_payload()
         byte_data: Dict[str, bytes] = super().exec(self.clip.__bytes__())
         self.cells.save(byte_data["cells"], self._read_mode("cells"))
         self.points.save(byte_data["points"], self._read_mode("points"))
@@ -168,3 +174,14 @@ class Query(BaseQuery):
 
         if self.Meta.as_int("cell_output_type") == PointOutput.GDAL:
             self.Meta.set_default("cell_output_gdal_format")
+
+    def _alter_payload(self) -> None:
+        """
+        Makes final changes to the parameter payload
+        :return: None
+        """
+        if self.Meta.as_int("clip_subset_type") == ClipType.COARSE_CELLS:
+            # noinspection PyUnresolvedReferences
+            self.Meta.save("clip_cell_addresses", " ".join([str(n) for n in self.clip.data]))
+            self.Meta.save("input_address_type", InputAddress.SEQNUM)
+

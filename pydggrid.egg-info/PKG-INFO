@@ -9,6 +9,7 @@ License: UNKNOWN
 Platform: UNKNOWN
 Requires-Python: >=3.7
 Provides-Extra: test
+License-File: LICENSE
 
 UNKNOWN
 

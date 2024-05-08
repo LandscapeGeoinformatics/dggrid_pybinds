@@ -302,6 +302,12 @@ class Template(ABC):
                          data_options=Options(ClipType),
                          data_default=ClipType.WHOLE_EARTH,
                          on_verify=None)
+        # clip_subset_type
+        self.Meta.define(name="clip_cell_addresses",
+                         data_type=str,
+                         data_options=None,
+                         data_default="",
+                         on_verify=None)
         # clip_cell_densification
         self.Meta.define(name="clip_cell_densification",
                          data_type=int,

@@ -61,7 +61,11 @@ class DgOutKMLfile : public DgOutLocTextFile
 
       std::vector<unsigned char> getData() override
       {
-          postamble();
+          if (!this->postAmbled)
+          {
+              postamble();
+              this->postAmbled = true;
+          }
           return DgOutLocTextFile::getData();
       }
 
@@ -99,6 +103,7 @@ class DgOutKMLfile : public DgOutLocTextFile
       int width_;
       string name_;
       string description_;
+      bool postAmbled = false;
 
    private:
 

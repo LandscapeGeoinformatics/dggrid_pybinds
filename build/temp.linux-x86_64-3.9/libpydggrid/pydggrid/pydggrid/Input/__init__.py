@@ -9,6 +9,7 @@ from pydggrid.Input._ShapeFIle import Input as ShapeFileInput
 from pydggrid.Input._GeoJSON import Input as GeoJSONInput
 from pydggrid.Input._GDAL import Input as GDALInput
 from pydggrid.Input._AIGen import Input as AIGenInput
+from pydggrid.Input._Cells import Input as CellTemplate
 from pydggrid.Input._Template import Template as InputTemplate
 
 
@@ -49,4 +50,8 @@ class AIGen(AIGenInput):
 
 
 class Template(InputTemplate, ABC):
+    pass
+
+
+class Cells(CellTemplate):
     pass
