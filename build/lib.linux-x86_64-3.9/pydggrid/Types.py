@@ -44,6 +44,7 @@ class DataType(TypeDef):
     BINARY = 4
     STRING = 5
     SHAPE_BINARY = 6
+    GDAL_GEOJSON = 7
 
     @classmethod
     def from_type(cls, input_type: type) -> Any:

@@ -1,5 +1,6 @@
 import os.path
 import pathlib
+import sys
 from typing import List, Tuple, Any
 
 import geopandas
@@ -101,8 +102,11 @@ class Input(InputTemplate):
         :param data: List of integers
         :return: None
         """
+        self.records.clear()
+        blocks: List[str] = list([])
         self.data.append([str(n) for n in data])
-        self.records.save(self.data[len(self.data) - 1], DataType.STRING)
+        [blocks.extend([str(n) for n in x]) for x in self.data]
+        self.records.save(os.linesep.join(blocks), DataType.STRING)
 
     def save_numpy(self, data: numpy.ndarray, column: [int, None] = None) -> None:
         """

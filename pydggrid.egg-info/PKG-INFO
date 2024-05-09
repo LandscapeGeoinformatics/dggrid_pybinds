@@ -1,7 +1,7 @@
 Metadata-Version: 2.1
 Name: pydggrid
-Version: 0.0.1
-Summary: A test project using pybind11 and CMake
+Version: 0.0.2
+Summary: DGGRID Adaptation for python using pybind11.
 Home-page: UNKNOWN
 Author: Qbist
 Author-email: q@arqimedes

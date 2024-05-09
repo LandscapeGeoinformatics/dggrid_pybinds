@@ -38,9 +38,11 @@ DgInLocStreamFile::DgInLocStreamFile(const DgRFBase& rfIn,
     this->DATA.resize(array.size());
     this->DATA.assign(array.begin(), array.end());
    if (fileNameIn)
-      if (!open(NULL, DgBase::Silent))
+      if (!open(NULL, DgBase::Silent) && this->DATA.empty())
+      {
          report("DgInLocStreamFile::DgInLocStreamFile() unable to open file " +
                 fileName_, failLevel);
+      }
 
 } // DgInLocStreamFile::DgInLocStreamFile
 

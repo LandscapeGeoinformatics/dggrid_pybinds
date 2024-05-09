@@ -1,14 +1,19 @@
 # Version 0.0.2
 # Change Log
 
-- 0.0.1 
+- **0.0.3**
+  - UnitTests - hiRes, holes, icosahedron
+  - GDAL GeoJSON File fix
+
+- **0.0.2**
+    - gridgenCellClip, gridgenDiamond, gridgenPureKML unit tests
+    - Cells input object
+    - geojson and kml postamble fixes
+    - various bugfixes
+
+
+- **0.0.1** 
   - Initial Release
-
-
-- 0.0.2
-  - gridgenCellClip, gridgenDiamond, gridgenPureKML unit tests
-  - geojson and kml postamble fixes
-  - various bugfixes
 
 
 # Installation

@@ -287,11 +287,25 @@ namespace pydggrid
                     }
                     if ((this->getDataType(index) == Constants::DataTypes::STRING))
                     {
+                        bool isGdal = (this->parameters.find("clip_subset_type") != this->parameters.end()) &&
+                                        (this->parameters["clip_subset_type"] == "GDAL");
                         Bytes bytes(this->bin[index]);
-                        std::vector<std::string> elements = Functions::split(bytes.getString(), "\n");
-                        std::string enumID = "STR-" + std::to_string((index + 1));
-                        this->streams.insert({enumID, std::vector<std::string>{elements}});
-                        this->REGF.emplace_back(enumID);
+                        if (!isGdal)
+                        {
+                            std::vector<std::string> elements = Functions::split(bytes.getString(), "\n");
+                            std::string enumID = "STR-" + std::to_string((index + 1));
+                            this->streams.insert({enumID, std::vector<std::string>{elements}});
+                            this->REGF.emplace_back(enumID);
+                        }
+                        else
+                        {
+                            std::string fileName = this->tmpFile();
+                            std::vector<unsigned char> fileData = bytes.getBytes();
+                            Functions::writeBinary(fileName.c_str(),
+                                                   fileData.data(),
+                                                   fileData.size());
+                            this->parameters["clip_region_files"] = fileName;
+                        }
                     }
                 }
             }
@@ -424,7 +438,7 @@ namespace pydggrid
                     bytes.insert(bytes.end(), byteData.begin(), byteData.end());
                 }
                 return {bytes};
-            }
+            };
 
             /**
              * returns output type based on data index

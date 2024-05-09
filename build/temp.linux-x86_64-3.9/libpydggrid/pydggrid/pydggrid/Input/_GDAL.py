@@ -16,7 +16,7 @@ class Input(InputTemplate):
         self._root: InputTemplate = ShapeInput()
         self.data: List[geopandas.GeoDataFrame] = list([])
 
-    def geojson(self, geo_json: Any) -> None:
+    def geo_json(self, geo_json: Any) -> None:
         """
         Reads geojson into memory
         :param geo_json: GeoJSON object this can be any of the following objects:
