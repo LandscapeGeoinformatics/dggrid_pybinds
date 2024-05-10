@@ -133,6 +133,7 @@ pybind11::dict RunQuery(const pybind11::dict& dictionary,
     dict["cells"] = query.getResponse("cells");
     dict["points"] = query.getResponse("points");
     dict["collection"] = query.getResponse("collection");
+    dict["meta"] = query.getResponse("meta");
     return dict;
 }
 

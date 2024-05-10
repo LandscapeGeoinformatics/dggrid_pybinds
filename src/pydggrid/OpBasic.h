@@ -60,6 +60,7 @@ struct OpBasic : public DgApOperationPList {
    SubOpIn inOp;
    SubOpOut outOp;
    SubOpBasicMulti* primarySubOp;
+   std::string metaResponse;
    std::map<std::string, std::vector<std::string> > stringStreamData{};
 };
 

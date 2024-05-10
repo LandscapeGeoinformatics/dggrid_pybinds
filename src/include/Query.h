@@ -56,6 +56,7 @@ namespace pydggrid
             {
                 this->operation->initialize();
                 this->operation->execute();
+                this->response["meta"] = this->metaBin();
                 this->response["cells"] = this->operation->outOp.getCells();
                 this->response["points"] = this->operation->outOp.getPoints();
                 this->response["collection"] = this->operation->outOp.getCollection();
@@ -195,6 +196,19 @@ namespace pydggrid
             std::vector<std::string> REGF; // region registration set
             std::vector<std::string> IOGC; // I/o garbage collection
             std::map<std::string, std::vector<std::string> > streams;
+
+            /**
+             * Returns the meta response data as a byte array
+             * @return  Meta Data vector
+             */
+            std::vector<unsigned char> metaBin()
+            {
+                std::vector<unsigned char> elements;
+                elements.insert(elements.begin(),
+                                this->operation->metaResponse.begin(),
+                                this->operation->metaResponse.end());
+                return elements;
+            }
 
             /**
              * Returns data type label

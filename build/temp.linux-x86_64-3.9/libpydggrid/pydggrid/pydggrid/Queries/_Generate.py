@@ -28,6 +28,7 @@ class Query(BaseQuery):
         self.cells: Collection = Collection()
         self.points: Collection = Collection()
         self.collection: Collection = Collection()
+        self.dgg_meta: str = ""
         self.set_clip(ClipType.WHOLE_EARTH)
         # Set defaults
         self.Meta.set_default("clip_cell_densification")
@@ -125,6 +126,7 @@ class Query(BaseQuery):
         """
         self._alter_payload()
         byte_data: Dict[str, bytes] = super().exec(self.clip.__bytes__())
+        self.dgg_meta = bytearray(byte_data["meta"]).decode() if "meta" in byte_data else ""
         self.cells.save(byte_data["cells"], self._read_mode("cells"))
         self.points.save(byte_data["points"], self._read_mode("points"))
         self.collection.save(byte_data["collection"], self._read_mode("collection"))

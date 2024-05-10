@@ -190,13 +190,18 @@ SubOpBasicMulti::execute (bool force) {
       // perform the metafile output if needed; all other output files have been
       // created by the outOp
 
-      if (op.dggOp.numGrids > 1 || op.dggOp.placeRandom) {
-         ofstream metaOutFile;
-         metaOutFile.open(op.outOp.metaOutFileName.c_str());
-         metaOutFile.setf(ios::fixed, ios::floatfield);
-         metaOutFile.precision(12);
-         metaOutFile << pList();
-         metaOutFile.close();
+      if (op.dggOp.numGrids > 1 || op.dggOp.placeRandom)
+      {
+          std::stringstream stream;
+          stream.precision(12);
+          stream << pList();
+          op.metaResponse = stream.str();
+//         ofstream metaOutFile;
+//         metaOutFile.open(op.outOp.metaOutFileName.c_str());
+//         metaOutFile.setf(ios::fixed, ios::floatfield);
+//         metaOutFile.precision(12);
+//         metaOutFile << pList();
+//         metaOutFile.close();
       }
 
       // now do the operation using the current grid

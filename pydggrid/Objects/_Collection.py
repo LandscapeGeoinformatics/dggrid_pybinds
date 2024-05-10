@@ -15,10 +15,11 @@ from shapely.geometry import shape, mapping
 
 from pydggrid.Types import ReadMode
 
-fiona.drvsupport.supported_drivers['kml'] = 'rw' # enable KML support which is disabled by default
-fiona.drvsupport.supported_drivers['KML'] = 'rw' # enable KML support which is disabled by default
+fiona.drvsupport.supported_drivers['kml'] = 'rw'  # enable KML support which is disabled by default
+fiona.drvsupport.supported_drivers['KML'] = 'rw'  # enable KML support which is disabled by default
 pandas.set_option('display.max_columns', None)
 pandas.set_option('display.max_rows', None)
+
 
 class Object:
 
@@ -99,7 +100,7 @@ class Object:
                 data = data[byte_size:]
             self._type = geopandas.GeoDataFrame
             self._data = geopandas.GeoDataFrame.from_file(shape_file)
-            self._data = self._data.rename(columns ={"global_id": "id"})
+            self._data = self._data.rename(columns={"global_id": "id"})
             self._text = str(self._data)
         elif read_mode == ReadMode.NONE:
             return

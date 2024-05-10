@@ -5,7 +5,7 @@ import sys
 import textwrap
 import time
 from abc import ABC, abstractmethod
-from typing import List, Any, Dict, TextIO, Callable
+from typing import List, Any, Dict, TextIO
 
 import libpydggrid
 

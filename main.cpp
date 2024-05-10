@@ -7,40 +7,45 @@ int main()
     std::string hexString = pydggrid::Functions::readString(shapeFile_test);
     pydggrid::Bytes bytes(hexString.c_str());
     std::map<std::string, std::string> parameters;
-    // # ################################################################################
-    //# #
-    //# # holes.meta - example of a DGGRID metafile that generates a ISEA3H
-    //# #     resolution 17 grid using an input clipping polygon with holes.
-    //# #
-    //# # Kevin Sahr, 06/20/22
-    //# #
-    //# ################################################################################
-    //#
+    // #
     //# # specify the operation
     //# dggrid_operation GENERATE_GRID
     //#
     //# # specify the DGG
     //# dggs_type ISEA3H
-    //# dggs_res_spec 17
+    //# dggs_res_spec 2
     //#
     //# # control the generation
-    //# clip_subset_type GDAL
-    //# clip_region_files ./inputfiles/holes00.geojson
-    //# clip_using_holes TRUE
-    //# geodetic_densify 0.01
+    //# clip_subset_type WHOLE_EARTH
+    //# geodetic_densify 0.0
+    //#
+    //# # create four orientations randomly
+    //# dggs_num_placements 4
+    //# dggs_orient_specify_type RANDOM
+    //# dggs_orient_rand_seed 1013
+    //# dggs_orient_output_file_name outputfiles/isea3h2.meta
     //#
     //# # specify the output
+    //# max_cells_per_output_file 50
     //# cell_output_type KML
-    //# cell_output_file_name ./outputfiles/res17
-    //# densification 1
-    //
+    //# cell_output_file_name outputfiles/isea3h2
+    //# point_output_type KML
+    //# point_output_file_name outputfiles/isea3h2p
+    //# kml_default_width 2
+    //# kml_default_color ff0000ff
+    //# precision 5
     parameters["dggrid_operation"] = "GENERATE_GRID";
     parameters["dggs_type"] = "ISEA3H";
-    parameters["dggs_res_spec"] = "17";
-    parameters["clip_subset_type"] = "GDAL";
-    parameters["clip_using_holes"] = "TRUE";
-    parameters["geodetic_densify"] = "0.01";    
+    parameters["dggs_res_spec"] = "2";
+    parameters["clip_subset_type"] = "WHOLE_EARTH";
+    parameters["geodetic_densify"] = "0.00";
+    parameters["dggs_num_placements"] = "4";
+    parameters["dggs_orient_specify_type"] = "RANDOM";
+    parameters["dggs_orient_rand_seed"] = "1013";
+    parameters["max_cells_per_output_file"] = "50";
     parameters["cell_output_type"] = "KML";
+    parameters["point_output_type"] = "KML";
+    parameters["dggs_orient_output_file_name"] = "dmd";
 
 
 
