@@ -52,6 +52,7 @@ Supported File Formats
 - AIGen
 - Raw Sequences
 - Raw Coordinate Sets
+- DGGS meta format
 
 Tested Meta Files
 - gdalCollection
@@ -64,5 +65,12 @@ Tested Meta Files
 - gridgenCellClip
 - gridgenDiamond
 - gridgenPureKML
+- hiRes
+- holes
+- icosahedron
+- isea4d
+- isea4t
+- isea7hGen
+- multipleOrientations
 
 ** This library has not been tested with MacOS systems
