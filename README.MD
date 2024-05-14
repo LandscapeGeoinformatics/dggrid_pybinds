@@ -1,6 +1,10 @@
 # Version 0.0.2
 # Change Log
 
+- **0.0.5**
+  - UnitTests - planetRiskClipHiRes, planetRiskClipMulti
+  - GDAL driver geojson fix
+
 - **0.0.4**
   - UnitTests - isea4d, isea4t, isea7hGen, multipleOrientations
   - dgg_meta patch access as <query>.dgg_meta 

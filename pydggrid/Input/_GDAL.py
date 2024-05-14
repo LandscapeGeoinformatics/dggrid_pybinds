@@ -1,6 +1,9 @@
+import os
 import pathlib
+import sys
 from typing import Any, List
 
+import geojson
 import geopandas
 
 from pydggrid.Input._ShapeFIle import Input as ShapeInput
@@ -16,19 +19,43 @@ class Input(InputTemplate):
         self._root: InputTemplate = ShapeInput()
         self.data: List[geopandas.GeoDataFrame] = list([])
 
-    def geo_json(self, geo_json: Any) -> None:
+    def geo_json(self, data: Any) -> None:
         """
         Reads geojson into memory
-        :param geo_json: GeoJSON object this can be any of the following objects:
+        :param data: GeoJSON object this can be any of the following objects:
             str, (Path string or geojson string)
             pathlib.Path,
             geojson.GeoJSON,
             dict
         :return: None
         """
-        self._root = GeoJSONInput()
-        self._root.save(geo_json)
-        self.records = self._root.records
+        if isinstance(data, geojson.GeoJSON):
+            self.data.append(geopandas.GeoDataFrame.from_features(data))
+            self.records.save(geojson.dumps(data), DataType.STRING)
+            return
+        elif isinstance(data, dict):
+            self.data.append(geopandas.GeoDataFrame.from_dict(data))
+            self.records.save(geojson.dumps(geojson.GeoJSON(data)), DataType.STRING)
+            return
+        elif isinstance(data, pathlib.Path):
+            file = open(data.absolute(), "rt")
+            text: str = file.read()
+            file.close()
+            #
+            self.data.append(geopandas.read_file(text, driver="GeoJSON"))
+            self.records.save(text, DataType.STRING)
+            file.close()
+            return
+        elif isinstance(data, str):
+            if data.strip().startswith("{"):
+                return self.geo_json(geojson.loads(data))
+            elif os.path.isfile(data.strip()):
+                return self.geo_json(pathlib.Path(data.strip()))
+        else:
+            raise ValueError(f"Unrecognized GeoJSON data {data}")
+        # self._root = GeoJSONInput()
+        # self._root.save(geo_json)
+        # self.records = self._root.records
 
     def shape_file(self, path: [str, pathlib.Path]) -> None:
         """
