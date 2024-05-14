@@ -514,3 +514,6 @@ class GDALFormat(TypeDef):
     """
     KML = 4
     GEOJSON = 5
+    # these should be more performant acttually
+    # FlatGeobuf = 6
+    # GPKG = 7
