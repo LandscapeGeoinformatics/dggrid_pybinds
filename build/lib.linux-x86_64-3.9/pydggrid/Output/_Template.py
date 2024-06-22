@@ -10,11 +10,30 @@ import geojson
 import geopandas
 import numpy
 import pandas
+<<<<<<< HEAD:build/lib.linux-x86_64-3.9/pydggrid/Output/_Template.py
 from shapely import Polygon, Point, GeometryCollection, LineString
 from shapely.geometry import mapping, shape
 
 from pydggrid.Types import ReadMode
 
+=======
+from shapely.geometry import Polygon, Point, GeometryCollection, LineString
+from shapely.geometry import shape, mapping
+
+from pydggrid.Types import ReadMode
+
+fiona.drvsupport.supported_drivers['kml'] = 'rw'  # enable KML support which is disabled by default
+fiona.drvsupport.supported_drivers['KML'] = 'rw'  # enable KML support which is disabled by default
+
+fiona.supported_drivers['KML'] = "rw"
+
+# Enable fiona driver
+geopandas.io.file.fiona.drvsupport.supported_drivers['KML'] = 'rw'
+
+pandas.set_option('display.max_columns', None)
+pandas.set_option('display.max_rows', None)
+
+>>>>>>> 4efa5737ac179398e19bad5d9f529ab7b3b6d686:pydggrid/Objects/_Collection.py
 
 class Template(ABC):
 
@@ -55,7 +74,7 @@ class Template(ABC):
             self._data = geopandas.GeoDataFrame({"id": unique_sets, "geometry": geometry_elements})
             self._type = geopandas.GeoDataFrame
             self._content["kml"] = self._get_kml()
-        #
+            # TODO: KML 
         elif read_mode == ReadMode.KML:
             self._text = bytes(data).decode()
             self._type = geopandas.GeoDataFrame
@@ -247,3 +266,4 @@ class Template(ABC):
             file.close()
             os.remove(path)
             return kml_string
+

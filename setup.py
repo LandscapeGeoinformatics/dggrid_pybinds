@@ -130,6 +130,7 @@ setup(
     author_email="q@arqimedes",
     description="DGGRID Adaptation for python using pybind11.",
     long_description="",
+<<<<<<< HEAD
     packages=["pydggrid",
               "pydggrid.Input",
               "pydggrid.Output",
@@ -137,6 +138,9 @@ setup(
               "pydggrid.Objects",
               "pydggrid.Queries",
               "pydggrid.System"],
+=======
+    packages=["pydggrid", "pydggrid.Input", "pydggrid.Modules", "pydggrid.Objects", "pydggrid.Queries", "pydggrid.System"],
+>>>>>>> 4efa5737ac179398e19bad5d9f529ab7b3b6d686
     ext_modules=[CMakeExtension("libpydggrid")],
     cmdclass={"build_ext": CMakeBuild},
     zip_safe=False,
@@ -150,4 +154,9 @@ setup(
     ],
     extras_require={"test": ["pytest>=6.0"]},
     python_requires=">=3.9",
+<<<<<<< HEAD
 )
+=======
+)
+
+>>>>>>> 4efa5737ac179398e19bad5d9f529ab7b3b6d686

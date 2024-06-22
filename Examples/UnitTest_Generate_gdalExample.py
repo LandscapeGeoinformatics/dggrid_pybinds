@@ -11,8 +11,8 @@ if __name__ == "__main__":
     document.Meta.save("dggs_res_spec", 9)
     document.Meta.save("point_output_type", PointOutput.GDAL)
     document.Meta.save("cell_output_type", CellOutput.GDAL)
-    document.Meta.save("cell_output_gdal_format", GDALFormat.KML)
     document.Meta.save("point_output_gdal_format", GDALFormat.GEOJSON)
+    document.Meta.save("cell_output_gdal_format", GDALFormat.GEOJSON)
     document.set_clip(ClipType.GDAL)
     document.clip.shape_file("../DGGRID/examples/gdalExample/inputfiles/corvallis.shp")
 
