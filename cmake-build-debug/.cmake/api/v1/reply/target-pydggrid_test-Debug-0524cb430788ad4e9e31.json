@@ -34,25 +34,25 @@
 			{
 				"command" : 1,
 				"file" : 0,
-				"line" : 54,
+				"line" : 56,
 				"parent" : 0
 			},
 			{
 				"command" : 2,
 				"file" : 0,
-				"line" : 50,
+				"line" : 52,
 				"parent" : 0
 			},
 			{
 				"command" : 3,
 				"file" : 0,
-				"line" : 46,
+				"line" : 48,
 				"parent" : 0
 			},
 			{
 				"command" : 4,
 				"file" : 0,
-				"line" : 48,
+				"line" : 50,
 				"parent" : 0
 			}
 		]
@@ -151,7 +151,8 @@
 				9,
 				10,
 				11,
-				12
+				12,
+				13
 			]
 		}
 	],
@@ -248,7 +249,8 @@
 				9,
 				10,
 				11,
-				12
+				12,
+				13
 			]
 		}
 	],
@@ -300,6 +302,12 @@
 			"backtrace" : 1,
 			"compileGroupIndex" : 0,
 			"path" : "src/pydggrid/SubOpGen.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "src/pydggrid/SubOpBinPts.cpp",
 			"sourceGroupIndex" : 0
 		},
 		{

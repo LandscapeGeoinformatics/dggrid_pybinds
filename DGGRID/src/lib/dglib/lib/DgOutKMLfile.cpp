@@ -77,7 +77,6 @@ DgOutKMLfile::setColor (const string& colorIn)
          DgOutputStream::report("DgOutKMLfile::setColor(): invalid KML color " + colorIn,
              DgBase::Fatal);
    }
-
    color_ = colorIn;
 }
 

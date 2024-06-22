@@ -356,6 +356,33 @@ src/pydggrid/SubOpBasicMulti.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/libpydggrid.dir/build.make CMakeFiles/libpydggrid.dir/src/pydggrid/SubOpBasicMulti.cpp.s
 .PHONY : src/pydggrid/SubOpBasicMulti.cpp.s
 
+src/pydggrid/SubOpBinPts.o: src/pydggrid/SubOpBinPts.cpp.o
+.PHONY : src/pydggrid/SubOpBinPts.o
+
+# target to build an object file
+src/pydggrid/SubOpBinPts.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pydggrid_test.dir/build.make CMakeFiles/pydggrid_test.dir/src/pydggrid/SubOpBinPts.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/libpydggrid.dir/build.make CMakeFiles/libpydggrid.dir/src/pydggrid/SubOpBinPts.cpp.o
+.PHONY : src/pydggrid/SubOpBinPts.cpp.o
+
+src/pydggrid/SubOpBinPts.i: src/pydggrid/SubOpBinPts.cpp.i
+.PHONY : src/pydggrid/SubOpBinPts.i
+
+# target to preprocess a source file
+src/pydggrid/SubOpBinPts.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pydggrid_test.dir/build.make CMakeFiles/pydggrid_test.dir/src/pydggrid/SubOpBinPts.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/libpydggrid.dir/build.make CMakeFiles/libpydggrid.dir/src/pydggrid/SubOpBinPts.cpp.i
+.PHONY : src/pydggrid/SubOpBinPts.cpp.i
+
+src/pydggrid/SubOpBinPts.s: src/pydggrid/SubOpBinPts.cpp.s
+.PHONY : src/pydggrid/SubOpBinPts.s
+
+# target to generate assembly for a file
+src/pydggrid/SubOpBinPts.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pydggrid_test.dir/build.make CMakeFiles/pydggrid_test.dir/src/pydggrid/SubOpBinPts.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/libpydggrid.dir/build.make CMakeFiles/libpydggrid.dir/src/pydggrid/SubOpBinPts.cpp.s
+.PHONY : src/pydggrid/SubOpBinPts.cpp.s
+
 src/pydggrid/SubOpDGG.o: src/pydggrid/SubOpDGG.cpp.o
 .PHONY : src/pydggrid/SubOpDGG.o
 
@@ -577,6 +604,9 @@ help:
 	@echo "... src/pydggrid/SubOpBasicMulti.o"
 	@echo "... src/pydggrid/SubOpBasicMulti.i"
 	@echo "... src/pydggrid/SubOpBasicMulti.s"
+	@echo "... src/pydggrid/SubOpBinPts.o"
+	@echo "... src/pydggrid/SubOpBinPts.i"
+	@echo "... src/pydggrid/SubOpBinPts.s"
 	@echo "... src/pydggrid/SubOpDGG.o"
 	@echo "... src/pydggrid/SubOpDGG.i"
 	@echo "... src/pydggrid/SubOpDGG.s"

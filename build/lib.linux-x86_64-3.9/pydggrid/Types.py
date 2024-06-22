@@ -1,4 +1,5 @@
 import struct
+import sys
 from enum import IntEnum
 from typing import List, Dict, Any
 
@@ -45,6 +46,7 @@ class DataType(TypeDef):
     STRING = 5
     SHAPE_BINARY = 6
     GDAL_GEOJSON = 7
+    LOCATION = 13
 
     @classmethod
     def from_type(cls, input_type: type) -> Any:
@@ -458,6 +460,7 @@ class ReadMode(TypeDef):
     GEOJSON = 5
     SHAPEFILE = 6
     GDAL_COLLECTION = 7
+    SEQUENCE = 8
 
 
 class RandPointOutput(TypeDef):

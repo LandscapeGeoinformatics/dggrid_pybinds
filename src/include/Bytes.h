@@ -12,6 +12,7 @@ namespace pydggrid
     {
         public:
             const static int intSize = 4;
+            const static int floatSize = 4;
 
             /**
              * Empty constructor
@@ -124,7 +125,7 @@ namespace pydggrid
             int getInt()
             {
                 return this->getInt(this->index);
-            }
+            };
 
             /**
              * Returns the integer at given index
@@ -135,6 +136,32 @@ namespace pydggrid
             {
                 int value = 0;
                 size_t yIndex = byteIndex + Bytes::intSize;
+                memcpy(&value, this->slice(this->data,
+                                        (int) byteIndex,
+                                        (int) yIndex).data(),
+                       Bytes::intSize);
+                this->index += Bytes::intSize;
+                return value;
+            };
+
+            /**
+             * Returns the float at current index
+             * @return Float at current index
+             */
+            float getFloat()
+            {
+                return this->getFloat(this->index);
+            };
+
+            /**
+             * Returns the float at given index
+             * @param byteIndex Byte Index
+             * @return Float at given index
+             */
+            float getFloat(size_t byteIndex)
+            {
+                float value = 0.0f;
+                size_t yIndex = byteIndex + Bytes::floatSize;
                 memcpy(&value, this->slice(this->data,
                                         (int) byteIndex,
                                         (int) yIndex).data(),
@@ -169,7 +196,6 @@ namespace pydggrid
                 memcpy(stringData, elements.data(), stringSize);
                 stringData[stringSize] = '\0';
                 std::string stringElement(stringData);
-                std::cout << stringElement << std::endl;
                 this->index += stringSize;
                 return stringElement;
             }

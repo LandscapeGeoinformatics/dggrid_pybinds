@@ -1,5 +1,6 @@
 import os.path
 import pathlib
+import sys
 from typing import Any, List
 import geojson
 import shapely.wkt
@@ -18,7 +19,11 @@ class Input(InputTemplate):
     def save(self, data: [str, pathlib.Path, geojson.GeoJSON, dict], column: None = None) -> None:
         """
         Save data override
-        :param data: Path to or a path object pointing to a shape file
+        :param data: Path to a geojson file or geojson data which can be
+            - a geojson.GeoJSON object
+            - a dictionary object
+            - a string path pointing to a geojson file
+            - pathlib.Path object pointing to a geojson file
         :param column: Ignored for this interface
         :return: None
         """
@@ -55,8 +60,18 @@ class Input(InputTemplate):
             self.records.clear()
             self.records.copy(source_object.records)
             [self.data.append(n) for n in source_object.data]
-        else:
-            raise AttributeError("Unrecognized input object type.")
+        return super(Input, self).copy(source_object)
+
+    # Override
+    def read(self, source: [str, pathlib.Path]) -> None:
+        """
+        Reads records into data set, this could be:
+            1. String pointing to a valid source path
+            2. pathlib.Path object
+        :param source: Source Path
+        :return: None
+        """
+        return self.save(source)
 
     # INTERNAL
 

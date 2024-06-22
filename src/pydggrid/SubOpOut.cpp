@@ -774,6 +774,22 @@ SubOpOut::setupOp (void)
 } // SubOpOut::setupOp
 
 
+std::vector<unsigned char> SubOpOut::getTextOut()
+{
+    if (this->dataOut == nullptr)
+        { return std::vector<unsigned char>{}; }
+    std::string stringData = this->dataOut->str();
+    //
+    std::vector<unsigned char> elements;
+    size_t stringSize = stringData.size();
+    for (size_t index = 0; index < stringSize; index++)
+    {
+        elements.emplace_back((unsigned char) stringData[index]);
+    }
+    return elements;
+}
+
+
 std::vector<unsigned char> SubOpOut::getPRCells()
 {
     return (this->prCellOut != nullptr) ?
@@ -908,9 +924,15 @@ SubOpOut::executeOp (void) {
 
    // now create all the files
 
+//   if (dataOutType == "TEXT") {
+//      dataOut = new ofstream();
+//      dataOut->open(dataOutFileName.c_str());
+//      dataOut->setf(ios::fixed, ios::floatfield);
+//      dataOut->precision(op.mainOp.precision);
+//   }
+
    if (dataOutType == "TEXT") {
-      dataOut = new ofstream();
-      dataOut->open(dataOutFileName.c_str());
+      dataOut = new stringstream();
       dataOut->setf(ios::fixed, ios::floatfield);
       dataOut->precision(op.mainOp.precision);
    }

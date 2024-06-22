@@ -1,5 +1,6 @@
 import os
 import pathlib
+import sys
 from typing import Dict, Any, List
 
 import geopandas
@@ -39,7 +40,9 @@ class Input(InputTemplate):
                     geopandas.GeoDataFrame,
                     Dict[str, Any],
                     List[List[Any]],
-                    List[Dict[str, Any]]],
+                    List[Dict[str, Any]],
+                    str,
+                    pathlib.Path],
              column: [Dict[str, int], Dict[str, str], None] = None) -> None:
         """
         Save data override
@@ -53,6 +56,9 @@ class Input(InputTemplate):
                     parameter
                 - A numpy array, which should follow the indexing of the required fields, this can be remapped by using
                     the column argument
+                - A string containing a path to a input text file with " " used as a delimiter. (using lat, long, id,
+                    label) columns respectively.
+                - A pathlib.Path object containing a path to an location input file
         :param column: Column name mapping, should be a dictionary, as
             {
                 "lat": "<lat-equivalent-field>",
@@ -77,6 +83,8 @@ class Input(InputTemplate):
             return self.save_list(data, column)
         if isinstance(data, dict):
             return self.save_dict(data, column)
+        if isinstance(data, str) or isinstance(data, pathlib.Path):
+            return self.read(file_path=data, column_order=column, delimiter=" ", ignore_header=True)
         raise ValueError("Invalid data passed to location input.")
 
     def insert(self, lat: float, long: float, index_id: int, label: str = "UNKNOWN") -> None:
@@ -230,12 +238,14 @@ class Input(InputTemplate):
         Exports the current frame to byte records
         :return: None
         """
-        lat_bytes: List[bytes] = [DataType.FLOAT.convert_bytes(float(n)) for n in list(self.frame["lat"])]
-        long_bytes: List[bytes] = [DataType.FLOAT.convert_bytes(float(n)) for n in list(self.frame["long"])]
-        id_bytes: List[bytes] = [DataType.INT.convert_bytes(int(n)) for n in list(self.frame["id"])]
-        label_bytes: List[bytes] = [str(n).encode() for n in list(self.frame["label"])]
-        self.records.clear()
-        self.records.save(b''.join(lat_bytes), DataType.FLOAT)
-        self.records.save(b''.join(long_bytes), DataType.FLOAT)
-        self.records.save(b''.join(id_bytes), DataType.INT)
-        self.records.save(b''.join(label_bytes), DataType.STRING)
+        byte_array: List[bytes] = list();
+        record_size: int = self.frame.shape[0]
+        byte_array.append(DataType.INT.convert_bytes(record_size))
+        for index, record in self.frame.iterrows():
+            byte_array.append(DataType.FLOAT.convert_bytes(record["lat"]))
+            byte_array.append(DataType.FLOAT.convert_bytes(record["long"]))
+            byte_array.append(DataType.INT.convert_bytes(record["id"]))
+            byte_array.append(DataType.INT.convert_bytes(len(str(record["label"]))))
+            byte_array.append(str(record["label"]).encode())
+        self.records.update(b''.join(byte_array), DataType.LOCATION)
+

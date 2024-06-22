@@ -1,6 +1,5 @@
 import os
 import pathlib
-import sys
 from typing import List, Tuple, Dict, Any
 
 import geopandas
@@ -60,7 +59,7 @@ class Input(InputTemplate):
             return self.save_list(data[0][0], data, column)
         if isinstance(data, dict):
             return self.save_dict(data, column)
-        raise ValueError("Invalid data passed to location input.")
+        raise ValueError(f"Unsupported data type {type(data)} for {type(self).__name__} type query.")
 
     # Override
     def copy(self, source_object: Any) -> None:
@@ -71,7 +70,66 @@ class Input(InputTemplate):
         if isinstance(source_object, Input):
             self.data = source_object.data
             self.cols = source_object.cols
-            super().copy(source_object)
+        return super(Input, self).copy(source_object)
+
+    # Override
+    def read(self,
+             file_path: [str, pathlib.Path],
+             ignore_header: bool = False,
+             delimiter: str = " ") -> None:
+        """
+        Saves a file to a data array,
+        :param file_path: File path to read
+        :param ignore_header If set to true the first line of file will be ignored
+        :param delimiter The delimiter string, by default this is set to " " (Space)
+        :return: None
+        """
+        if isinstance(file_path, str):
+            return self.read(pathlib.Path(file_path), ignore_header, delimiter)
+        if isinstance(file_path, pathlib.Path):
+            # index_array: List[int] = list(range(0, len(self.cols)))
+            with open(file_path.absolute(), 'r', encoding='UTF-8') as file:
+                text: str = file.read()
+                elements: List[str] = list([])
+                elements_d: List[List[str]] = list([list([]), list([]), list([])])
+                elements_t: List[str] = text.split("END")
+                [elements_d[0].extend(n.split(os.linesep)) for n in elements_t]
+                [elements_d[1].extend(n.split(" ")) for n in elements_d[0]]
+                [elements.append(str(n)) for n in elements_d[1] if n.strip() != ""]
+                # traverse
+                index_id: int = -1
+                last_node: str = "long"
+                dictionary: Dict[str, Any] = dict({})
+                record_set: List[Dict[str, Any]] = list()
+                for node in elements:
+                    if "." not in node and node.isnumeric():
+                        index_id = int(node)
+                        dictionary["id"] = index_id
+                        continue
+                    if "." in node and index_id != -1:
+                        node_n: str = "long" if last_node == "lat" else "lat"
+                        last_node = node_n
+                        dictionary[node_n] = float(node)
+                        if node_n == "long":
+                            record_set.append(dictionary.copy())
+                # group by id
+                record_data: Dict[int, List[List[float]]] = {n["id"]: [] for n in record_set}
+                [record_data[n["id"]].append(list(n.values())) for n in record_set]
+                [self.save_list(n, record_data[n]) for n in record_data]
+
+    # Override
+    def __str__(self) -> str:
+        """
+        Returns description of input object
+        :return: Description String
+        """
+        elements: List[str] = list([])
+        elements.append("DATA:")
+        index_range: List[int] = list(range(0, len(self.data)))
+        elements.append(os.linesep.join([f"{self.data[n][0]}: {self.data[n][1]}, {self.data[n][2]}"
+                                         for n in index_range]))
+        elements.append(super().__str__())
+        return os.linesep.join(elements)
 
     def insert(self, index_id: int, lat: float, long: float) -> None:
         """
@@ -162,64 +220,6 @@ class Input(InputTemplate):
                         lat=float(data[map_t["lat"]]),
                         long=float(data[map_t["long"]]))
             return
-
-    def read(self,
-             file_path: [str, pathlib.Path],
-             ignore_header: bool = False,
-             delimiter: str = " ") -> None:
-        """
-        Saves a file to a data array,
-        :param file_path: File path to read
-        :param ignore_header If set to true the first line of file will be ignored
-        :param delimiter The delimiter string, by default this is set to " " (Space)
-        :return: None
-        """
-        if isinstance(file_path, str):
-            return self.read(pathlib.Path(file_path), ignore_header, delimiter)
-        if isinstance(file_path, pathlib.Path):
-            # index_array: List[int] = list(range(0, len(self.cols)))
-            with open(file_path.absolute(), 'r', encoding='UTF-8') as file:
-                text: str = file.read()
-                elements: List[str] = list([])
-                elements_d: List[List[str]] = list([list([]), list([]), list([])])
-                elements_t: List[str] = text.split("END")
-                [elements_d[0].extend(n.split(os.linesep)) for n in elements_t]
-                [elements_d[1].extend(n.split(" ")) for n in elements_d[0]]
-                [elements.append(str(n)) for n in elements_d[1] if n.strip() != ""]
-                # traverse
-                index_id: int = -1
-                last_node: str = "long"
-                dictionary: Dict[str, Any] = dict({})
-                record_set: List[Dict[str, Any]] = list()
-                for node in elements:
-                    if "." not in node and node.isnumeric():
-                        index_id = int(node)
-                        dictionary["id"] = index_id
-                        continue
-                    if "." in node and index_id != -1:
-                        node_n: str = "long" if last_node == "lat" else "lat"
-                        last_node = node_n
-                        dictionary[node_n] = float(node)
-                        if node_n == "long":
-                            record_set.append(dictionary.copy())
-                # group by id
-                record_data: Dict[int, List[List[float]]] = {n["id"]: [] for n in record_set}
-                [record_data[n["id"]].append(list(n.values())) for n in record_set]
-                [self.save_list(n, record_data[n]) for n in record_data]
-
-    # Override
-    def __str__(self) -> str:
-        """
-        Returns description of input object
-        :return: Description String
-        """
-        elements: List[str] = list([])
-        elements.append("DATA:")
-        index_range: List[int] = list(range(0, len(self.data)))
-        elements.append(os.linesep.join([f"{self.data[n][0]}: {self.data[n][1]}, {self.data[n][2]}"
-                                         for n in index_range]))
-        elements.append(super().__str__())
-        return os.linesep.join(elements)
 
     # INTERNAL
 

@@ -38,6 +38,14 @@ class Input(InputTemplate):
         else:
             raise ValueError(f"Unrecognized shape file {data}")
 
+    def read(self, source_file: [str, pathlib.Path]) -> None:
+        """
+        Reads a file into memory routes for save
+        :param source_file: Source File
+        :return: None
+        """
+        return self.save(source_file)
+
     # Override
     def copy(self, source_object: Any) -> None:
         """

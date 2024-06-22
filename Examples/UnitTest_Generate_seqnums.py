@@ -1,5 +1,3 @@
-import sys
-
 from pydggrid.Queries import Generate
 from pydggrid.Types import ClipType, CellOutput, DGGSType, PointOutput
 

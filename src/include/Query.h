@@ -64,6 +64,8 @@ namespace pydggrid
                 this->response["pr_cells"] = this->operation->outOp.getPRCells();
                 this->response["r_points"] = this->operation->outOp.getRPoints();
                 this->response["collection"] = this->operation->outOp.getCollection();
+                if (this->isPointQuery())
+                    { this->response["points"] = this->operation->outOp.getTextOut(); }
                 this->operation->cleanup();
                 if (this->isOutFile("cell"))
                     { this->response["cells"] = this->getData("cell"); }
@@ -224,6 +226,7 @@ namespace pydggrid
                 if (dataType == Constants::DataTypes::BINARY) { return "BINARY"; }
                 if (dataType == Constants::DataTypes::STRING) { return "STRING"; }
                 if (dataType == Constants::DataTypes::SHAPE_BINARY) { return "SHAPE_BINARY"; }
+                if (dataType == Constants::DataTypes::LOCATION) { return "LOCATION"; }
                 return "UNKNOWN";
             }
 
@@ -235,10 +238,12 @@ namespace pydggrid
             std::string dataString(size_t index)
             {
                 if ((this->bin_t[index] == Constants::DataTypes::BINARY) ||
-                    (this->bin_t[index] == Constants::DataTypes::SHAPE_BINARY))
+                    (this->bin_t[index] == Constants::DataTypes::SHAPE_BINARY) ||
+                    (this->bin_t[index] == Constants::DataTypes::LOCATION))
                 {
                     return Functions::to_hex(this->bin[index]);
                 }
+
                 return "";
             }
 
@@ -283,7 +288,10 @@ namespace pydggrid
                                                    file_data.data(),
                                                    file_data.size());
                             // only use the .shp to register
-                            if (file_extension == "shp") { this->REGF.emplace_back(file_name); }
+                            if (file_extension == "shp")
+                            {
+                                this->REGF.emplace_back(file_name);
+                            }
                             this->IOGC.emplace_back(file_name);
                         }
                     }
@@ -301,10 +309,8 @@ namespace pydggrid
                     }
                     if ((this->getDataType(index) == Constants::DataTypes::STRING))
                     {
-                        bool isGdal = (this->parameters.find("clip_subset_type") != this->parameters.end()) &&
-                                        (this->parameters["clip_subset_type"] == "GDAL");
                         Bytes bytes(this->bin[index]);
-                        if (!isGdal)
+                        if (!this->isGdal())
                         {
                             std::vector<std::string> elements = Functions::split(bytes.getString(), "\n");
                             std::string enumID = "STR-" + std::to_string((index + 1));
@@ -318,8 +324,26 @@ namespace pydggrid
                             Functions::writeBinary(fileName.c_str(),
                                                    fileData.data(),
                                                    fileData.size());
-                            this->parameters["clip_region_files"] = fileName;
+                            this->REGF.emplace_back(fileName);
                         }
+                    }
+                    if (this->getDataType(index) == Constants::DataTypes::LOCATION)
+                    {
+                        std::vector<std::string> elements;
+                        Bytes bytes(this->bin[index]);
+                        auto recordSize = (size_t) bytes.getInt();
+                        for (size_t recordIndex = 0; recordIndex < recordSize; recordIndex++)
+                        {
+                            std::stringstream stream;
+                            stream << bytes.getFloat() << "|";
+                            stream << bytes.getFloat() << "|";
+                            stream << bytes.getInt() << "|";
+                            stream << bytes.getString();
+                            elements.emplace_back(stream.str());
+                        }
+                        std::string enumID = "STR-" + std::to_string((index + 1));
+                        this->streams.insert({enumID, std::vector<std::string>{elements}});
+                        this->REGF.emplace_back(enumID);
                     }
                 }
             }
@@ -336,7 +360,14 @@ namespace pydggrid
                     std::copy(this->REGF.begin(),
                               this->REGF.end(),
                               std::ostream_iterator<std::string>(region_files, " "));
-                    this->parameters["clip_region_files"] = region_files.str();
+                    if (this->isGenerateQuery())
+                    {
+                        this->parameters["clip_region_files"] = region_files.str();
+                    }
+                    if (this->isPointQuery())
+                    {
+                        this->parameters["input_files"] = region_files.str();
+                    }
                     this->REGF.clear();
                     this->REGF.resize(0);
                 }
@@ -368,7 +399,9 @@ namespace pydggrid
             bool isOutFile()
             {
                 for (const std::string &data_index : Constants::data_indexes)
-                    { if (this->isOutFile(data_index.c_str())) { return true; } }
+                {
+                    if (this->isOutFile(data_index.c_str())) { return true; }
+                }
                 return false;
             }
 
@@ -381,6 +414,43 @@ namespace pydggrid
             {
                 return  ((!this->getGDALType(dataIndex).empty()) ||
                         (this->getOutputType(dataIndex) == "SHAPEFILE"));
+            }
+
+            /**
+             * Returns true if the query is of grid generation type
+             * @return True if GENERATE_GRID
+             */
+            bool isGenerateQuery()
+            {
+                if (this->parameters.find("dggrid_operation")->second == "GENERATE_GRID") { return true; }
+                return false;
+            }
+
+            /**
+             * Returns true if the query is of point presence or point value type
+             * @return True if BIN_POINT_PRESENCE or BIN_POINT_VALS
+             */
+            bool isPointQuery()
+            {
+                if (this->parameters.find("dggrid_operation")->second == "BIN_POINT_PRESENCE") { return true; }
+                if (this->parameters.find("dggrid_operation")->second == "BIN_POINT_VALS") { return true; }
+                return false;
+            }
+
+            /**
+             * Returns true if the query carries a GDAL package
+             * @return True if GDAL
+             */
+            bool isGdal()
+            {
+                if (this->isPointQuery())
+                {
+                    return (this->parameters.find("point_input_file_type") != this->parameters.end()) &&
+                           (this->parameters.find("point_input_file_type")->second == "GDAL");
+                }
+                if ((this->parameters.find("clip_subset_type") != this->parameters.end()) &&
+                    (this->parameters["clip_subset_type"] == "GDAL")) { return  true; }
+                return false;
             }
 
             /**

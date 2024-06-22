@@ -1,4 +1,5 @@
 import os
+import pathlib
 import textwrap
 from abc import ABC, abstractmethod
 from typing import List, Any, Dict
@@ -15,11 +16,11 @@ class Template(ABC):
         self.records: Records = Records()
 
     @abstractmethod
-    def save(self, data: Any, column: [Any, None] = None) -> None:
+    def save(self, data: Any, columns: [Any, None] = None) -> None:
         """
         Save data override
         :param data: Data Save, defined by input object
-        :param column: Column name defined by input object
+        :param columns: Column name defined by input object
         :return: None
         """
         pass
@@ -28,11 +29,23 @@ class Template(ABC):
     def copy(self, source_object: Any) -> None:
         """
         Copies the source object to local
-        :return:
+        :param source_object: Source Object should be Template compatible
+        :return: None
         """
         if isinstance(source_object, Template):
             self.records.clear()
             self.records.copy(source_object.records)
+
+    @abstractmethod
+    def read(self, source: [str, pathlib.Path]) -> None:
+        """
+        Reads records into data set, this could be:
+            1. String pointing to a valid source path
+            2. pathlib.Path object
+        :param source: Source Path
+        :return: None
+        """
+        pass
 
     # override
     def __bytes__(self) -> bytes:

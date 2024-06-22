@@ -181,10 +181,24 @@ CMakeFiles/libpydggrid.dir/src/pydggrid/SubOpGen.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/libpydggrid.dir/src/pydggrid/SubOpGen.cpp.s"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /opt/source/ut/libpydggrid/src/pydggrid/SubOpGen.cpp -o CMakeFiles/libpydggrid.dir/src/pydggrid/SubOpGen.cpp.s
 
+CMakeFiles/libpydggrid.dir/src/pydggrid/SubOpBinPts.cpp.o: CMakeFiles/libpydggrid.dir/flags.make
+CMakeFiles/libpydggrid.dir/src/pydggrid/SubOpBinPts.cpp.o: ../../../src/pydggrid/SubOpBinPts.cpp
+CMakeFiles/libpydggrid.dir/src/pydggrid/SubOpBinPts.cpp.o: CMakeFiles/libpydggrid.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/opt/source/ut/libpydggrid/build/temp.linux-x86_64-3.9/libpydggrid/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building CXX object CMakeFiles/libpydggrid.dir/src/pydggrid/SubOpBinPts.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/libpydggrid.dir/src/pydggrid/SubOpBinPts.cpp.o -MF CMakeFiles/libpydggrid.dir/src/pydggrid/SubOpBinPts.cpp.o.d -o CMakeFiles/libpydggrid.dir/src/pydggrid/SubOpBinPts.cpp.o -c /opt/source/ut/libpydggrid/src/pydggrid/SubOpBinPts.cpp
+
+CMakeFiles/libpydggrid.dir/src/pydggrid/SubOpBinPts.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/libpydggrid.dir/src/pydggrid/SubOpBinPts.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /opt/source/ut/libpydggrid/src/pydggrid/SubOpBinPts.cpp > CMakeFiles/libpydggrid.dir/src/pydggrid/SubOpBinPts.cpp.i
+
+CMakeFiles/libpydggrid.dir/src/pydggrid/SubOpBinPts.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/libpydggrid.dir/src/pydggrid/SubOpBinPts.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /opt/source/ut/libpydggrid/src/pydggrid/SubOpBinPts.cpp -o CMakeFiles/libpydggrid.dir/src/pydggrid/SubOpBinPts.cpp.s
+
 CMakeFiles/libpydggrid.dir/src/pydggrid/SubOpBasic.cpp.o: CMakeFiles/libpydggrid.dir/flags.make
 CMakeFiles/libpydggrid.dir/src/pydggrid/SubOpBasic.cpp.o: ../../../src/pydggrid/SubOpBasic.cpp
 CMakeFiles/libpydggrid.dir/src/pydggrid/SubOpBasic.cpp.o: CMakeFiles/libpydggrid.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/opt/source/ut/libpydggrid/build/temp.linux-x86_64-3.9/libpydggrid/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building CXX object CMakeFiles/libpydggrid.dir/src/pydggrid/SubOpBasic.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/opt/source/ut/libpydggrid/build/temp.linux-x86_64-3.9/libpydggrid/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Building CXX object CMakeFiles/libpydggrid.dir/src/pydggrid/SubOpBasic.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/libpydggrid.dir/src/pydggrid/SubOpBasic.cpp.o -MF CMakeFiles/libpydggrid.dir/src/pydggrid/SubOpBasic.cpp.o.d -o CMakeFiles/libpydggrid.dir/src/pydggrid/SubOpBasic.cpp.o -c /opt/source/ut/libpydggrid/src/pydggrid/SubOpBasic.cpp
 
 CMakeFiles/libpydggrid.dir/src/pydggrid/SubOpBasic.cpp.i: cmake_force
@@ -198,7 +212,7 @@ CMakeFiles/libpydggrid.dir/src/pydggrid/SubOpBasic.cpp.s: cmake_force
 CMakeFiles/libpydggrid.dir/src/pydggrid/SubOpBasicMulti.cpp.o: CMakeFiles/libpydggrid.dir/flags.make
 CMakeFiles/libpydggrid.dir/src/pydggrid/SubOpBasicMulti.cpp.o: ../../../src/pydggrid/SubOpBasicMulti.cpp
 CMakeFiles/libpydggrid.dir/src/pydggrid/SubOpBasicMulti.cpp.o: CMakeFiles/libpydggrid.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/opt/source/ut/libpydggrid/build/temp.linux-x86_64-3.9/libpydggrid/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Building CXX object CMakeFiles/libpydggrid.dir/src/pydggrid/SubOpBasicMulti.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/opt/source/ut/libpydggrid/build/temp.linux-x86_64-3.9/libpydggrid/CMakeFiles --progress-num=$(CMAKE_PROGRESS_11) "Building CXX object CMakeFiles/libpydggrid.dir/src/pydggrid/SubOpBasicMulti.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/libpydggrid.dir/src/pydggrid/SubOpBasicMulti.cpp.o -MF CMakeFiles/libpydggrid.dir/src/pydggrid/SubOpBasicMulti.cpp.o.d -o CMakeFiles/libpydggrid.dir/src/pydggrid/SubOpBasicMulti.cpp.o -c /opt/source/ut/libpydggrid/src/pydggrid/SubOpBasicMulti.cpp
 
 CMakeFiles/libpydggrid.dir/src/pydggrid/SubOpBasicMulti.cpp.i: cmake_force
@@ -212,7 +226,7 @@ CMakeFiles/libpydggrid.dir/src/pydggrid/SubOpBasicMulti.cpp.s: cmake_force
 CMakeFiles/libpydggrid.dir/src/pydggrid/SubOpGenHelper.cpp.o: CMakeFiles/libpydggrid.dir/flags.make
 CMakeFiles/libpydggrid.dir/src/pydggrid/SubOpGenHelper.cpp.o: ../../../src/pydggrid/SubOpGenHelper.cpp
 CMakeFiles/libpydggrid.dir/src/pydggrid/SubOpGenHelper.cpp.o: CMakeFiles/libpydggrid.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/opt/source/ut/libpydggrid/build/temp.linux-x86_64-3.9/libpydggrid/CMakeFiles --progress-num=$(CMAKE_PROGRESS_11) "Building CXX object CMakeFiles/libpydggrid.dir/src/pydggrid/SubOpGenHelper.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/opt/source/ut/libpydggrid/build/temp.linux-x86_64-3.9/libpydggrid/CMakeFiles --progress-num=$(CMAKE_PROGRESS_12) "Building CXX object CMakeFiles/libpydggrid.dir/src/pydggrid/SubOpGenHelper.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/libpydggrid.dir/src/pydggrid/SubOpGenHelper.cpp.o -MF CMakeFiles/libpydggrid.dir/src/pydggrid/SubOpGenHelper.cpp.o.d -o CMakeFiles/libpydggrid.dir/src/pydggrid/SubOpGenHelper.cpp.o -c /opt/source/ut/libpydggrid/src/pydggrid/SubOpGenHelper.cpp
 
 CMakeFiles/libpydggrid.dir/src/pydggrid/SubOpGenHelper.cpp.i: cmake_force
@@ -226,7 +240,7 @@ CMakeFiles/libpydggrid.dir/src/pydggrid/SubOpGenHelper.cpp.s: cmake_force
 CMakeFiles/libpydggrid.dir/src/pydggrid/clipper.cpp.o: CMakeFiles/libpydggrid.dir/flags.make
 CMakeFiles/libpydggrid.dir/src/pydggrid/clipper.cpp.o: ../../../src/pydggrid/clipper.cpp
 CMakeFiles/libpydggrid.dir/src/pydggrid/clipper.cpp.o: CMakeFiles/libpydggrid.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/opt/source/ut/libpydggrid/build/temp.linux-x86_64-3.9/libpydggrid/CMakeFiles --progress-num=$(CMAKE_PROGRESS_12) "Building CXX object CMakeFiles/libpydggrid.dir/src/pydggrid/clipper.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/opt/source/ut/libpydggrid/build/temp.linux-x86_64-3.9/libpydggrid/CMakeFiles --progress-num=$(CMAKE_PROGRESS_13) "Building CXX object CMakeFiles/libpydggrid.dir/src/pydggrid/clipper.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/libpydggrid.dir/src/pydggrid/clipper.cpp.o -MF CMakeFiles/libpydggrid.dir/src/pydggrid/clipper.cpp.o.d -o CMakeFiles/libpydggrid.dir/src/pydggrid/clipper.cpp.o -c /opt/source/ut/libpydggrid/src/pydggrid/clipper.cpp
 
 CMakeFiles/libpydggrid.dir/src/pydggrid/clipper.cpp.i: cmake_force
@@ -240,7 +254,7 @@ CMakeFiles/libpydggrid.dir/src/pydggrid/clipper.cpp.s: cmake_force
 CMakeFiles/libpydggrid.dir/src/pydggrid/DgHexSF.cpp.o: CMakeFiles/libpydggrid.dir/flags.make
 CMakeFiles/libpydggrid.dir/src/pydggrid/DgHexSF.cpp.o: ../../../src/pydggrid/DgHexSF.cpp
 CMakeFiles/libpydggrid.dir/src/pydggrid/DgHexSF.cpp.o: CMakeFiles/libpydggrid.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/opt/source/ut/libpydggrid/build/temp.linux-x86_64-3.9/libpydggrid/CMakeFiles --progress-num=$(CMAKE_PROGRESS_13) "Building CXX object CMakeFiles/libpydggrid.dir/src/pydggrid/DgHexSF.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/opt/source/ut/libpydggrid/build/temp.linux-x86_64-3.9/libpydggrid/CMakeFiles --progress-num=$(CMAKE_PROGRESS_14) "Building CXX object CMakeFiles/libpydggrid.dir/src/pydggrid/DgHexSF.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/libpydggrid.dir/src/pydggrid/DgHexSF.cpp.o -MF CMakeFiles/libpydggrid.dir/src/pydggrid/DgHexSF.cpp.o.d -o CMakeFiles/libpydggrid.dir/src/pydggrid/DgHexSF.cpp.o -c /opt/source/ut/libpydggrid/src/pydggrid/DgHexSF.cpp
 
 CMakeFiles/libpydggrid.dir/src/pydggrid/DgHexSF.cpp.i: cmake_force
@@ -261,6 +275,7 @@ libpydggrid_OBJECTS = \
 "CMakeFiles/libpydggrid.dir/src/pydggrid/SubOpIn.cpp.o" \
 "CMakeFiles/libpydggrid.dir/src/pydggrid/SubOpOut.cpp.o" \
 "CMakeFiles/libpydggrid.dir/src/pydggrid/SubOpGen.cpp.o" \
+"CMakeFiles/libpydggrid.dir/src/pydggrid/SubOpBinPts.cpp.o" \
 "CMakeFiles/libpydggrid.dir/src/pydggrid/SubOpBasic.cpp.o" \
 "CMakeFiles/libpydggrid.dir/src/pydggrid/SubOpBasicMulti.cpp.o" \
 "CMakeFiles/libpydggrid.dir/src/pydggrid/SubOpGenHelper.cpp.o" \
@@ -278,6 +293,7 @@ libpydggrid_EXTERNAL_OBJECTS =
 ../../lib.linux-x86_64-3.9/libpydggrid.cpython-39-x86_64-linux-gnu.so: CMakeFiles/libpydggrid.dir/src/pydggrid/SubOpIn.cpp.o
 ../../lib.linux-x86_64-3.9/libpydggrid.cpython-39-x86_64-linux-gnu.so: CMakeFiles/libpydggrid.dir/src/pydggrid/SubOpOut.cpp.o
 ../../lib.linux-x86_64-3.9/libpydggrid.cpython-39-x86_64-linux-gnu.so: CMakeFiles/libpydggrid.dir/src/pydggrid/SubOpGen.cpp.o
+../../lib.linux-x86_64-3.9/libpydggrid.cpython-39-x86_64-linux-gnu.so: CMakeFiles/libpydggrid.dir/src/pydggrid/SubOpBinPts.cpp.o
 ../../lib.linux-x86_64-3.9/libpydggrid.cpython-39-x86_64-linux-gnu.so: CMakeFiles/libpydggrid.dir/src/pydggrid/SubOpBasic.cpp.o
 ../../lib.linux-x86_64-3.9/libpydggrid.cpython-39-x86_64-linux-gnu.so: CMakeFiles/libpydggrid.dir/src/pydggrid/SubOpBasicMulti.cpp.o
 ../../lib.linux-x86_64-3.9/libpydggrid.cpython-39-x86_64-linux-gnu.so: CMakeFiles/libpydggrid.dir/src/pydggrid/SubOpGenHelper.cpp.o
@@ -290,7 +306,7 @@ libpydggrid_EXTERNAL_OBJECTS =
 ../../lib.linux-x86_64-3.9/libpydggrid.cpython-39-x86_64-linux-gnu.so: ../../lib.linux-x86_64-3.9/libshapelib.so
 ../../lib.linux-x86_64-3.9/libpydggrid.cpython-39-x86_64-linux-gnu.so: ../../lib.linux-x86_64-3.9/libproj4lib.so
 ../../lib.linux-x86_64-3.9/libpydggrid.cpython-39-x86_64-linux-gnu.so: CMakeFiles/libpydggrid.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/opt/source/ut/libpydggrid/build/temp.linux-x86_64-3.9/libpydggrid/CMakeFiles --progress-num=$(CMAKE_PROGRESS_14) "Linking CXX shared module ../../lib.linux-x86_64-3.9/libpydggrid.cpython-39-x86_64-linux-gnu.so"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/opt/source/ut/libpydggrid/build/temp.linux-x86_64-3.9/libpydggrid/CMakeFiles --progress-num=$(CMAKE_PROGRESS_15) "Linking CXX shared module ../../lib.linux-x86_64-3.9/libpydggrid.cpython-39-x86_64-linux-gnu.so"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/libpydggrid.dir/link.txt --verbose=$(VERBOSE)
 	/usr/bin/strip /opt/source/ut/libpydggrid/build/lib.linux-x86_64-3.9/libpydggrid.cpython-39-x86_64-linux-gnu.so
 

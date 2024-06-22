@@ -11,6 +11,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/pydggrid_test.dir/src/pydggrid/SubOpBasic.cpp.o.d"
   "CMakeFiles/pydggrid_test.dir/src/pydggrid/SubOpBasicMulti.cpp.o"
   "CMakeFiles/pydggrid_test.dir/src/pydggrid/SubOpBasicMulti.cpp.o.d"
+  "CMakeFiles/pydggrid_test.dir/src/pydggrid/SubOpBinPts.cpp.o"
+  "CMakeFiles/pydggrid_test.dir/src/pydggrid/SubOpBinPts.cpp.o.d"
   "CMakeFiles/pydggrid_test.dir/src/pydggrid/SubOpDGG.cpp.o"
   "CMakeFiles/pydggrid_test.dir/src/pydggrid/SubOpDGG.cpp.o.d"
   "CMakeFiles/pydggrid_test.dir/src/pydggrid/SubOpGen.cpp.o"

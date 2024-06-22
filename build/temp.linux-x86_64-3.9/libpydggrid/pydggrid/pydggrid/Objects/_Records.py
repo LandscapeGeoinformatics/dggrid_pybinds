@@ -61,6 +61,18 @@ class Object:
             self._data = list(elements[0])
             self._type = list(elements[1])
 
+    def update(self, data: [bytes, str, pathlib.Path, List[Any]], data_type: DataType) -> None:
+        """
+        Updates the last saved record to the records array
+        :param data: Record Data
+        :param data_type: Data Type
+        :return: None
+        """
+        if len(self._data) > 0:
+            self._data.pop()
+            self._type.pop()
+        return self.save(data, data_type)
+
     def save(self, data: [bytes, str, pathlib.Path, List[Any]], data_type: DataType) -> None:
         """
         Saves bytes to the records set

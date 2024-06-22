@@ -10,14 +10,16 @@ import geojson
 import geopandas
 import numpy
 import pandas
-from shapely import Polygon, Point
+from shapely import Polygon, Point, GeometryCollection, LineString
+from shapely.geometry import shape, mapping
 
 from pydggrid.Types import ReadMode
 
-fiona.drvsupport.supported_drivers['kml'] = 'rw' # enable KML support which is disabled by default
-fiona.drvsupport.supported_drivers['KML'] = 'rw' # enable KML support which is disabled by default
+fiona.drvsupport.supported_drivers['kml'] = 'rw'  # enable KML support which is disabled by default
+fiona.drvsupport.supported_drivers['KML'] = 'rw'  # enable KML support which is disabled by default
 pandas.set_option('display.max_columns', None)
 pandas.set_option('display.max_rows', None)
+
 
 class Object:
 
@@ -68,11 +70,38 @@ class Object:
             self._data = geopandas.read_file(payload, driver="KML")
             self._data = self._data.rename(columns={"Name": "id"})
             self._content["kml"] = self._get_kml()
-        elif read_mode == ReadMode.GEOJSON:
-            self._text = bytes(data).decode().replace("\n", "").replace("},]", "}]")
+        elif read_mode == ReadMode.GEOJSON or \
+                read_mode == ReadMode.GDAL_COLLECTION:
             self._type = geopandas.GeoDataFrame
-            self._data = geopandas.GeoDataFrame.from_features(geojson.loads(self._text))
-            self._data = self._data.rename(columns={"name": "id"})
+            self._text = bytes(data).decode().replace("\n", "").replace("},]", "}]")
+            if len(self._text) > 0:
+                self._data = geopandas.GeoDataFrame.from_features(geojson.loads(self._text))
+                self._data = self._data.rename(columns={"name": "id"})
+            else:
+                self._data = geopandas.GeoDataFrame()
+        elif read_mode == ReadMode.SHAPEFILE:
+            shape_file: str = ""
+            ext_array: List[str] = ["shp", "dbf", "prj", "sbn", "sbx", "shx"]
+            # noinspection PyUnresolvedReferences,PyProtectedMember
+            temp_file = os.path.join(tempfile.gettempdir(), f"{next(tempfile._get_candidate_names())}")
+            for extension in ext_array:
+                extension = "".join([chr(c) for c in data[0:3]])
+                file_name: str = f"{temp_file}.{extension}"
+                shape_file = file_name if extension == "shp" else shape_file
+                data = data[3:]
+                #
+                byte_size: int = int.from_bytes(bytearray(data[:4]), "little")
+                data = data[4:]
+                #
+                file = open(file_name, "wb")
+                file.write(bytearray(data[:byte_size]))
+                file.close()
+                print(file_name)
+                data = data[byte_size:]
+            self._type = geopandas.GeoDataFrame
+            self._data = geopandas.GeoDataFrame.from_file(shape_file)
+            self._data = self._data.rename(columns={"global_id": "id"})
+            self._text = str(self._data)
         elif read_mode == ReadMode.NONE:
             return
         else:
@@ -206,23 +235,31 @@ class Object:
             })
         return records
 
-    def _list_points(self, geometry: [Polygon, Point]) -> List[Tuple[float, float]]:
+    def _list_points(self,
+                     geometry: [Polygon, Point, GeometryCollection],
+                     point_list: [List[Tuple[float, float]], None] = None) -> List[Tuple[float, float]]:
+        """
+        Lists all points in a geometry
+        :param geometry: Geometry Object
+        :param point_list: Point List Object
+        :return: Points List as [(x, y),...]
+        """
         self.un_static()
-        point_list: List[List[Tuple[float, float]]] = []
-        try:
-            for part in geometry:
-                x, y = part.exterior.coords.xy
-                point_list.append(list(zip(x, y)))
-        except:
-            try:
-                x,y = geometry.exterior.coords.xy
-                point_list.append(list(zip(x,y)))
-            except:
-                x, y = geometry.coords.xy
-                point_list.append(list(zip(x, y)))
-                # except:
-                #     print(geometry)+
-                #     sys.exit(0)
+        point_list = list([]) if point_list is None else point_list
+        if isinstance(geometry, GeometryCollection):
+            for index in list(range(0, len(mapping(geometry)['geometries'][0]))):
+                self._list_points(shape(mapping(geometry)['geometries'][index]), point_list)
+        elif isinstance(geometry, Point):
+            x, y = geometry.coords.xy
+            point_list.append(list(zip(x, y)))
+        elif isinstance(geometry, Polygon):
+            x, y = geometry.exterior.coords.xy
+            point_list.append(list(zip(x, y)))
+        elif isinstance(geometry, LineString):
+            x, y = geometry.coords.xy
+            point_list.append(list(zip(x, y)))
+        else:
+            raise NotImplementedError(f"Geometry type not implemented {type(geometry)}")
         return [point for point_set in point_list for point in point_set]
 
     def _get_kml(self):

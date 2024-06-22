@@ -116,38 +116,43 @@ SubOpBinPts::outputCell(const DgLocation& loc, const Val& val) const
 {
       // create the data fields
       DgDataList* data = new DgDataList();
-      if (outputCount) {
+//      if (outputCount)
+      {
          DgDataFieldInt* fld =
               new DgDataFieldInt(outputCountFldName, val.nVals);
          data->addField(fld);
       }
 
-      if (outputTotal) {
+//      if (outputTotal)
+      {
          DgDataFieldDouble* fld =
               new DgDataFieldDouble(outputTotalFldName, val.total);
          data->addField(fld);
       }
 
-      if (outputMean) {
+//      if (outputMean)
+      {
          DgDataFieldDouble* fld =
            new DgDataFieldDouble(outputMeanFldName, val.mean, valFmtStr);
          data->addField(fld);
       }
-
+//
       if (op.mainOp.operation == "BIN_POINT_PRESENCE") {
          string vecStr;
          int numClasses = presVecToString(val.presVec, op.inOp.inputFiles.size(), vecStr);
-         if (outputNumClasses) {
+//         if (outputNumClasses)
+         {
             DgDataFieldInt* fld =
                  new DgDataFieldInt(outputNumClassesFldName, numClasses);
             data->addField(fld);
          }
-
-         if (outputPresVec) {
+//
+//         if (outputPresVec)
+//         {
             DgDataFieldString* fld =
               new DgDataFieldString(outputPresVecFldName, vecStr);
             data->addField(fld);
-         }
+//         }
       }
 
       op.outOp.outputCellAdd2D(loc, nullptr, data);

@@ -1,4 +1,5 @@
 import struct
+import sys
 from enum import IntEnum
 from typing import List, Dict, Any
 
@@ -44,6 +45,8 @@ class DataType(TypeDef):
     BINARY = 4
     STRING = 5
     SHAPE_BINARY = 6
+    GDAL_GEOJSON = 7
+    LOCATION = 13
 
     @classmethod
     def from_type(cls, input_type: type) -> Any:
@@ -436,8 +439,7 @@ class PointOutput(TypeDef):
     KML = 4
     GEOJSON = 5
     SHAPEFILE = 6
-    TEXT = 7
-    GDAL_COLLECTION = 8
+    GDAL_COLLECTION = 7
 
 
 class ReadMode(TypeDef):
@@ -504,3 +506,13 @@ class ChildrenOutput(TypeDef):
     TEXT = 2
     GEOJSON_COLLECTION = 3
     GDAL_COLLECTION = 4
+
+
+class GDALFormat(TypeDef):
+    """
+    GDAL Format for GDAL outputs
+    KML = 1
+    GEOJSON = 2
+    """
+    KML = 4
+    GEOJSON = 5

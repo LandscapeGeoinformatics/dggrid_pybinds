@@ -116,19 +116,22 @@ SubOpBinPts::outputCell(const DgLocation& loc, const Val& val) const
 {
       // create the data fields
       DgDataList* data = new DgDataList();
-      if (outputCount) {
+      if (outputCount)
+      {
          DgDataFieldInt* fld =
               new DgDataFieldInt(outputCountFldName, val.nVals);
          data->addField(fld);
       }
 
-      if (outputTotal) {
+      if (outputTotal)
+      {
          DgDataFieldDouble* fld =
               new DgDataFieldDouble(outputTotalFldName, val.total);
          data->addField(fld);
       }
 
-      if (outputMean) {
+      if (outputMean)
+      {
          DgDataFieldDouble* fld =
            new DgDataFieldDouble(outputMeanFldName, val.mean, valFmtStr);
          data->addField(fld);

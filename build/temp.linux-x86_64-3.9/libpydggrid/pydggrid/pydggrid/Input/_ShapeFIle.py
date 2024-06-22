@@ -57,8 +57,7 @@ class Input(InputTemplate):
             self.records.clear()
             self.records.copy(source_object.records)
             [self.data.append(n) for n in source_object.data]
-        else:
-            raise AttributeError("Unrecognized input object type.")
+        return super(Input, self).copy(source_object)
 
     # INTERNAL
     def _un_static(self) -> None:

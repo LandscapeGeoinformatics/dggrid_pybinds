@@ -1,13 +1,13 @@
 Metadata-Version: 2.1
 Name: pydggrid
-Version: 0.0.3
+Version: 0.0.5
 Summary: DGGRID Adaptation for python using pybind11.
 Home-page: UNKNOWN
 Author: Qbist
 Author-email: q@arqimedes
 License: UNKNOWN
 Platform: UNKNOWN
-Requires-Python: >=3.7
+Requires-Python: >=3.9
 Provides-Extra: test
 License-File: LICENSE
 

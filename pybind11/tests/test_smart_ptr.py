@@ -92,7 +92,7 @@ def test_smart_ptr(capture):
     assert cstats.move_assignments == 0
 
     # Object
-    cstats = ConstructorStats.get(m.Object)
+    cstats = ConstructorStats.get(m.Output)
     assert cstats.alive() == 0
     assert cstats.values() == []
     assert cstats.default_constructions == 10

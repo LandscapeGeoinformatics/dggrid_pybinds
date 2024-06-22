@@ -1,9 +1,19 @@
-# Version 0.0.5
+# Version 0.0.6
 # Change Log
 
+- **0.0.6**
+  - Location data type
+  - PointPresence Query
+  - Location input empty line fix
+  - Location inputs multi-location update
+  - Sequence output object
+  - Output Template Object
+  - Input objects inheritance fixes
+  
 - **0.0.5**
   - UnitTests - planetRiskClipHiRes, planetRiskClipMulti
   - GDAL driver geojson fix
+  - Docker and setup fixes by alex
 
 - **0.0.4**
   - UnitTests - isea4d, isea4t, isea7hGen, multipleOrientations

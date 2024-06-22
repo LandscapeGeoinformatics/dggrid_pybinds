@@ -81,10 +81,10 @@ OpBasic::initialize (bool force)
 //      primarySubOp = new SubOpBinPts(*this);
 //   else if (opName == "OUTPUT_STATS")
 //      primarySubOp = new SubOpStats(*this);
-//   else if (opName == "BIN_POINT_VALS")
-//      primarySubOp = new SubOpBinPts(*this);
-//   else if (opName == "BIN_POINT_PRESENCE")
-//      primarySubOp = new SubOpBinPts(*this);
+   else if (opName == "BIN_POINT_VALS")
+      primarySubOp = new SubOpBinPts(*this);
+   else if (opName == "BIN_POINT_PRESENCE")
+      primarySubOp = new SubOpBinPts(*this);
 //   else if (opName == "TRANSFORM_POINTS")
 //      primarySubOp = new SubOpTransform(*this);
    else

@@ -61,6 +61,18 @@ class Object:
             self._data = list(elements[0])
             self._type = list(elements[1])
 
+    def update(self, data: [bytes, str, pathlib.Path, List[Any]], data_type: DataType) -> None:
+        """
+        Updates the last saved record to the records array
+        :param data: Record Data
+        :param data_type: Data Type
+        :return: None
+        """
+        if len(self._data) > 0:
+            self._data.pop()
+            self._type.pop()
+        return self.save(data, data_type)
+
     def save(self, data: [bytes, str, pathlib.Path, List[Any]], data_type: DataType) -> None:
         """
         Saves bytes to the records set
@@ -72,7 +84,10 @@ class Object:
         :return: None
         """
         if isinstance(data, str):
-            return self.save(str(data).encode(), data_type)
+            byte_data: List[bytes] = list([])
+            byte_data.append(DataType.INT.convert_bytes(len(data)))
+            byte_data.append(str(data).encode())
+            return self.save(b''.join(byte_data), data_type)
         elif isinstance(data, pathlib.Path):
             file = open(pathlib.Path(data).absolute(), "rb")
             byte_data: bytes = file.read()

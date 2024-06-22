@@ -125,6 +125,14 @@ build CMakeFiles/libpydggrid.dir/src/pydggrid/SubOpGen.cpp.o: CXX_COMPILER__libp
   OBJECT_DIR = CMakeFiles/libpydggrid.dir
   OBJECT_FILE_DIR = CMakeFiles/libpydggrid.dir/src/pydggrid
 
+build CMakeFiles/libpydggrid.dir/src/pydggrid/SubOpBinPts.cpp.o: CXX_COMPILER__libpydggrid_Debug /opt/source/ut/libpydggrid/src/pydggrid/SubOpBinPts.cpp || cmake_object_order_depends_target_libpydggrid
+  DEFINES = -DUSE_GDAL -DVERSION_INFO="" -Dlibpydggrid_EXPORTS
+  DEP_FILE = CMakeFiles/libpydggrid.dir/src/pydggrid/SubOpBinPts.cpp.o.d
+  FLAGS = -g -fPIC -fvisibility=hidden -std=gnu++17
+  INCLUDES = -I/opt/source/ut/libpydggrid/include -I/opt/source/ut/libpydggrid/DGGRID/src/lib/pydgaplib -I/usr/include/gdal -I/opt/source/ut/libpydggrid/DGGRID/src/lib/shapelib/include -I/opt/source/ut/libpydggrid/DGGRID/src/lib/shapelib/include/shapelib -I/opt/source/ut/libpydggrid/DGGRID/src/lib/proj4lib/include -I/opt/source/ut/libpydggrid/src/pydglib/include -I/opt/source/ut/libpydggrid/src/pydgaplib/include -I/opt/source/ut/libpydggrid/src/pydgaplib/../../DGGRID/src/lib/dglib/include -isystem /opt/source/ut/libpydggrid/pybind11/include -isystem /usr/include/python3.9
+  OBJECT_DIR = CMakeFiles/libpydggrid.dir
+  OBJECT_FILE_DIR = CMakeFiles/libpydggrid.dir/src/pydggrid
+
 build CMakeFiles/libpydggrid.dir/src/pydggrid/SubOpBasic.cpp.o: CXX_COMPILER__libpydggrid_Debug /opt/source/ut/libpydggrid/src/pydggrid/SubOpBasic.cpp || cmake_object_order_depends_target_libpydggrid
   DEFINES = -DUSE_GDAL -DVERSION_INFO="" -Dlibpydggrid_EXPORTS
   DEP_FILE = CMakeFiles/libpydggrid.dir/src/pydggrid/SubOpBasic.cpp.o.d
@@ -173,7 +181,7 @@ build CMakeFiles/libpydggrid.dir/src/pydggrid/DgHexSF.cpp.o: CXX_COMPILER__libpy
 #############################################
 # Link the shared module libpydggrid.cpython-39-x86_64-linux-gnu.so
 
-build libpydggrid.cpython-39-x86_64-linux-gnu.so: CXX_MODULE_LIBRARY_LINKER__libpydggrid_Debug CMakeFiles/libpydggrid.dir/main.cpp.o CMakeFiles/libpydggrid.dir/src/library.cpp.o CMakeFiles/libpydggrid.dir/src/pydggrid/OpBasic.cpp.o CMakeFiles/libpydggrid.dir/src/pydggrid/SubOpMain.cpp.o CMakeFiles/libpydggrid.dir/src/pydggrid/SubOpDGG.cpp.o CMakeFiles/libpydggrid.dir/src/pydggrid/SubOpIn.cpp.o CMakeFiles/libpydggrid.dir/src/pydggrid/SubOpOut.cpp.o CMakeFiles/libpydggrid.dir/src/pydggrid/SubOpGen.cpp.o CMakeFiles/libpydggrid.dir/src/pydggrid/SubOpBasic.cpp.o CMakeFiles/libpydggrid.dir/src/pydggrid/SubOpBasicMulti.cpp.o CMakeFiles/libpydggrid.dir/src/pydggrid/SubOpGenHelper.cpp.o CMakeFiles/libpydggrid.dir/src/pydggrid/clipper.cpp.o CMakeFiles/libpydggrid.dir/src/pydggrid/DgHexSF.cpp.o | /usr/lib/libgdal.so src/pydgaplib/libpydgaplib.so src/pydglib/libpydglib.so DGGRID/src/lib/shapelib/libshapelib.so DGGRID/src/lib/proj4lib/libproj4lib.so || DGGRID/src/lib/proj4lib/libproj4lib.so DGGRID/src/lib/shapelib/libshapelib.so src/pydgaplib/libpydgaplib.so src/pydglib/libpydglib.so
+build libpydggrid.cpython-39-x86_64-linux-gnu.so: CXX_MODULE_LIBRARY_LINKER__libpydggrid_Debug CMakeFiles/libpydggrid.dir/main.cpp.o CMakeFiles/libpydggrid.dir/src/library.cpp.o CMakeFiles/libpydggrid.dir/src/pydggrid/OpBasic.cpp.o CMakeFiles/libpydggrid.dir/src/pydggrid/SubOpMain.cpp.o CMakeFiles/libpydggrid.dir/src/pydggrid/SubOpDGG.cpp.o CMakeFiles/libpydggrid.dir/src/pydggrid/SubOpIn.cpp.o CMakeFiles/libpydggrid.dir/src/pydggrid/SubOpOut.cpp.o CMakeFiles/libpydggrid.dir/src/pydggrid/SubOpGen.cpp.o CMakeFiles/libpydggrid.dir/src/pydggrid/SubOpBinPts.cpp.o CMakeFiles/libpydggrid.dir/src/pydggrid/SubOpBasic.cpp.o CMakeFiles/libpydggrid.dir/src/pydggrid/SubOpBasicMulti.cpp.o CMakeFiles/libpydggrid.dir/src/pydggrid/SubOpGenHelper.cpp.o CMakeFiles/libpydggrid.dir/src/pydggrid/clipper.cpp.o CMakeFiles/libpydggrid.dir/src/pydggrid/DgHexSF.cpp.o | /usr/lib/libgdal.so src/pydgaplib/libpydgaplib.so src/pydglib/libpydglib.so DGGRID/src/lib/shapelib/libshapelib.so DGGRID/src/lib/proj4lib/libproj4lib.so || DGGRID/src/lib/proj4lib/libproj4lib.so DGGRID/src/lib/shapelib/libshapelib.so src/pydgaplib/libpydgaplib.so src/pydglib/libpydglib.so
   LANGUAGE_COMPILE_FLAGS = -g
   LINK_LIBRARIES = -Wl,-rpath,/opt/source/ut/libpydggrid/cmake-build-debug/src/pydgaplib:/opt/source/ut/libpydggrid/cmake-build-debug/src/pydglib:/opt/source/ut/libpydggrid/cmake-build-debug/DGGRID/src/lib/shapelib:/opt/source/ut/libpydggrid/cmake-build-debug/DGGRID/src/lib/proj4lib  /usr/lib/libgdal.so  src/pydgaplib/libpydgaplib.so  src/pydglib/libpydglib.so  DGGRID/src/lib/shapelib/libshapelib.so  DGGRID/src/lib/proj4lib/libproj4lib.so
   OBJECT_DIR = CMakeFiles/libpydggrid.dir
@@ -266,6 +274,14 @@ build CMakeFiles/pydggrid_test.dir/src/pydggrid/SubOpGen.cpp.o: CXX_COMPILER__py
   OBJECT_DIR = CMakeFiles/pydggrid_test.dir
   OBJECT_FILE_DIR = CMakeFiles/pydggrid_test.dir/src/pydggrid
 
+build CMakeFiles/pydggrid_test.dir/src/pydggrid/SubOpBinPts.cpp.o: CXX_COMPILER__pydggrid_test_Debug /opt/source/ut/libpydggrid/src/pydggrid/SubOpBinPts.cpp || cmake_object_order_depends_target_pydggrid_test
+  DEFINES = -DUSE_GDAL
+  DEP_FILE = CMakeFiles/pydggrid_test.dir/src/pydggrid/SubOpBinPts.cpp.o.d
+  FLAGS = -g -std=gnu++17
+  INCLUDES = -I/opt/source/ut/libpydggrid/include -I/opt/source/ut/libpydggrid/src/pydgaplib -I/usr/include/gdal -I/opt/source/ut/libpydggrid/DGGRID/src/lib/shapelib/include -I/opt/source/ut/libpydggrid/DGGRID/src/lib/shapelib/include/shapelib -I/opt/source/ut/libpydggrid/DGGRID/src/lib/proj4lib/include -I/opt/source/ut/libpydggrid/src/pydglib/include -I/opt/source/ut/libpydggrid/src/pydgaplib/include -I/opt/source/ut/libpydggrid/src/pydgaplib/../../DGGRID/src/lib/dglib/include -isystem /opt/source/ut/libpydggrid/pybind11/include -isystem /usr/include/python3.9
+  OBJECT_DIR = CMakeFiles/pydggrid_test.dir
+  OBJECT_FILE_DIR = CMakeFiles/pydggrid_test.dir/src/pydggrid
+
 build CMakeFiles/pydggrid_test.dir/src/pydggrid/SubOpBasic.cpp.o: CXX_COMPILER__pydggrid_test_Debug /opt/source/ut/libpydggrid/src/pydggrid/SubOpBasic.cpp || cmake_object_order_depends_target_pydggrid_test
   DEFINES = -DUSE_GDAL
   DEP_FILE = CMakeFiles/pydggrid_test.dir/src/pydggrid/SubOpBasic.cpp.o.d
@@ -314,7 +330,7 @@ build CMakeFiles/pydggrid_test.dir/src/pydggrid/DgHexSF.cpp.o: CXX_COMPILER__pyd
 #############################################
 # Link the executable pydggrid_test
 
-build pydggrid_test: CXX_EXECUTABLE_LINKER__pydggrid_test_Debug CMakeFiles/pydggrid_test.dir/main.cpp.o CMakeFiles/pydggrid_test.dir/src/library.cpp.o CMakeFiles/pydggrid_test.dir/src/pydggrid/OpBasic.cpp.o CMakeFiles/pydggrid_test.dir/src/pydggrid/SubOpMain.cpp.o CMakeFiles/pydggrid_test.dir/src/pydggrid/SubOpDGG.cpp.o CMakeFiles/pydggrid_test.dir/src/pydggrid/SubOpIn.cpp.o CMakeFiles/pydggrid_test.dir/src/pydggrid/SubOpOut.cpp.o CMakeFiles/pydggrid_test.dir/src/pydggrid/SubOpGen.cpp.o CMakeFiles/pydggrid_test.dir/src/pydggrid/SubOpBasic.cpp.o CMakeFiles/pydggrid_test.dir/src/pydggrid/SubOpBasicMulti.cpp.o CMakeFiles/pydggrid_test.dir/src/pydggrid/SubOpGenHelper.cpp.o CMakeFiles/pydggrid_test.dir/src/pydggrid/clipper.cpp.o CMakeFiles/pydggrid_test.dir/src/pydggrid/DgHexSF.cpp.o | /usr/lib/libgdal.so src/pydgaplib/libpydgaplib.so src/pydglib/libpydglib.so DGGRID/src/lib/shapelib/libshapelib.so DGGRID/src/lib/proj4lib/libproj4lib.so /usr/lib/x86_64-linux-gnu/libpython3.9.so || DGGRID/src/lib/proj4lib/libproj4lib.so DGGRID/src/lib/shapelib/libshapelib.so src/pydgaplib/libpydgaplib.so src/pydglib/libpydglib.so
+build pydggrid_test: CXX_EXECUTABLE_LINKER__pydggrid_test_Debug CMakeFiles/pydggrid_test.dir/main.cpp.o CMakeFiles/pydggrid_test.dir/src/library.cpp.o CMakeFiles/pydggrid_test.dir/src/pydggrid/OpBasic.cpp.o CMakeFiles/pydggrid_test.dir/src/pydggrid/SubOpMain.cpp.o CMakeFiles/pydggrid_test.dir/src/pydggrid/SubOpDGG.cpp.o CMakeFiles/pydggrid_test.dir/src/pydggrid/SubOpIn.cpp.o CMakeFiles/pydggrid_test.dir/src/pydggrid/SubOpOut.cpp.o CMakeFiles/pydggrid_test.dir/src/pydggrid/SubOpGen.cpp.o CMakeFiles/pydggrid_test.dir/src/pydggrid/SubOpBinPts.cpp.o CMakeFiles/pydggrid_test.dir/src/pydggrid/SubOpBasic.cpp.o CMakeFiles/pydggrid_test.dir/src/pydggrid/SubOpBasicMulti.cpp.o CMakeFiles/pydggrid_test.dir/src/pydggrid/SubOpGenHelper.cpp.o CMakeFiles/pydggrid_test.dir/src/pydggrid/clipper.cpp.o CMakeFiles/pydggrid_test.dir/src/pydggrid/DgHexSF.cpp.o | /usr/lib/libgdal.so src/pydgaplib/libpydgaplib.so src/pydglib/libpydglib.so DGGRID/src/lib/shapelib/libshapelib.so DGGRID/src/lib/proj4lib/libproj4lib.so /usr/lib/x86_64-linux-gnu/libpython3.9.so || DGGRID/src/lib/proj4lib/libproj4lib.so DGGRID/src/lib/shapelib/libshapelib.so src/pydgaplib/libpydgaplib.so src/pydglib/libpydglib.so
   FLAGS = -g
   LINK_LIBRARIES = -Wl,-rpath,/opt/source/ut/libpydggrid/cmake-build-debug/src/pydgaplib:/opt/source/ut/libpydggrid/cmake-build-debug/src/pydglib:/opt/source/ut/libpydggrid/cmake-build-debug/DGGRID/src/lib/shapelib:/opt/source/ut/libpydggrid/cmake-build-debug/DGGRID/src/lib/proj4lib  /usr/lib/libgdal.so  src/pydgaplib/libpydgaplib.so  src/pydglib/libpydglib.so  DGGRID/src/lib/shapelib/libshapelib.so  DGGRID/src/lib/proj4lib/libproj4lib.so  /usr/lib/x86_64-linux-gnu/libpython3.9.so
   OBJECT_DIR = CMakeFiles/pydggrid_test.dir

@@ -1,0 +1,186 @@
+import pathlib
+import sys
+from typing import Any, List, Dict
+
+import libpydggrid
+
+from pydggrid.Input import Auto, InputTemplate, Sequence, ShapeFile, Array, GeoJSON, Location
+from pydggrid.Objects import Collection
+from pydggrid.Types import Operation, ReadMode, CellOutput, ChildrenOutput, NeighborOutput, \
+    InputAddress, PointOutput, PointDataType
+from pydggrid.Queries._Custom import Query as BaseQuery
+
+
+class Query(BaseQuery):
+    """
+    Base Generate Grid Query
+    - clip: clip settings configured with set_clip, by default set to WHOLE_EARTH, AKA. "Auto()"
+    - cells: Cells response from DGGRID
+    - points: Points response from DGGRID
+    - Meta: Query meta-data object
+    """
+
+    def __init__(self):
+        """
+        Default constructor
+        """
+        super().__init__(Operation.BIN_POINT_PRESENCE)
+        self.input: InputTemplate = Auto()
+        self.cells: Collection = Collection()
+        self.points: Collection = Collection()
+        self.collection: Collection = Collection()
+        self.dgg_meta: str = ""
+        # Set defaults
+
+    def __bytes__(self) -> bytes:
+        """
+        Returns query bytes
+        :return: Clip Bytes
+        """
+        return self.clip.records.__bytes__()
+
+    def set_input(self,
+                  point_type: [PointDataType, int, None] = None,
+                  input_data: [Any, None] = None,
+                  column: [Dict[str, str], Dict[str, int], None] = None) -> None:
+        """
+        Sets the point presence input query.
+        :param point_type: PointDataType definition
+        :param column: Column name mapping, should be a dictionary, as
+            In the case of PointDataType.TEXT
+                {
+                    "lat": "<lat-equivalent-field>",
+                    "long": "<lat-equivalent-field>",
+                    "id": "<id-equivalent-field>",
+                    "label": "<label-equivalent-field>"
+                }
+
+                .. or, a dictionary of indexes as:
+                {
+                    "lat": 1,
+                    "long": 2,
+                    "id": 0,
+                    "label": 3
+                }
+                this field can be left as none, in which case default mapping as described above will be used.
+            for PointDataType.GDAL
+                The column value is ignored for GDAL PointPresence Queries
+        :param input_data: Input data to process to the input element.
+        :return:
+        """
+        if point_type == PointDataType.TEXT:
+            self.input = Location()
+            if input_data is not None:
+                self.input.save(input_data, column)
+        elif point_type == PointDataType.GDAL:
+            self.input = GeoJSON()
+        else:
+            raise Exception("Unsupported PointDataType")
+        if input_data is not None:
+            self.input.save(input_data, column)
+
+    # Override
+    # noinspection PyPep8Naming
+    def UnitTest_ReadPayload(self) -> str:
+        """
+        Runs a unit test to pybinds11 layer
+        :return: Test response string
+        """
+        self._alter_payload()
+        return libpydggrid.UnitTest_ReadPayload(self.Meta.dict(), self.input.__bytes__())
+
+    # Override
+    # noinspection PyPep8Naming
+    def UnitTest_ReadQuery(self) -> str:
+        """
+        Runs a unit test to pybinds11 layer
+        :return: Test response string
+        """
+        dictionary: Dict[str, str] = self.Meta.dict()
+        payload: bytearray = bytearray(self.input.__bytes__())
+        print(self.input.__bytes__().hex())
+        sys.exit(0)
+        return libpydggrid.UnitTest_ReadQuery(dictionary, list(payload))
+
+    # Override
+    # noinspection PyPep8Naming
+    def UnitTest_RunQuery(self) -> str:
+        """
+        Runs a unit test to pybinds11 layer
+        :return: Test response string
+        """
+        # self._alter_payload()
+        # dictionary: Dict[str, str] = self.Meta.dict()
+        # payload: bytearray = bytearray(self.input.__bytes__())
+        # return libpydggrid.UnitTest_RunQuery(dictionary, list(payload))
+
+    # Override
+    def run(self, byte_data: [bytes, None] = None) -> None:
+        """
+        Runs the query
+        :param byte_data byte payload, if left blank Input.__bytes__() will be used
+        :return: None
+        """
+        # self._alter_payload()
+        # byte_data: Dict[str, bytes] = super().exec(self.input.__bytes__())
+        # self.dgg_meta = bytearray(byte_data["meta"]).decode() if "meta" in byte_data else ""
+        # self.cells.save(byte_data["cells"], self._read_mode("cells"))
+        # self.points.save(byte_data["points"], self._read_mode("points"))
+        # self.collection.save(byte_data["collection"], self._read_mode("collection"))
+
+    # INTERNAL
+    #
+    # def _read_mode(self, vector_id: str) -> ReadMode:
+    #     """
+    #     Returns read mode for the vector
+    #     :param vector_id Vector ID To use
+    #     :return: Read Mode Object
+    #     """
+    #     if vector_id == "cells":
+    #         return ReadMode(self.Meta.as_int("cell_output_gdal_format")) \
+    #             if self.Meta.as_int("cell_output_type") == CellOutput.GDAL \
+    #             else ReadMode(self.Meta.as_int("cell_output_type"))
+    #     elif vector_id == "points":
+    #         return ReadMode(self.Meta.as_int("point_output_gdal_format")) \
+    #             if self.Meta.as_int("point_output_type") == PointOutput.GDAL \
+    #             else ReadMode(self.Meta.as_int("point_output_type"))
+    #     elif vector_id == "collection":
+    #         return ReadMode.NONE if self._is_collection() is False \
+    #             else ReadMode(self.Meta.as_int("cell_output_gdal_format"))
+    #
+    # def _is_collection(self) -> bool:
+    #     """
+    #     Returns true if collection query
+    #     :return: True if collection
+    #     """
+    #     return self.Meta.get("cell_output_type") == CellOutput.GDAL_COLLECTION or \
+    #            self.Meta.get("point_output_type") == PointOutput.GDAL_COLLECTION
+    #
+    # def _run_fixes(self):
+    #     """
+    #     Returns collection output type
+    #     :return: Collection output type
+    #     """
+    #     if self._is_collection():
+    #         self.Meta.save("children_output_type", ChildrenOutput.GDAL_COLLECTION)
+    #         self.Meta.save("neighbor_output_type", NeighborOutput.GDAL_COLLECTION)
+    #         self.Meta.set_default("cell_output_gdal_format")
+    #         self.Meta.set_default("point_output_gdal_format")
+    #         self.Meta.set_default("collection_output_gdal_format")
+    #
+    #     if self.Meta.as_int("point_output_type") == PointOutput.GDAL:
+    #         self.Meta.set_default("point_output_gdal_format")
+    #
+    #     if self.Meta.as_int("cell_output_type") == PointOutput.GDAL:
+    #         self.Meta.set_default("cell_output_gdal_format")
+    #
+    # def _alter_payload(self) -> None:
+    #     """
+    #     Makes final changes to the parameter payload
+    #     :return: None
+    #     """
+    #     if self.Meta.as_int("clip_subset_type") == ClipType.COARSE_CELLS:
+    #         # noinspection PyUnresolvedReferences
+    #         self.Meta.save("clip_cell_addresses", " ".join([str(n) for n in self.clip.data]))
+    #         self.Meta.save("input_address_type", InputAddress.SEQNUM)
+

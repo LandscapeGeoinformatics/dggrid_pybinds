@@ -1,36 +1,29 @@
-import json
-import os.path
 import sys
 import tempfile
+from abc import ABC, abstractmethod
 from io import StringIO
 from typing import List, Any, Dict, Tuple
 
-import fiona
+import os
+
 import geojson
 import geopandas
 import numpy
 import pandas
 from shapely import Polygon, Point, GeometryCollection, LineString
-from shapely.geometry import shape, mapping
+from shapely.geometry import mapping, shape
 
 from pydggrid.Types import ReadMode
 
-fiona.drvsupport.supported_drivers['kml'] = 'rw'  # enable KML support which is disabled by default
-fiona.drvsupport.supported_drivers['KML'] = 'rw'  # enable KML support which is disabled by default
-pandas.set_option('display.max_columns', None)
-pandas.set_option('display.max_rows', None)
 
-
-class Object:
+class Template(ABC):
 
     def __init__(self):
         self._text: str = ""
-        self._data: Any = list([])
-        self._cols: List[str] = list(["id", "lat", "long"])
-        self._type: [ReadMode, None] = None
-        self._crs: str = "epsg:4326"
+        self._data: [Any, None] = None
+        self._type: [type, None] = None
+        self._cols: List[str] = list([])
         self._content: Dict[str, str] = dict({})
-        pass
 
     def save(self, data: bytes, read_mode: ReadMode) -> None:
         """
@@ -102,6 +95,10 @@ class Object:
             self._data = geopandas.GeoDataFrame.from_file(shape_file)
             self._data = self._data.rename(columns={"global_id": "id"})
             self._text = str(self._data)
+        elif read_mode == ReadMode.SEQUENCE:
+            self._type = list
+            self._data = list(data)
+            self._text = os.linesep.join([str(n) for n in self._data])
         elif read_mode == ReadMode.NONE:
             return
         else:
@@ -117,6 +114,8 @@ class Object:
             return str(self._data)
         if self._type == geopandas.GeoDataFrame:
             return str(pandas.DataFrame(self._data))
+        if self._type == list:
+            return os.linesep.join([str(n) for n in self._data])
         return "UNKNOWN"
 
     def get_columns(self) -> List[str]:
@@ -133,69 +132,44 @@ class Object:
         """
         return self._text
 
+    def un_static(self) -> None:
+        """
+        Un Statics a method
+        :return: None
+        """
+        pass
+
+    @abstractmethod
     def get_frame(self) -> [pandas.DataFrame, None]:
         """
         Returns the record as a data frame
         :return: Pandas DataFrame or None if not available
         """
-        if self._type is None:
-            return pandas.DataFrame()
-        elif self._type == pandas.DataFrame:
-            return self._data
-        elif self._type == geopandas.GeoDataFrame:
-            elements: List[Dict[str, Any]] = list([])
-            frame: pandas.DataFrame({"id": [], "lat": [], "long": []})
-            for data_node in self._data.itertuples():
-                points: List[Tuple[float, float]] = self._list_points(data_node.geometry)
-                index_id = data_node.id if hasattr(data_node, "id") else data_node.Name
-                [elements.append({
-                    self._cols[0]: str(index_id),
-                    self._cols[1]: n[0],
-                    self._cols[2]: n[1]
-                }) for n in points]
-            return pandas.DataFrame(elements)
-        else:
-            raise NotImplementedError(f"This collection cannot be exported as a DataFrame [ {self._type} ]")
+        raise NotImplementedError(f"This collection cannot be exported as a DataFrame [ {self._type} ]")
 
+    @abstractmethod
     def get_geoframe(self) -> geopandas.GeoDataFrame:
         """
         Returns the record as a geo data frame
         :return: Geo Pandas Data Frame
         """
-        if self._type is None:
-            return geopandas.GeoDataFrame()
-        elif self._type == pandas.DataFrame:
-            return geopandas.GeoDataFrame(self._data)
-        elif self._type == geopandas.GeoDataFrame:
-            return self._data
-        else:
-            raise NotImplementedError("This collection cannot be exported as a GeoDataFrame")
+        raise NotImplementedError("This collection cannot be exported as a GeoDataFrame")
 
+    @abstractmethod
     def get_xml(self) -> str:
         """
         Returns the XML string of the content
         :return: XML String
         """
-        if self._type == pandas.DataFrame:
-            return self._data.to_xml()
-        elif self._type == geopandas.GeoDataFrame:
-            return self._content["kml"]
-        else:
-            raise NotImplementedError("This collection cannot be exported as XML")
+        raise NotImplementedError("This collection cannot be exported as XML")
 
+    @abstractmethod
     def get_numpy(self) -> numpy.ndarray:
         """
         Returns the record as a numpy ndarray
         :return: Numpy ND Array
         """
-        if self._type is None:
-            return numpy.array([])
-        if self._type == pandas.DataFrame:
-            return self._data.to_numpy()
-        elif self._type == geopandas.GeoDataFrame:
-            return self.get_frame().to_numpy()
-        else:
-            raise NotImplementedError("This collection cannot be exported as Numpy NDArray")
+        raise NotImplementedError("This collection cannot be exported as Numpy NDArray")
 
     def un_static(self) -> None:
         """

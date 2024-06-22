@@ -64,6 +64,7 @@ class Input(InputTemplate):
         elif isinstance(data, pandas.DataFrame) or isinstance(data, geopandas.GeoDataFrame):
             return self.save_frame(data, column)
 
+    # Override
     def read(self, file_path: [str, pathlib.Path]) -> None:
         """
         Reads a file and saves into sequence records

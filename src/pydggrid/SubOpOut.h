@@ -73,6 +73,7 @@ struct SubOpOut : public SubOpBasic {
     std::vector<unsigned char> getRPoints();
     std::vector<unsigned char> getPRCells();
    std::vector<unsigned char> getCollection();
+   std::vector<unsigned char> getTextOut();
 
    // the parameters
    const DgRFBase* pOutRF;     // RF for output addresses
@@ -132,7 +133,7 @@ struct SubOpOut : public SubOpBasic {
    string kmlName;
    string kmlDescription;
 
-   ofstream* dataOut;    // text output with no geometry
+   stringstream * dataOut;    // text output with no geometry
    DgOutLocFile *cellOut, *ptOut, *collectOut, *randPtsOut;
    DgOutShapefile *cellOutShp, *ptOutShp;
    DgOutPRCellsFile *prCellOut;
