@@ -237,10 +237,38 @@ CMakeFiles/pydggrid_test.dir/src/pydggrid/SubOpGenHelper.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/pydggrid_test.dir/src/pydggrid/SubOpGenHelper.cpp.s"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /opt/source/ut/libpydggrid/src/pydggrid/SubOpGenHelper.cpp -o CMakeFiles/pydggrid_test.dir/src/pydggrid/SubOpGenHelper.cpp.s
 
+CMakeFiles/pydggrid_test.dir/src/pydggrid/SubOpStats.cpp.o: CMakeFiles/pydggrid_test.dir/flags.make
+CMakeFiles/pydggrid_test.dir/src/pydggrid/SubOpStats.cpp.o: ../../../src/pydggrid/SubOpStats.cpp
+CMakeFiles/pydggrid_test.dir/src/pydggrid/SubOpStats.cpp.o: CMakeFiles/pydggrid_test.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/opt/source/ut/libpydggrid/build/temp.linux-x86_64-3.9/libpydggrid/CMakeFiles --progress-num=$(CMAKE_PROGRESS_13) "Building CXX object CMakeFiles/pydggrid_test.dir/src/pydggrid/SubOpStats.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/pydggrid_test.dir/src/pydggrid/SubOpStats.cpp.o -MF CMakeFiles/pydggrid_test.dir/src/pydggrid/SubOpStats.cpp.o.d -o CMakeFiles/pydggrid_test.dir/src/pydggrid/SubOpStats.cpp.o -c /opt/source/ut/libpydggrid/src/pydggrid/SubOpStats.cpp
+
+CMakeFiles/pydggrid_test.dir/src/pydggrid/SubOpStats.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/pydggrid_test.dir/src/pydggrid/SubOpStats.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /opt/source/ut/libpydggrid/src/pydggrid/SubOpStats.cpp > CMakeFiles/pydggrid_test.dir/src/pydggrid/SubOpStats.cpp.i
+
+CMakeFiles/pydggrid_test.dir/src/pydggrid/SubOpStats.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/pydggrid_test.dir/src/pydggrid/SubOpStats.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /opt/source/ut/libpydggrid/src/pydggrid/SubOpStats.cpp -o CMakeFiles/pydggrid_test.dir/src/pydggrid/SubOpStats.cpp.s
+
+CMakeFiles/pydggrid_test.dir/src/pydggrid/SubOpTransform.cpp.o: CMakeFiles/pydggrid_test.dir/flags.make
+CMakeFiles/pydggrid_test.dir/src/pydggrid/SubOpTransform.cpp.o: ../../../src/pydggrid/SubOpTransform.cpp
+CMakeFiles/pydggrid_test.dir/src/pydggrid/SubOpTransform.cpp.o: CMakeFiles/pydggrid_test.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/opt/source/ut/libpydggrid/build/temp.linux-x86_64-3.9/libpydggrid/CMakeFiles --progress-num=$(CMAKE_PROGRESS_14) "Building CXX object CMakeFiles/pydggrid_test.dir/src/pydggrid/SubOpTransform.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/pydggrid_test.dir/src/pydggrid/SubOpTransform.cpp.o -MF CMakeFiles/pydggrid_test.dir/src/pydggrid/SubOpTransform.cpp.o.d -o CMakeFiles/pydggrid_test.dir/src/pydggrid/SubOpTransform.cpp.o -c /opt/source/ut/libpydggrid/src/pydggrid/SubOpTransform.cpp
+
+CMakeFiles/pydggrid_test.dir/src/pydggrid/SubOpTransform.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/pydggrid_test.dir/src/pydggrid/SubOpTransform.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /opt/source/ut/libpydggrid/src/pydggrid/SubOpTransform.cpp > CMakeFiles/pydggrid_test.dir/src/pydggrid/SubOpTransform.cpp.i
+
+CMakeFiles/pydggrid_test.dir/src/pydggrid/SubOpTransform.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/pydggrid_test.dir/src/pydggrid/SubOpTransform.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /opt/source/ut/libpydggrid/src/pydggrid/SubOpTransform.cpp -o CMakeFiles/pydggrid_test.dir/src/pydggrid/SubOpTransform.cpp.s
+
 CMakeFiles/pydggrid_test.dir/src/pydggrid/clipper.cpp.o: CMakeFiles/pydggrid_test.dir/flags.make
 CMakeFiles/pydggrid_test.dir/src/pydggrid/clipper.cpp.o: ../../../src/pydggrid/clipper.cpp
 CMakeFiles/pydggrid_test.dir/src/pydggrid/clipper.cpp.o: CMakeFiles/pydggrid_test.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/opt/source/ut/libpydggrid/build/temp.linux-x86_64-3.9/libpydggrid/CMakeFiles --progress-num=$(CMAKE_PROGRESS_13) "Building CXX object CMakeFiles/pydggrid_test.dir/src/pydggrid/clipper.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/opt/source/ut/libpydggrid/build/temp.linux-x86_64-3.9/libpydggrid/CMakeFiles --progress-num=$(CMAKE_PROGRESS_15) "Building CXX object CMakeFiles/pydggrid_test.dir/src/pydggrid/clipper.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/pydggrid_test.dir/src/pydggrid/clipper.cpp.o -MF CMakeFiles/pydggrid_test.dir/src/pydggrid/clipper.cpp.o.d -o CMakeFiles/pydggrid_test.dir/src/pydggrid/clipper.cpp.o -c /opt/source/ut/libpydggrid/src/pydggrid/clipper.cpp
 
 CMakeFiles/pydggrid_test.dir/src/pydggrid/clipper.cpp.i: cmake_force
@@ -254,7 +282,7 @@ CMakeFiles/pydggrid_test.dir/src/pydggrid/clipper.cpp.s: cmake_force
 CMakeFiles/pydggrid_test.dir/src/pydggrid/DgHexSF.cpp.o: CMakeFiles/pydggrid_test.dir/flags.make
 CMakeFiles/pydggrid_test.dir/src/pydggrid/DgHexSF.cpp.o: ../../../src/pydggrid/DgHexSF.cpp
 CMakeFiles/pydggrid_test.dir/src/pydggrid/DgHexSF.cpp.o: CMakeFiles/pydggrid_test.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/opt/source/ut/libpydggrid/build/temp.linux-x86_64-3.9/libpydggrid/CMakeFiles --progress-num=$(CMAKE_PROGRESS_14) "Building CXX object CMakeFiles/pydggrid_test.dir/src/pydggrid/DgHexSF.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/opt/source/ut/libpydggrid/build/temp.linux-x86_64-3.9/libpydggrid/CMakeFiles --progress-num=$(CMAKE_PROGRESS_16) "Building CXX object CMakeFiles/pydggrid_test.dir/src/pydggrid/DgHexSF.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/pydggrid_test.dir/src/pydggrid/DgHexSF.cpp.o -MF CMakeFiles/pydggrid_test.dir/src/pydggrid/DgHexSF.cpp.o.d -o CMakeFiles/pydggrid_test.dir/src/pydggrid/DgHexSF.cpp.o -c /opt/source/ut/libpydggrid/src/pydggrid/DgHexSF.cpp
 
 CMakeFiles/pydggrid_test.dir/src/pydggrid/DgHexSF.cpp.i: cmake_force
@@ -279,6 +307,8 @@ pydggrid_test_OBJECTS = \
 "CMakeFiles/pydggrid_test.dir/src/pydggrid/SubOpBasic.cpp.o" \
 "CMakeFiles/pydggrid_test.dir/src/pydggrid/SubOpBasicMulti.cpp.o" \
 "CMakeFiles/pydggrid_test.dir/src/pydggrid/SubOpGenHelper.cpp.o" \
+"CMakeFiles/pydggrid_test.dir/src/pydggrid/SubOpStats.cpp.o" \
+"CMakeFiles/pydggrid_test.dir/src/pydggrid/SubOpTransform.cpp.o" \
 "CMakeFiles/pydggrid_test.dir/src/pydggrid/clipper.cpp.o" \
 "CMakeFiles/pydggrid_test.dir/src/pydggrid/DgHexSF.cpp.o"
 
@@ -297,6 +327,8 @@ pydggrid_test: CMakeFiles/pydggrid_test.dir/src/pydggrid/SubOpBinPts.cpp.o
 pydggrid_test: CMakeFiles/pydggrid_test.dir/src/pydggrid/SubOpBasic.cpp.o
 pydggrid_test: CMakeFiles/pydggrid_test.dir/src/pydggrid/SubOpBasicMulti.cpp.o
 pydggrid_test: CMakeFiles/pydggrid_test.dir/src/pydggrid/SubOpGenHelper.cpp.o
+pydggrid_test: CMakeFiles/pydggrid_test.dir/src/pydggrid/SubOpStats.cpp.o
+pydggrid_test: CMakeFiles/pydggrid_test.dir/src/pydggrid/SubOpTransform.cpp.o
 pydggrid_test: CMakeFiles/pydggrid_test.dir/src/pydggrid/clipper.cpp.o
 pydggrid_test: CMakeFiles/pydggrid_test.dir/src/pydggrid/DgHexSF.cpp.o
 pydggrid_test: CMakeFiles/pydggrid_test.dir/build.make
@@ -307,7 +339,7 @@ pydggrid_test: ../../lib.linux-x86_64-3.9/libshapelib.so
 pydggrid_test: ../../lib.linux-x86_64-3.9/libproj4lib.so
 pydggrid_test: /usr/lib/x86_64-linux-gnu/libpython3.9.so
 pydggrid_test: CMakeFiles/pydggrid_test.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/opt/source/ut/libpydggrid/build/temp.linux-x86_64-3.9/libpydggrid/CMakeFiles --progress-num=$(CMAKE_PROGRESS_15) "Linking CXX executable pydggrid_test"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/opt/source/ut/libpydggrid/build/temp.linux-x86_64-3.9/libpydggrid/CMakeFiles --progress-num=$(CMAKE_PROGRESS_17) "Linking CXX executable pydggrid_test"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/pydggrid_test.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.

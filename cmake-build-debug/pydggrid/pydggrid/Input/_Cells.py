@@ -24,14 +24,16 @@ class Input(InputTemplate):
         """
         if isinstance(source_object, Input):
             self.data = source_object.data
-            super().copy(source_object)
+        return super(Input, self).copy(source_object)
 
-    def save(self, data: [List[int],
-                          numpy.ndarray,
-                          pandas.DataFrame,
-                          geopandas.GeoDataFrame,
-                          Tuple[int, int],
-                          Tuple[int, int, int]],
+    # Override
+    def save(self,
+             data: [List[int],
+                    numpy.ndarray,
+                    pandas.DataFrame,
+                    geopandas.GeoDataFrame,
+                    Tuple[int, int],
+                    Tuple[int, int, int]],
              column: [int, str, None] = None) -> None:
         """
         Saves a sequence into the data array
@@ -64,6 +66,7 @@ class Input(InputTemplate):
         elif isinstance(data, pandas.DataFrame) or isinstance(data, geopandas.GeoDataFrame):
             return self.save_frame(data, column)
 
+    # Override
     def read(self, file_path: [str, pathlib.Path]) -> None:
         """
         Reads a file and saves into sequence records
@@ -85,44 +88,6 @@ class Input(InputTemplate):
             if len(elements) > 0:
                 self.save_list(elements)
 
-    def save_range(self, start: int, end: int, step: int = 1) -> None:
-        """
-        Inserts a range of numbers
-        :param start: Start Integer
-        :param end: End Integer
-        :param step: Step per integer, default is set to 1
-        :return: None
-        """
-        self.data.extend(list(range(start, end, step)))
-
-    def save_list(self, data: List[int]) -> None:
-        """
-        Inserts a list of integers into the payload
-        :param data: List of integers
-        :return: None
-        """
-        self.data.extend([int(n) for n in data])
-
-    def save_numpy(self, data: numpy.ndarray, column: [int, None] = None) -> None:
-        """
-        Inserts a numpy column into the collection
-        :param data: Numpy Array
-        :param column: Column index, must be an integer pointing to column #
-        :return: None
-        """
-        column_t: int = 0 if column is None else column
-        self.data.extend(list(data[:, column_t].tolist()))
-
-    def save_frame(self, data: [pandas.DataFrame, geopandas.GeoDataFrame], column: [int, str] = 0) -> None:
-        """
-        Inserts a column from a data frame object
-        :param data: DataFrame object can be a GeoDataFrame or a standard DataFrame
-        :param column: Column name or numeric index to retrieve sequence from
-        :return: None
-        """
-        index_t: int = column if isinstance(column, int) else data.columns.get_loc(column)
-        self.data.extend(list(data.iloc[:, index_t].tolist()))
-
     # Override
     def __str__(self) -> str:
         """
@@ -134,3 +99,55 @@ class Input(InputTemplate):
         [elements.append(f"\t{n}") for n in self.data]
         elements.append(super().__str__())
         return os.linesep.join(elements)
+
+    def save_range(self, start: int, end: int, step: int = 1) -> None:
+        """
+        Inserts a range of numbers
+        :param start: Start Integer
+        :param end: End Integer
+        :param step: Step per integer, default is set to 1
+        :return: None
+        """
+        self.data.extend(list(range(start, end, step)))
+        self._export_frame()
+
+    def save_list(self, data: List[int]) -> None:
+        """
+        Inserts a list of integers into the payload
+        :param data: List of integers
+        :return: None
+        """
+        self.data.extend([int(n) for n in data])
+        self._export_frame()
+
+    def save_numpy(self, data: numpy.ndarray, column: [int, None] = None) -> None:
+        """
+        Inserts a numpy column into the collection
+        :param data: Numpy Array
+        :param column: Column index, must be an integer pointing to column #
+        :return: None
+        """
+        column_t: int = 0 if column is None else column
+        self.data.extend(list(data[:, column_t].tolist()))
+        self._export_frame()
+
+    def save_frame(self, data: [pandas.DataFrame, geopandas.GeoDataFrame], column: [int, str] = 0) -> None:
+        """
+        Inserts a column from a data frame object
+        :param data: DataFrame object can be a GeoDataFrame or a standard DataFrame
+        :param column: Column name or numeric index to retrieve sequence from
+        :return: None
+        """
+        index_t: int = column if isinstance(column, int) else data.columns.get_loc(column)
+        self.data.extend(list(data.iloc[:, index_t].tolist()))
+        self._export_frame()
+
+    # Internal
+
+    def _export_frame(self) -> None:
+        """
+        Exorts records post modification
+        :return: None
+        """
+        self.records.clear()
+        self.records.save(self.data, DataType.INT)

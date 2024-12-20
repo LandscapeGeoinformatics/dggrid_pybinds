@@ -693,7 +693,7 @@ SubOpGen::executeOp (void)
 
 ////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////
-ClipperLib::Paths*
+ClipperLib::Paths
 SubOpGen::intersectPolyWithQuad (const DgPolygon& v, DgQuadClipRegion& clipRegion)
 //
 // caller takes responsibility for the returned memory
@@ -723,8 +723,8 @@ SubOpGen::intersectPolyWithQuad (const DgPolygon& v, DgQuadClipRegion& clipRegio
    c.AddPaths(clpPoly, ClipperLib::ptSubject, true);
    c.AddPaths(clipRegion.gnomBndry(), ClipperLib::ptClip, true);
 
-   ClipperLib::Paths* solution = new ClipperLib::Paths();
-   c.Execute(ClipperLib::ctIntersection, *solution,
+   ClipperLib::Paths solution;
+   c.Execute(ClipperLib::ctIntersection, solution,
                   ClipperLib::pftNonZero, ClipperLib::pftNonZero);
 
    return solution;
@@ -833,9 +833,9 @@ SubOpGen::processOneClipPoly (DgPolygon& polyIn, const DgIDGGBase& dgg,
 
       if (op.mainOp.megaVerbose) dgcout << "input: " << polyIn << endl;
 
-      ClipperLib::Paths* solution =
+      ClipperLib::Paths solutionBase =
                 intersectPolyWithQuad (polyIn, clipRegions[q]);
-
+       ClipperLib::Paths *solution = &solutionBase;
       if (solution->size() == 0) {
          if (op.mainOp.megaVerbose)
             dgcout << "no intersection in quad " << q << endl;
@@ -986,8 +986,6 @@ printf("ogrPoly:\n%s\n", clpStr);
             delete tloc;
          }
       }
-
-      delete solution;
    }
 
 #ifdef USE_GDAL

@@ -545,6 +545,60 @@ src/pydggrid/SubOpOut.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/libpydggrid.dir/build.make CMakeFiles/libpydggrid.dir/src/pydggrid/SubOpOut.cpp.s
 .PHONY : src/pydggrid/SubOpOut.cpp.s
 
+src/pydggrid/SubOpStats.o: src/pydggrid/SubOpStats.cpp.o
+.PHONY : src/pydggrid/SubOpStats.o
+
+# target to build an object file
+src/pydggrid/SubOpStats.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pydggrid_test.dir/build.make CMakeFiles/pydggrid_test.dir/src/pydggrid/SubOpStats.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/libpydggrid.dir/build.make CMakeFiles/libpydggrid.dir/src/pydggrid/SubOpStats.cpp.o
+.PHONY : src/pydggrid/SubOpStats.cpp.o
+
+src/pydggrid/SubOpStats.i: src/pydggrid/SubOpStats.cpp.i
+.PHONY : src/pydggrid/SubOpStats.i
+
+# target to preprocess a source file
+src/pydggrid/SubOpStats.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pydggrid_test.dir/build.make CMakeFiles/pydggrid_test.dir/src/pydggrid/SubOpStats.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/libpydggrid.dir/build.make CMakeFiles/libpydggrid.dir/src/pydggrid/SubOpStats.cpp.i
+.PHONY : src/pydggrid/SubOpStats.cpp.i
+
+src/pydggrid/SubOpStats.s: src/pydggrid/SubOpStats.cpp.s
+.PHONY : src/pydggrid/SubOpStats.s
+
+# target to generate assembly for a file
+src/pydggrid/SubOpStats.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pydggrid_test.dir/build.make CMakeFiles/pydggrid_test.dir/src/pydggrid/SubOpStats.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/libpydggrid.dir/build.make CMakeFiles/libpydggrid.dir/src/pydggrid/SubOpStats.cpp.s
+.PHONY : src/pydggrid/SubOpStats.cpp.s
+
+src/pydggrid/SubOpTransform.o: src/pydggrid/SubOpTransform.cpp.o
+.PHONY : src/pydggrid/SubOpTransform.o
+
+# target to build an object file
+src/pydggrid/SubOpTransform.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pydggrid_test.dir/build.make CMakeFiles/pydggrid_test.dir/src/pydggrid/SubOpTransform.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/libpydggrid.dir/build.make CMakeFiles/libpydggrid.dir/src/pydggrid/SubOpTransform.cpp.o
+.PHONY : src/pydggrid/SubOpTransform.cpp.o
+
+src/pydggrid/SubOpTransform.i: src/pydggrid/SubOpTransform.cpp.i
+.PHONY : src/pydggrid/SubOpTransform.i
+
+# target to preprocess a source file
+src/pydggrid/SubOpTransform.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pydggrid_test.dir/build.make CMakeFiles/pydggrid_test.dir/src/pydggrid/SubOpTransform.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/libpydggrid.dir/build.make CMakeFiles/libpydggrid.dir/src/pydggrid/SubOpTransform.cpp.i
+.PHONY : src/pydggrid/SubOpTransform.cpp.i
+
+src/pydggrid/SubOpTransform.s: src/pydggrid/SubOpTransform.cpp.s
+.PHONY : src/pydggrid/SubOpTransform.s
+
+# target to generate assembly for a file
+src/pydggrid/SubOpTransform.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/pydggrid_test.dir/build.make CMakeFiles/pydggrid_test.dir/src/pydggrid/SubOpTransform.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/libpydggrid.dir/build.make CMakeFiles/libpydggrid.dir/src/pydggrid/SubOpTransform.cpp.s
+.PHONY : src/pydggrid/SubOpTransform.cpp.s
+
 src/pydggrid/clipper.o: src/pydggrid/clipper.cpp.o
 .PHONY : src/pydggrid/clipper.o
 
@@ -625,6 +679,12 @@ help:
 	@echo "... src/pydggrid/SubOpOut.o"
 	@echo "... src/pydggrid/SubOpOut.i"
 	@echo "... src/pydggrid/SubOpOut.s"
+	@echo "... src/pydggrid/SubOpStats.o"
+	@echo "... src/pydggrid/SubOpStats.i"
+	@echo "... src/pydggrid/SubOpStats.s"
+	@echo "... src/pydggrid/SubOpTransform.o"
+	@echo "... src/pydggrid/SubOpTransform.i"
+	@echo "... src/pydggrid/SubOpTransform.s"
 	@echo "... src/pydggrid/clipper.o"
 	@echo "... src/pydggrid/clipper.i"
 	@echo "... src/pydggrid/clipper.s"

@@ -213,7 +213,7 @@ struct SubOpGen : public SubOpBasicMulti {
    bool evalCell (const DgIDGGBase& dgg, const DgContCartRF& cc1,
                   const DgDiscRF2D& grid, DgQuadClipRegion& clipRegion,
                   const DgIVec2D& add2D);
-   ClipperLib::Paths* intersectPolyWithQuad (const DgPolygon& v, DgQuadClipRegion& clipRegion);
+   ClipperLib::Paths intersectPolyWithQuad (const DgPolygon& v, DgQuadClipRegion& clipRegion);
    void processOneClipPoly (DgPolygon& polyIn, const DgIDGGBase& dgg,
              DgQuadClipRegion clipRegions[], DgInShapefileAtt* pAttributeFile);
    void createClipRegions (const DgIDGGBase& dgg,

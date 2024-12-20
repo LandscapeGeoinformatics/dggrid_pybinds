@@ -1,0 +1,35 @@
+import sys
+
+from pydggrid.Queries import Statistics
+from pydggrid.Types import ClipType, CellOutput, DGGSType, PointOutput, LongitudeWrap
+
+if __name__ == "__main__":
+
+    print("-> READ QUERY")
+    document: Statistics = Statistics()
+    document.Meta.save("dggs_type", DGGSType.PLANETRISK)
+    document.Meta.save("dggs_res_spec", 20)
+    #
+    print(f"---QUERY REQUEST---\n{document}")
+    document.run()
+    print("---QUERY RESPONSE [TABLE]---\n")
+    print(f"COLUMNS: {document.table.get_columns()}\n")
+    print(f"---[CELLS (DataFrame)]---\n{document.table.get_frame()}")
+    print(f"---[CELLS (GeoDataFrame)]---\n{document.table.get_geoframe()}")
+    print(f"---[CELLS (Numpy)]---\n{document.table.get_numpy()}")
+
+# ################################################################################
+# #
+# # planetRiskTable.meta - example of outputting a table of statistics for the
+# #      first 20 resolutions of the PlanetRisk grid.
+# #
+# # Kevin Sahr, 7/14/19
+# #
+# ################################################################################
+#
+# # specify the operation
+# dggrid_operation OUTPUT_STATS
+#
+# # specify the DGG
+# dggs_type PLANETRISK
+# dggs_res_spec 20

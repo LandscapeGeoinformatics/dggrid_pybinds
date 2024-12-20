@@ -67,15 +67,53 @@ class Input(InputTemplate):
         if isinstance(source_object, Input):
             self.data = source_object.data
             self.cols = source_object.cols
-            super().copy(source_object)
+        return super(Input, self).copy(source_object)
+
+    # Override
+    def __str__(self) -> str:
+        """
+        Returns description of input object
+        :return: Description String
+        """
+        elements: List[str] = list([])
+        elements.append("DATA:")
+        index_range: List[int] = list(range(0, len(self.data)))
+        elements.append(os.linesep.join([f"{self.data[n][0]}, {self.data[n][1]}" for n in index_range]))
+        elements.append(super().__str__())
+        return os.linesep.join(elements)
+
+    # Override
+    def read(self,
+             file_path: [str, pathlib.Path],
+             ignore_header: bool = False,
+             delimiter: str = " ") -> None:
+        """
+        Saves a file to a data array,
+        :param file_path: File path to read
+        :param ignore_header If set to true the first line of file will be ignored
+        :param delimiter The delimiter string, by default this is set to " " (Space)
+        :return: None
+        """
+        if isinstance(file_path, str):
+            return self.read(pathlib.Path(file_path), ignore_header, delimiter)
+        if isinstance(file_path, pathlib.Path):
+            index_array: List[int] = list(range(0, len(self.cols)))
+            with open(file_path.absolute(), 'r', encoding='UTF-8') as file:
+                while line := file.readline():
+                    line_t: str = line.strip()
+                    if not line_t.startswith("#") and not line_t.startswith("/"):
+                        try:
+                            nodes: List[str] = line_t.split(delimiter)
+                            elements: Dict[str, Any] = {self.cols[n]: nodes[n].strip() for n in index_array}
+                            self.insert(lat=float(elements["lat"]), long=float(elements["long"]))
+                        except Exception:
+                            continue
 
     def insert(self, lat: float, long: float) -> None:
         """
         Inserts a record
         :param lat: Latitude
         :param long: Longitude
-        :param index_id: Index ID
-        :param label: Location label
         :return: None
         """
         self.data.append((lat, long))
@@ -147,45 +185,6 @@ class Input(InputTemplate):
                     map_t: Dict[str, str] = dict(columns)
             self.insert(lat=float(data[map_t["lat"]]), long=float(data[map_t["long"]]))
             return
-
-    def read(self,
-             file_path: [str, pathlib.Path],
-             ignore_header: bool = False,
-             delimiter: str = " ") -> None:
-        """
-        Saves a file to a data array,
-        :param file_path: File path to read
-        :param ignore_header If set to true the first line of file will be ignored
-        :param delimiter The delimiter string, by default this is set to " " (Space)
-        :return: None
-        """
-        if isinstance(file_path, str):
-            return self.read(pathlib.Path(file_path), ignore_header, delimiter)
-        if isinstance(file_path, pathlib.Path):
-            index_array: List[int] = list(range(0, len(self.cols)))
-            with open(file_path.absolute(), 'r', encoding='UTF-8') as file:
-                while line := file.readline():
-                    line_t: str = line.strip()
-                    if not line_t.startswith("#") and not line_t.startswith("/"):
-                        try:
-                            nodes: List[str] = line_t.split(delimiter)
-                            elements: Dict[str, Any] = {self.cols[n]: nodes[n].strip() for n in index_array}
-                            self.insert(lat=float(elements["lat"]), long=float(elements["long"]))
-                        except Exception:
-                            continue
-
-    # Override
-    def __str__(self) -> str:
-        """
-        Returns description of input object
-        :return: Description String
-        """
-        elements: List[str] = list([])
-        elements.append("DATA:")
-        index_range: List[int] = list(range(0, len(self.data)))
-        elements.append(os.linesep.join([f"{self.data[n][0]}, {self.data[n][1]}" for n in index_range]))
-        elements.append(super().__str__())
-        return os.linesep.join(elements)
 
     # INTERNAL
 

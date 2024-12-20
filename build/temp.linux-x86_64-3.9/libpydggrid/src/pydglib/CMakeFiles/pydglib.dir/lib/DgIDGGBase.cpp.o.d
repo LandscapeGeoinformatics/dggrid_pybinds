@@ -388,4 +388,6 @@ src/pydglib/CMakeFiles/pydglib.dir/lib/DgIDGGBase.cpp.o: \
  /opt/source/ut/libpydggrid/src/pydglib/include/dglib/DgZOrderRF.h \
  /opt/source/ut/libpydggrid/src/pydglib/include/dglib/DgZOrderStringRF.h \
  /opt/source/ut/libpydggrid/src/pydglib/include/dglib/DgZ3RF.h \
- /opt/source/ut/libpydggrid/src/pydglib/include/dglib/DgZ3StringRF.h
+ /opt/source/ut/libpydggrid/src/pydglib/include/dglib/DgZ7RF.h \
+ /opt/source/ut/libpydggrid/src/pydglib/include/dglib/DgZ3StringRF.h \
+ /opt/source/ut/libpydggrid/src/pydglib/include/dglib/DgZ7StringRF.h

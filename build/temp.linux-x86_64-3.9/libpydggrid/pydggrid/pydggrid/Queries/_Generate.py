@@ -1,12 +1,13 @@
 import sys
-from typing import Any, List, Dict
+from typing import Dict
 
 import libpydggrid
 
-from pydggrid.Input import Auto, InputTemplate, Sequence, ShapeFile, Array, GDAL, AIGen, Cells
+from pydggrid.Modules import Clip
 from pydggrid.Output import Locations
+from pydggrid.System import Constants
 from pydggrid.Types import Operation, ClipType, ReadMode, CellOutput, ChildrenOutput, NeighborOutput, \
-    InputAddress, PointOutput
+    InputAddress, PointOutput, GDALFormat, DataType, OutputAddress, CellLabel
 from pydggrid.Queries._Custom import Query as BaseQuery
 
 
@@ -24,64 +25,103 @@ class Query(BaseQuery):
         Default constructor
         """
         super().__init__(Operation.GENERATE_GRID)
-        self.clip: InputTemplate = Auto()
+        self.clip: Clip = Clip()
         self.cells: Locations = Locations()
         self.points: Locations = Locations()
         self.collection: Locations = Locations()
         self.dgg_meta: str = ""
-        self.set_clip(ClipType.WHOLE_EARTH)
         # Set defaults
         self.Meta.set_default("clip_cell_densification")
         self.Meta.set_default("clipper_scale_factor")
         self.Meta.set_default("clip_using_holes")
         self.Meta.set_default("clip_cell_res")
-        self.Meta.on_save("cell_output_type", lambda : self._run_fixes())
-        self.Meta.on_save("point_output_type", lambda : self._run_fixes())
+        self.Meta.on_save("cell_output_type", lambda: self._run_fixes())
+        self.Meta.on_save("point_output_type", lambda: self._run_fixes())
+        self.Meta.save("point_output_type", PointOutput.GEOJSON)
+        self.Meta.save("cell_output_type", CellOutput.GEOJSON)
+
+    def set_crs(self, crs_type: [str, None] = None) -> None:
+        """
+        Sets the read crs pf the generated query
+        :param crs_type: Crs String
+        :return: None
+        """
+        self.cells.set_crs(crs_type)
+        self.points.set_crs(crs_type)
+        self.collection.set_crs(crs_type)
+
+    def cell_type(self, address_type: [OutputAddress, None] = None) -> None:
+        """
+        Sets output address type
+        :param address_type: Address type identifier
+        :return: None
+        """
+        self.Meta.save("output_address_type", address_type)
+        self.Meta.save("output_cell_label_type", CellLabel.OUTPUT_ADDRESS_TYPE)
+
+    def set_collection(self, enabled: bool = True) -> None:
+        """
+        Puts the generator into collection mode
+        :return: None
+        """
+        if enabled:
+            self.Meta.save("cell_output_type", CellOutput.GDAL_COLLECTION)
+            self.Meta.save("point_output_type", PointOutput.GDAL_COLLECTION)
+            self.Meta.save("children_output_type", ChildrenOutput.GDAL_COLLECTION)
+            self.Meta.save("neighbor_output_type", NeighborOutput.GDAL_COLLECTION)
+        else:
+            self.Meta.save("point_output_type", PointOutput.GEOJSON)
+            self.Meta.save("cell_output_type", CellOutput.GEOJSON)
+            self.Meta.save("point_output_type", PointOutput.NONE)
+            self.Meta.save("cell_output_type", CellOutput.NONE)
 
     def __bytes__(self) -> bytes:
         """
         Returns query bytes
         :return: Clip Bytes
         """
-        return self.clip.records.__bytes__()
+        return self.clip.__bytes__()
 
-    def set_points(self):
-        pass
-
-    def set_clip(self,
-                 clip_type: [ClipType, int, None] = None,
-                 data: [Any, None] = None,
-                 columns: [List[Any], None] = None) -> None:
-        """
-        Sets the query clip
-        :param clip_type: ClipType definition from pydggrid.Types
-        :param data: Data to use with the clipping this is optional and can be set after the clip type has been
-            configured
-        :param columns: Used to send column information with the clip options, this field is optional but allows you to
-            customize the order and index of columns to choose from using pandas dataframes, numpy ndarray objects and
-            dictionaries.
-        :return: None
-        """
-        if clip_type is not None:
-            type_t: ClipType = ClipType(clip_type)
-            if type_t == ClipType.WHOLE_EARTH:
-                self.clip = Auto()
-            elif type_t == ClipType.SEQNUMS:
-                self.clip = Sequence()
-            elif type_t == ClipType.SHAPEFILE:
-                self.clip = ShapeFile()
-            elif type_t == ClipType.INPUT_ADDRESS_TYPE:
-                self.clip = Array()
-            elif type_t == ClipType.GDAL:
-                self.clip = GDAL()
-            elif type_t == ClipType.AIGEN:
-                self.clip = AIGen()
-            elif type_t == ClipType.COARSE_CELLS:
-                self.clip = Cells()
-            else:
-                raise AttributeError(f"Requested clip type({clip_type}) is not supported")
-        self.Meta.save("clip_subset_type", clip_type)
-        return self.clip.save(data, columns) if data is not None else None
+    # def set_points(self):
+    #     pass
+    #
+    # def set_clip(self,
+    #              clip_type: [ClipType, int, None] = None,
+    #              data: [Any, None] = None,
+    #              columns: [List[Any], None] = None) -> None:
+    #     """
+    #     Sets the query clip
+    #     :param clip_type: ClipType definition from pydggrid.Types
+    #     :param data: Data to use with the clipping this is optional and can be set after the clip type has been
+    #         configured
+    #     :param columns: Used to send column information with the clip options, this field is optional but allows you to
+    #         customize the order and index of columns to choose from using pandas dataframes, numpy ndarray objects and
+    #         dictionaries.
+    #     :return: None
+    #     """
+    #     if clip_type is not None:
+    #         type_t: ClipType = ClipType(clip_type)
+    #         if type_t == ClipType.WHOLE_EARTH:
+    #             self.clip = Auto()
+    #         elif type_t == ClipType.SEQNUMS:
+    #             self.clip = Sequence()
+    #         elif type_t == ClipType.SHAPEFILE:
+    #             self.clip = ShapeFile()
+    #         elif type_t == ClipType.INPUT_ADDRESS_TYPE:
+    #             self.clip = Array()
+    #         elif type_t == ClipType.GDAL:
+    #             self.clip = GDAL()
+    #         elif type_t == ClipType.AIGEN:
+    #             self.clip = AIGen()
+    #         elif type_t == ClipType.COARSE_CELLS:
+    #             self.clip = Cells()
+    #         elif type_t == ClipType.GEOARROW:
+    #             self.clip = Arrow()
+    #             clip_type = ClipType.GDAL
+    #         else:
+    #             raise AttributeError(f"Requested clip type({clip_type}) is not supported")
+    #     self.Meta.save("clip_subset_type", clip_type)
+    #     return self.clip.save(data, columns) if data is not None else None
 
     # Override
     # noinspection PyPep8Naming
@@ -157,7 +197,7 @@ class Query(BaseQuery):
         :return: True if collection
         """
         return self.Meta.get("cell_output_type") == CellOutput.GDAL_COLLECTION or \
-            self.Meta.get("point_output_type") == PointOutput.GDAL_COLLECTION
+               self.Meta.get("point_output_type") == PointOutput.GDAL_COLLECTION
 
     def _run_fixes(self):
         """
@@ -182,8 +222,7 @@ class Query(BaseQuery):
         Makes final changes to the parameter payload
         :return: None
         """
-        if self.Meta.as_int("clip_subset_type") == ClipType.COARSE_CELLS:
-            # noinspection PyUnresolvedReferences
-            self.Meta.save("clip_cell_addresses", " ".join([str(n) for n in self.clip.data]))
-            self.Meta.save("input_address_type", InputAddress.SEQNUM)
-
+        self.Meta.save("clip_subset_type", self.clip.type)
+        if self.clip.type == ClipType.COARSE_CELLS:
+            self.Meta.save("clip_cell_addresses", self.clip.object.integer_list(" "))
+            self.Meta.save("input_address_type", self.clip.address_type)

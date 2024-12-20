@@ -18,6 +18,59 @@ class Input(InputTemplate):
         super(Input, self).__init__()
         self._root: InputTemplate = ShapeInput()
         self.data: List[geopandas.GeoDataFrame] = list([])
+        self.extensions: List[str] = list(["shp", "shx", "dbf", "prj", "sbn", "sbx"])
+
+    # Override
+    def save(self, data: [str,
+                          pathlib.Path,
+                          geojson.GeoJSON,
+                          dict], column: None = None) -> None:
+        """
+        Save data override
+        :param data: GDAL Data to save into buffer, this can be
+            - A string to a file that is a *.geojson or *.shp (shape file).
+            - A pathlib.path to a file that is a *.geojson or *.shp (shape file).
+            - A dictionary that is geojson compatible
+            - A geojson.GeoJSON object
+        :param column: Ignored for this interface
+        :return: None
+        """
+        if isinstance(data, str):
+            return self.save(pathlib.Path(data))
+        elif isinstance(data, geojson.GeoJSON):
+            return self.geo_json(data)
+        elif isinstance(data, dict):
+            return self.geo_json(dict)
+        elif isinstance(data, pathlib.Path):
+            extension: str = str(data.suffix).lower()
+            if extension == ".shp":
+                return self.shape_file(data)
+            if extension == ".json" or extension == ".geojson":
+                return self.geo_json(data)
+        else:
+            raise ValueError(f"Unrecognized shape file {data}")
+
+    # Override
+    def read(self, source_file: [str, pathlib.Path]) -> None:
+        """
+        Reads a file into memory routes for save
+        :param source_file: Source File
+        :return: None
+        """
+        return self.save(source_file)
+
+    # Override
+    def copy(self, source_object: Any) -> None:
+        """
+        Copies the source object to local
+        :return:
+        """
+        if isinstance(source_object, Input):
+            self.data.clear()
+            self.records.clear()
+            self.records.copy(source_object.records)
+            [self.data.append(n) for n in source_object.data]
+        return super(Input, self).copy(source_object)
 
     def geo_json(self, data: Any) -> None:
         """
@@ -53,64 +106,28 @@ class Input(InputTemplate):
                 return self.geo_json(pathlib.Path(data.strip()))
         else:
             raise ValueError(f"Unrecognized GeoJSON data {data}")
-        # self._root = GeoJSONInput()
-        # self._root.save(geo_json)
-        # self.records = self._root.records
 
-    def shape_file(self, path: [str, pathlib.Path]) -> None:
+    def shape_file(self, data: [str, pathlib.Path]) -> None:
         """
         Sets the input into shape file mode
-        :param path: Path to read shapefile from
-        :return: None
-        """
-        self._root = ShapeInput()
-        self._root.read(path)
-        self.records = self._root.records
-
-    # Override
-    def save(self, data: [str, pathlib.Path], column: None = None) -> None:
-        """
-        Save data override
-        :param data: Path to or a path object pointing to a shape file
-        :param column: Ignored for this interface
+        :param data: Path to read shapefile from which can be
+            - a string to a shape file
+            - a pathlib.Path to a file location
         :return: None
         """
         if isinstance(data, str):
-            return self.save(pathlib.Path(data))
+            return self.shape_file(pathlib.Path(data))
         elif isinstance(data, pathlib.Path):
             elements: List[bytes] = list([])
             file_base: str = str(data.absolute())[:-3]
-            elements.append(self._get_bytes(f"{file_base}shp", "shp"))
-            elements.append(self._get_bytes(f"{file_base}shx", "shx"))
-            elements.append(self._get_bytes(f"{file_base}shx", "dbf"))
-            elements.append(self._get_bytes(f"{file_base}shx", "prj"))
-            elements.append(self._get_bytes(f"{file_base}shx", "sbn"))
-            elements.append(self._get_bytes(f"{file_base}shx", "sbx"))
-            self.records.save(b''.join(elements), DataType.SHAPE_BINARY)
-        else:
-            raise ValueError(f"Unrecognized shape file {data}")
-
-    def read(self, source_file: [str, pathlib.Path]) -> None:
-        """
-        Reads a file into memory routes for save
-        :param source_file: Source File
-        :return: None
-        """
-        return self.save(source_file)
-
-    # Override
-    def copy(self, source_object: Any) -> None:
-        """
-        Copies the source object to local
-        :return:
-        """
-        if isinstance(source_object, Input):
-            self.data.clear()
-            self.records.clear()
-            self.records.copy(source_object.records)
-            [self.data.append(n) for n in source_object.data]
-        else:
-            raise AttributeError("Unrecognized input object type.")
+            for extension in self.extensions:
+                file_name: str = f"{file_base}{extension}"
+                if os.path.isfile(file_name):
+                    elements.append(self._get_bytes(file_name, extension))
+            return_elements: List[bytes] = list([])
+            return_elements.append(DataType.INT.convert_bytes(len(elements)))
+            [return_elements.append(e) for e in elements]
+            self.records.save(b''.join(return_elements), DataType.SHAPE_BINARY)
 
     # INTERNAL
     def _un_static(self) -> None:

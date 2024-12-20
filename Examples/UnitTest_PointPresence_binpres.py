@@ -13,20 +13,18 @@ if __name__ == "__main__":
     document.Meta.save("bin_coverage", BinCoverage.PARTIAL)
     document.Meta.save("output_address_type", OutputAddress.SEQNUM)
     document.Meta.save("cell_output_control", OutputControl.OUTPUT_OCCUPIED)
-    document.set_input(PointDataType.TEXT, "../DGGRID/examples/binpres/inputfiles/20k.txt")
-    document.input.read("../DGGRID/examples/binpres/inputfiles/50k.txt")
-    document.input.read("../DGGRID/examples/binpres/inputfiles/100k.txt")
-    document.input.read("../DGGRID/examples/binpres/inputfiles/200k.txt")
-
+    document.input.points("../DGGRID/examples/binpres/inputfiles/20k.txt")
+    document.input.points("../DGGRID/examples/binpres/inputfiles/50k.txt")
+    document.input.points("../DGGRID/examples/binpres/inputfiles/100k.txt")
+    document.input.points("../DGGRID/examples/binpres/inputfiles/200k.txt")
+    #
     print(f"---QUERY REQUEST---\n{document}")
     document.run()
-    print("\n---QUERY RESPONSE [POINTS]---\n")
-    print(f"COLUMNS: {document.points.get_columns()}\n")
-    print(f"---[POINTS (TEXT)]---\n{document.points.get_text()}")
-    print(f"---[POINTS (DataFrame)]---\n{document.points.get_frame()}")
-    print(f"---[POINTS (GeoDataFrame)]---\n{document.points.get_geoframe()}")
-    print(f"---[POINTS (Numpy)]---\n{document.points.get_numpy()}")
-    print(f"---[POINTS (XML)]---\n{document.points.get_xml()}")
+    print("\n---QUERY RESPONSE [RECORDS]---\n")
+    print(f"COLUMNS: {document.records.get_columns()}\n")
+    print(f"---[RECORDS (DataFrame)]---\n{document.records.get_frame()}")
+    print(f"---[RECORDS (GeoDataFrame)]---\n{document.records.get_geoframe()}")
+    print(f"---[RECORDS (Numpy)]---\n{document.records.get_numpy()}")
 
 # ################################################################################
 # ################################################################################

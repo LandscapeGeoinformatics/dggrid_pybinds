@@ -1,60 +1,117 @@
-import os
-from typing import Any, List
+import os.path
+import pathlib
+import sys
+from typing import Dict
 
-from pydggrid.Types import ClipType
-from pydggrid.Input import InputTemplate, Auto, Sequence
-from pydggrid.Modules._Template import Template as ModuleTemplate
+import geojson
+import geopandas
+import numpy
+import pandas
+import pyarrow
+from fiona.ogrext import List
+
+from pydggrid.Input import Auto, Geometry, ArrayList
+from pydggrid.Types import ClipType, InputAddress
 
 
-class Module(ModuleTemplate):
+class Module:
 
-    def __init__(self, clip_type: [ClipType, int]):
+    def __init__(self):
         """
-        Default clip constructor
-        :param clip_type: ClipType definition
+        Default constructor
         """
-        super().__init__()
-        self._type: ClipType = ClipType(clip_type)
-        self.set(self._type)
+        self.object: Auto = Auto()
+        self.type: ClipType = ClipType(ClipType.WHOLE_EARTH)
+        self.address_type: InputAddress = InputAddress.SEQNUM
 
-    def type(self) -> ClipType:
+    def auto(self) -> None:
         """
-        Returns clip type definition
-        :return: ClipType Enum
-        """
-        return self._type
-
-    def set(self, clip_type: [ClipType, InputTemplate]) -> None:
-        """
-        Sets the clip object
-        :param clip_type: ClipType object
+        Puts the clip mode into WHOLE_EARTH mode
         :return: None
         """
-        if isinstance(clip_type, ClipType):
-            self._type = clip_type
-            if self._type == ClipType.WHOLE_EARTH:
-                self._input = Auto()
-            elif self._type == ClipType.SEQNUMS:
-                self._input = Sequence()
-            else:
-                raise AttributeError("Invalid clip type for query")
+        self.object: Auto = Auto()
+        self.type: ClipType = ClipType(ClipType.WHOLE_EARTH)
 
-    # override
-    def save(self, data: Any, column: Any = None) -> None:
+    def geometry(self,
+                 records: [List,
+                           Dict,
+                           str,
+                           pathlib.Path,
+                           pandas.DataFrame,
+                           geopandas.geoseries,
+                           geopandas.GeoDataFrame,
+                           numpy.ndarray,
+                           pyarrow.Array,
+                           pyarrow.Table,
+                           geojson.GeoJSON],
+                 definition: [List[str],
+                              List[int],
+                              str,
+                              None] = None) -> None:
         """
-        Saves data into the input object
-        :param data: Data to save
-        :param column: Column information determined by input type
-        :return: None
+        Clips to geometry
+        :param records: Records to save into the buffer, this parameter can be:
+            - A path string or a pathlib.Path object point to file that is readable by the read parameter.
+            - A List of geometry strings, a polygon buffer which includes x, y, z, and optionally m points.
+            - A string value containing either geojson or csv data
+            - a pandas dataframe, which in this case must provide the name of the geometry column as a string, if
+            this value is not provided the column name is assumed as `geometry`.
+            - a geopandas dataframe, which in this case must provide the name of the geometry column as a string, if
+            this value is not provided the column name is assumed as `geometry`.
+            - a 2 dimensional numpy array which contains x, y, z, or m geometries.  Polygon offsets are sent as blank.
+            - A dictionary or a list of dictionaries containing a geometry column declared by the definition argument
+            as a string.
+            - a geojson dictionary object
+            - A pyarrow geometry Array
+            - a pyarrow table with the geometry column defined as a string in the definition argument, by default this
+            field is assumed as `geometry`.
+            - None which in case dataset must be loaded with the save() or read() keywords.
+        :param definition: Columns definition data, for most items this is a string declaring the geometry columns used.
+        :return:
         """
-        self._input.save(data, column)
+        self.type = ClipType(ClipType.GDAL)
+        self.object: Geometry = Geometry()
+        return self.object.save(records, definition) if records is not None else None
 
-    def __str__(self) -> str:
+    def cells(self,
+              records: [str,
+                        List[str],
+                        List[int],
+                        pathlib.Path,
+                        pandas.DataFrame,
+                        geopandas.geoseries,
+                        geopandas.GeoDataFrame,
+                        numpy.ndarray,
+                        pyarrow.Array,
+                        pyarrow.Table],
+              definition: [int, str, None] = None,
+              cell_type: InputAddress = InputAddress.SEQNUM) -> None:
         """
-        Returns default description of the object
-        :return: Description String
+        Clips to squence numbers
+        :param records: Records to save into the buffer, this parameter can be:
+            - A path string or a pathlib.Path object point to file that is readable by the read parameter.
+            - A List of sequence numbers as string or integers
+            - A string value containing a flat text file containing sequence numbers
+            - a pandas dataframe, which in this case must provide the name of the sequence column as a string, if
+            this value is not provided the column name is assumed as the first column.
+            - a geopandas dataframe, which in this must provide the name of the sequence column as a string, if
+            this value is not provided the column name is assumed as the first column.
+            - a 1 dimensional numpy array containing sequence numbers
+            - A pyarrow geometry Array containing sequence numbers
+            - a pyarrow table with the sequence column defined as a string in the definition argument, by default this
+            field is assumed as the first column name.
+        :param definition: Column name or index, respectively as a string or an index
+        :param cell_type: Input cell type, by default this value is set to SEQNUM
+        :return:
         """
-        elements: List[str] = list([])
-        elements.append(f"\tClip Type: {self._type.__str__()}")
-        elements.append(super().__str__())
-        return os.linesep.join(elements)
+        self.object: ArrayList = ArrayList()
+        self.address_type = InputAddress(cell_type)
+        self.type = ClipType(ClipType.COARSE_CELLS)
+        return self.object.save(records, definition) if records is not None else None
+
+    def __bytes__(self) -> bytes:
+        """
+        Return clip bytes
+        :return: Clip Bytes
+        """
+        return self.object.__bytes__()

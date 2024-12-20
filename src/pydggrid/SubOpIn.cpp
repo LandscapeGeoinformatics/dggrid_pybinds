@@ -204,7 +204,7 @@ SubOpIn::makeNewInFile (const DgRFBase& rfIn, const string* fileNameIn,
                                    failLevel);
 #ifdef USE_GDAL
    } else if (pointInputFileType == "GDAL") {
-      newFile = new DgInGdalFile (rfIn, fileNameIn, failLevel);
+      newFile = new DgInGdalFile (rfIn, &this->inTextFileName, failLevel);
 #endif
    } else {
       ::report("SubOpIn::makeNewInFile(): invalid point input file type " +
@@ -234,7 +234,10 @@ SubOpIn::getNextLoc (void) {
          const int maxLine = 2056;
          char buff[maxLine];
          inFile->getline(buff, maxLine);
-         if (!inFile->eof()) {  // we have an input line
+         std::string l_string = std::string(buff);
+         if (!inFile->eof() && !l_string.empty())
+         {
+             // we have an input line
             loc = op.primarySubOp->inStrToPointLoc(buff);
             break;
          }
@@ -288,6 +291,7 @@ SubOpIn::resetInFile (void) {
 
    fileNum = 0; // use first file
    inTextFileName = inputFiles[fileNum];
+//   inFile = makeNewInFile(*pInRF, &inTextFileName, DgBase::Fatal);
    inFile = makeNewInFile(*pInRF, &inTextFileName, DgBase::Fatal);
 
 } // void SubOpIn::resetInFile

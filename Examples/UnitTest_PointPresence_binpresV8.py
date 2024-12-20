@@ -1,4 +1,5 @@
 import sys
+from typing import Dict
 
 from pydggrid.Queries import PointPresence
 from pydggrid.Types import CellOutput, DGGSType, BinCoverage, PointDataType, OutputAddress, OutputControl
@@ -7,25 +8,26 @@ if __name__ == "__main__":
     #
     print("-> READ QUERY")
     document: PointPresence = PointPresence()
+    definition: Dict[str, str] = {"geometry": "geometry", "label": "name"}
 
     document.Meta.save("dggs_type", DGGSType.ISEA3H)
     document.Meta.save("dggs_res_spec", 7)
     document.Meta.save("bin_coverage", BinCoverage.PARTIAL)
     document.Meta.save("output_address_type", OutputAddress.SEQNUM)
-    document.set_input(PointDataType.GDAL, "../DGGRID/examples/binpresV8/inputfiles/20k.geojson")
-    document.input.save("../DGGRID/examples/binpresV8/inputfiles/50k.geojson")
-    document.input.save("../DGGRID/examples/binpresV8/inputfiles/100k.geojson")
-    document.input.save("../DGGRID/examples/binpresV8/inputfiles/200k.geojson")
+    document.Meta.save("cell_output_control", OutputControl.OUTPUT_OCCUPIED)
+    document.input.points("../DGGRID/examples/binpresV8/inputfiles/20k.geojson", definition)
+    document.input.points("../DGGRID/examples/binpresV8/inputfiles/50k.geojson", definition)
+    document.input.points("../DGGRID/examples/binpresV8/inputfiles/100k.geojson", definition)
+    document.input.points("../DGGRID/examples/binpresV8/inputfiles/200k.geojson", definition)
     #
     print(f"---QUERY REQUEST---\n{document}")
     document.run()
-    print("\n---QUERY RESPONSE [POINTS]---\n")
-    print(f"COLUMNS: {document.points.get_columns()}\n")
-    print(f"---[POINTS (TEXT)]---\n{document.points.get_text()}")
-    print(f"---[POINTS (DataFrame)]---\n{document.points.get_frame()}")
-    print(f"---[POINTS (GeoDataFrame)]---\n{document.points.get_geoframe()}")
-    print(f"---[POINTS (Numpy)]---\n{document.points.get_numpy()}")
-    print(f"---[POINTS (XML)]---\n{document.points.get_xml()}")
+    #
+    print("\n---QUERY RESPONSE [RECORDS]---\n")
+    print(f"COLUMNS: {document.records.get_columns()}\n")
+    print(f"---[RECORDS (DataFrame)]---\n{document.records.get_frame()}")
+    print(f"---[RECORDS (GeoDataFrame)]---\n{document.records.get_geoframe()}")
+    print(f"---[RECORDS (Numpy)]---\n{document.records.get_numpy()}")
 
 # ################################################################################
 # ################################################################################

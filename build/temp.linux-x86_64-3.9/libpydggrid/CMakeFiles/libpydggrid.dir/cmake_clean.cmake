@@ -27,6 +27,10 @@ file(REMOVE_RECURSE
   "CMakeFiles/libpydggrid.dir/src/pydggrid/SubOpMain.cpp.o.d"
   "CMakeFiles/libpydggrid.dir/src/pydggrid/SubOpOut.cpp.o"
   "CMakeFiles/libpydggrid.dir/src/pydggrid/SubOpOut.cpp.o.d"
+  "CMakeFiles/libpydggrid.dir/src/pydggrid/SubOpStats.cpp.o"
+  "CMakeFiles/libpydggrid.dir/src/pydggrid/SubOpStats.cpp.o.d"
+  "CMakeFiles/libpydggrid.dir/src/pydggrid/SubOpTransform.cpp.o"
+  "CMakeFiles/libpydggrid.dir/src/pydggrid/SubOpTransform.cpp.o.d"
   "CMakeFiles/libpydggrid.dir/src/pydggrid/clipper.cpp.o"
   "CMakeFiles/libpydggrid.dir/src/pydggrid/clipper.cpp.o.d"
 )

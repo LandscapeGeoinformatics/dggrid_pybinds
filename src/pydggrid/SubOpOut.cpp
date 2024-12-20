@@ -259,11 +259,9 @@ SubOpOut::outputCellAdd2D (const DgLocation& add2D, const string* labelIn,
          label = tmpLoc.asString(outputDelimiter);
       }
    }
-
    // start new files if needed
    if (maxCellsPerFile && nCellsOutputToFile >= maxCellsPerFile)
       execute(true);
-
    nCellsOutputToFile++;
 
    DgLocation* tmpLoc = new DgLocation(add2D);
@@ -309,6 +307,7 @@ SubOpOut::outputCellAdd2D (const DgLocation& add2D, const string* labelIn,
       *dataOut << label << op.primarySubOp->dataToOutStr(dataList) << endl;
 
    const DgQ2DICoord& q2di = *dgg.getAddress(add2D);
+
    if (cellOut) {
       if (op.mainOp.megaVerbose)
          dgcout << "outputting region: " << cell << endl;
@@ -818,6 +817,18 @@ std::vector<unsigned char> SubOpOut::getRPoints()
 {
     return (this->randPtsOut != nullptr) ?
            std::vector<unsigned char>{this->randPtsOut->getData()} : std::vector<unsigned char>{};
+}
+
+std::vector<unsigned char> SubOpOut::getDataOut()
+{
+    if (this->dataOut != NULL)
+    {
+        std::string data_response = this->dataOut->str();
+        std::vector<unsigned char> data_vector;
+        data_vector.insert(data_vector.begin(), data_response.begin(), data_response.end());
+        return std::vector<unsigned char>{data_vector};
+    }
+    return std::vector<unsigned char>{};
 }
 
 

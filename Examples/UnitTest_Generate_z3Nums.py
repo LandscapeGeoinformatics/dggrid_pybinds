@@ -7,42 +7,39 @@ if __name__ == "__main__":
     document: Generate = Generate()
     document.Meta.save("dggs_type", DGGSType.ISEA3H)
     document.Meta.save("dggs_res_spec", 9)
-    document.Meta.save("point_output_type", PointOutput.KML)
-    document.Meta.save("cell_output_type", CellOutput.KML)
     document.Meta.save("geodetic_densify", 0.0)
     document.Meta.save("input_address_type", InputAddress.Z3)
-    document.Meta.save("output_cell_label_type", CellLabel.OUTPUT_ADDRESS_TYPE)
-    document.Meta.save("output_address_type", OutputAddress.Z3)
-    document.set_clip(ClipType.INPUT_ADDRESS_TYPE)
-    document.clip.save(list(["1260240000000000",
-                             "1216840000000000",
-                             "1216840000000000",
-                             "1216840000000000",
-                             "1214680000000000",
-                             "1216500000000000",
-                             "1260a40000000000"]))
-    document.clip.save(list(["1100000000000000",
-                             "1010000000000000",
-                             "1010000000000000",
-                             "1120000000000000",
-                             "1020000000000000",
-                             "1200000000000000"]))
+    document.clip_cells(list(["1260240000000000",
+                              "1216840000000000",
+                              "1216840000000000",
+                              "1216840000000000",
+                              "1214680000000000",
+                              "1216500000000000",
+                              "1260a40000000000"]),
+                        cell_type=InputAddress.Z3)
+    document.clip_cells(list(["1100000000000000",
+                              "1010000000000000",
+                              "1010000000000000",
+                              "1120000000000000",
+                              "1020000000000000",
+                              "1200000000000000"]),
+                        cell_type=InputAddress.Z3)
+    document.cell_type(OutputAddress.Z3)
 
     print(f"---QUERY REQUEST---\n{document}")
     document.run()
     print("---QUERY RESPONSE [CELLS]---\n")
     print(f"COLUMNS: {document.cells.get_columns()}\n")
-    print(f"---[CELLS (TEXT)]---\n{document.cells.get_text()}")
+    print(f"---[CELLS (TEXT)]---\n{document.cells.get_aigen()}")
     print(f"---[CELLS (DataFrame)]---\n{document.cells.get_frame()}")
     print(f"---[CELLS (GeoDataFrame)]---\n{document.cells.get_geoframe()}")
     print(f"---[CELLS (Numpy)]---\n{document.cells.get_numpy()}")
     print("\n---QUERY RESPONSE [POINTS]---\n")
     print(f"COLUMNS: {document.points.get_columns()}\n")
-    print(f"---[POINTS (TEXT)]---\n{document.points.get_text()}")
+    print(f"---[POINTS (TEXT)]---\n{document.points.get_aigen()}")
     print(f"---[POINTS (DataFrame)]---\n{document.points.get_frame()}")
     print(f"---[POINTS (GeoDataFrame)]---\n{document.points.get_geoframe()}")
     print(f"---[POINTS (Numpy)]---\n{document.points.get_numpy()}")
-
 
 ###############################################################################
 # # z3Nums.meta - example of a DGGRID metafile that generates kml cells for a

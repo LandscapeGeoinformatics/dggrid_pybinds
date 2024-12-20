@@ -1,3 +1,4 @@
+import os
 import pathlib
 import sys
 from typing import Any, List
@@ -14,6 +15,7 @@ class Input(InputTemplate):
     def __init__(self):
         super(Input, self).__init__()
         self.data: List[geopandas.GeoDataFrame] = list([])
+        self.extensions: List[str] = list(["shp", "shx", "dbf", "prj", "sbn", "sbx"])
 
     # Override
     def save(self, data: [str, pathlib.Path], column: None = None) -> None:
@@ -28,13 +30,14 @@ class Input(InputTemplate):
         elif isinstance(data, pathlib.Path):
             elements: List[bytes] = list([])
             file_base: str = str(data.absolute())[:-3]
-            elements.append(self._get_bytes(f"{file_base}shp", "shp"))
-            elements.append(self._get_bytes(f"{file_base}shx", "shx"))
-            elements.append(self._get_bytes(f"{file_base}shx", "dbf"))
-            elements.append(self._get_bytes(f"{file_base}shx", "prj"))
-            elements.append(self._get_bytes(f"{file_base}shx", "sbn"))
-            elements.append(self._get_bytes(f"{file_base}shx", "sbx"))
-            self.records.save(b''.join(elements), DataType.SHAPE_BINARY)
+            for extension in self.extensions:
+                file_name: str = f"{file_base}{extension}"
+                if os.path.isfile(file_name):
+                    elements.append(self._get_bytes(file_name, extension))
+            return_elements: List[bytes] = list([])
+            return_elements.append(DataType.INT.convert_bytes(len(elements)))
+            [return_elements.append(e) for e in elements]
+            self.records.save(b''.join(return_elements), DataType.SHAPE_BINARY)
         else:
             raise ValueError(f"Unrecognized shape file {data}")
 
@@ -57,8 +60,7 @@ class Input(InputTemplate):
             self.records.clear()
             self.records.copy(source_object.records)
             [self.data.append(n) for n in source_object.data]
-        else:
-            raise AttributeError("Unrecognized input object type.")
+        return super(Input, self).copy(source_object)
 
     # INTERNAL
     def _un_static(self) -> None:

@@ -219,7 +219,6 @@ SubOpBinPts::initializeOp (void) {
    pList().insertParam(new DgStringChoiceParam("cell_output_control", "OUTPUT_ALL",
                                        &choices));
    dgg::util::release(choices);
-
    return 0;
 
 } // int SubOpBinPts::initializeOp
@@ -234,7 +233,6 @@ SubOpBinPts::setupOp (void) {
 /* not yet used
    getParamValue(plist, "bin_method", dummy, false);
 */
-
    getParamValue(pList(), "bin_coverage", dummy, false);
    wholeEarth = (dummy == "GLOBAL"); // alternative is PARTIAL
 
@@ -264,14 +262,12 @@ SubOpBinPts::setupOp (void) {
       getParamValue(pList(), "output_num_classes_field_name", outputNumClassesFldName,
                        false);
    }
-
    // cell_output_control
    getParamValue(pList(), "cell_output_control", dummy, false);
    outputAllCells = (dummy == "OUTPUT_ALL");
 
    // setup the value output format string
    valFmtStr = "%#." + dgg::util::to_string(op.mainOp.precision) + "LF";
-
    return 0;
 
 } // int SubOpBinPts::setupOp
@@ -345,7 +341,7 @@ SubOpBinPts::binPtsGlobal (void) {
    for (unsigned long int i = 0; i < dgg.bndRF().size(); i++)
       initVal(vals[i], outputPresVec);
 
-   // now process the points in each input file
+   // now process the points in each input file`
    if (useValInput)
       dgcout << "binning point values..." << endl;
    else
@@ -632,7 +628,6 @@ SubOpBinPts::executeOp (void)
       ::report("SubOpBinPts::executeOp() input address type must be GEO.",
                DgBase::Fatal);
    }
-
    char tmpStr[DgRFBase::maxFmtStr];
    snprintf(tmpStr, DgRFBase::maxFmtStr, "%%lf%c%%lf%c%%lf",
              op.inOp.inputDelimiter, op.inOp.inputDelimiter);

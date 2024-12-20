@@ -9,30 +9,25 @@ if __name__ == "__main__":
     document.Meta.save("dggs_type", DGGSType.ISEA7H)
     document.Meta.save("dggs_res_spec", 5)
     document.Meta.save("update_frequency", 10000000)
-    document.Meta.save("point_output_type", PointOutput.KML)
-    document.Meta.save("cell_output_type", CellOutput.KML)
-
-    document.set_clip(ClipType.SEQNUMS)
-    document.clip.save(list([4, 3, 4, 3, 3]))  # inputfiles/nums1.txt
-    document.clip.save(list([5, 3, 3, 7, 4, 8]))  # inputfiles/nums2.txt
-    document.clip.save(list([55, 202, 350]))  # inputfiles/nums3.txt
+    document.clip_cells(list([4, 3, 4, 3, 3]))  # inputfiles/nums1.txt
+    document.clip_cells(list([5, 3, 3, 7, 4, 8]))  # inputfiles/nums2.txt
 
     print(f"---QUERY REQUEST---\n{document}")
     document.run()
     print("---QUERY RESPONSE [CELLS]---\n")
     print(f"COLUMNS: {document.cells.get_columns()}\n")
-    print(f"---[CELLS (TEXT)]---\n{document.cells.get_text()}")
+    print(f"---[CELLS (TEXT)]---\n{document.cells.get_aigen()}")
     print(f"---[CELLS (DataFrame)]---\n{document.cells.get_frame()}")
     print(f"---[CELLS (GeoDataFrame)]---\n{document.cells.get_geoframe()}")
     print(f"---[CELLS (Numpy)]---\n{document.cells.get_numpy()}")
-    print(f"---[CELLS (XML)]---\n{document.cells.get_xml()}")
+    print(f"---[CELLS (XML)]---\n{document.cells.get_kml()}")
     print("\n---QUERY RESPONSE [POINTS]---\n")
     print(f"COLUMNS: {document.points.get_columns()}\n")
-    print(f"---[POINTS (TEXT)]---\n{document.points.get_text()}")
+    print(f"---[POINTS (TEXT)]---\n{document.points.get_aigen()}")
     print(f"---[POINTS (DataFrame)]---\n{document.points.get_frame()}")
     print(f"---[POINTS (GeoDataFrame)]---\n{document.points.get_geoframe()}")
     print(f"---[POINTS (Numpy)]---\n{document.points.get_numpy()}")
-    print(f"---[POINTS (XML)]---\n{document.points.get_xml()}")
+    print(f"---[POINTS (XML)]---\n{document.points.get_kml()}")
 
 # ################################################################################
 # #

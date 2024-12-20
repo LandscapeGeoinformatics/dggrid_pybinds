@@ -1,57 +1,32 @@
 from abc import ABC
 
-from pydggrid.Input._Auto import Input as AutoInput
-from pydggrid.Input._Array import Input as ArrayInput
-from pydggrid.Input._Sequence import Input as SequenceInput
-from pydggrid.Input._Location import Input as LocationInput
-from pydggrid.Input._Coordinate import Input as CoordinateInput
-from pydggrid.Input._ShapeFIle import Input as ShapeFileInput
-from pydggrid.Input._GeoJSON import Input as GeoJSONInput
-from pydggrid.Input._GDAL import Input as GDALInput
-from pydggrid.Input._AIGen import Input as AIGenInput
-from pydggrid.Input._Cells import Input as CellTemplate
+from pydggrid.Input._Auto import Input as AutoTemplate
+from pydggrid.Input._PointList import Input as PointListTemplate
+from pydggrid.Input._ArrayList import Input as ArrayListTemplate
 from pydggrid.Input._Template import Template as InputTemplate
+from pydggrid.Input._Geometry import Input as GeometryInput
+from pydggrid.Input._PointBinary import Input as PointBinaryInput
 
 
-class Auto(AutoInput):
+class Auto(AutoTemplate):
     pass
 
 
-class Array(ArrayInput):
+class PointList(PointListTemplate):
     pass
 
 
-class Sequence(SequenceInput):
+class PointBinary(PointBinaryInput):
     pass
 
 
-class Location(LocationInput):
+class Geometry(GeometryInput):
     pass
 
 
-class Coordinate(CoordinateInput):
-    pass
-
-
-class ShapeFile(ShapeFileInput):
-    pass
-
-
-class GeoJSON(GeoJSONInput):
-    pass
-
-
-class GDAL(GDALInput):
-    pass
-
-
-class AIGen(AIGenInput):
+class ArrayList(ArrayListTemplate):
     pass
 
 
 class Template(InputTemplate, ABC):
-    pass
-
-
-class Cells(CellTemplate):
     pass

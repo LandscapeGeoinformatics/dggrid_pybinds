@@ -24,16 +24,19 @@
 
 #include "OpBasic.h"
 #include "SubOpStats.h"
-
 ////////////////////////////////////////////////////////////////////////////////
 int
 SubOpStats::executeOp (void) {
 
    int numRes = op.dggOp.actualRes + 1;
+    if (this->op.mainOp.verbosity > 0)
+    {
+        dgcout << "Earth Radius: "
+                << dgg::util::addCommas(op.dggOp.geoRF().earthRadiusKM(), op.mainOp.precision)
+                << "\n" << endl;
+    }
 
-   dgcout << "Earth Radius: "
-        << dgg::util::addCommas(op.dggOp.geoRF().earthRadiusKM(), op.mainOp.precision)
-        << "\n" << endl;
+
 
    string resS = "Res";
    string nCellsS = "# Cells";
@@ -53,24 +56,32 @@ SubOpStats::executeOp (void) {
    int clsWidth = max((int) dgg::util::addCommas(gs0.cls(),
                          op.mainOp.precision).length(), (int) clsS.length()) + 1;
 
-   dgcout << setw(resWidth) << resS
-        << setw(nCellsWidth) << nCellsS
-        << setw(areaWidth) << areaS
- //       << setw(spcWidth) << spcS
-        << setw(clsWidth) << clsS << endl;
+    if (this->op.mainOp.verbosity > 0)
+    {
+       dgcout << setw(resWidth) << resS
+            << setw(nCellsWidth) << nCellsS
+            << setw(areaWidth) << areaS
+            << setw(clsWidth) << clsS << endl;
+    }
 
-   for (int r = 0; r < numRes; r++) {
-      if (op.dggOp.dggs().idggBase(r).outputRes() >= 0) { // in case invalid sf res
-
-         const DgGridStats& gs = op.dggOp.dggs().idggBase(r).gridStats();
-         dgcout << setw(resWidth)  << op.dggOp.dggs().idggBase(r).outputRes()
-           << setw(nCellsWidth) << dgg::util::addCommas(gs.nCells())
-           << setw(areaWidth) << dgg::util::addCommas(gs.cellAreaKM(),
-                                                op.mainOp.precision)
-//           << setw(spcWidth) << dgg::util::addCommas(gs.cellDistKM(),
-//                                                op.mainOp.precision)
-           << setw(clsWidth) << dgg::util::addCommas(gs.cls(),
-                                                op.mainOp.precision) << endl;
+   for (int r = 0; r < numRes; r++)
+   {
+      if (op.dggOp.dggs().idggBase(r).outputRes() >= 0)
+      { // in case invalid sf res
+          std::vector<std::string> block;
+          const DgGridStats& gs = op.dggOp.dggs().idggBase(r).gridStats();
+          block.push_back(std::to_string(op.dggOp.dggs().idggBase(r).outputRes()));
+          block.push_back(std::to_string(gs.nCells()));
+          block.push_back(std::to_string(gs.cellAreaKM()));
+          block.push_back(std::to_string(gs.cls()));
+          this->op.statisticBlocks.emplace_back(block);
+          if (this->op.mainOp.verbosity > 0)
+          {
+              dgcout << setw(resWidth)  << op.dggOp.dggs().idggBase(r).outputRes()
+                      << setw(nCellsWidth) << dgg::util::addCommas(gs.nCells())
+                      << setw(areaWidth) << dgg::util::addCommas(gs.cellAreaKM(), op.mainOp.precision)
+                      << setw(clsWidth) << dgg::util::addCommas(gs.cls(), op.mainOp.precision) << endl;
+          }
       }
    }
 

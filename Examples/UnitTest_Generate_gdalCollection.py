@@ -9,41 +9,27 @@ if __name__ == "__main__":
     document.Meta.save("dggs_res_spec", 2)
     document.Meta.save("unwrap_points", True)
     document.Meta.save("longitude_wrap_mode", LongitudeWrap.UNWRAP_EAST)
-    document.Meta.save("point_output_type", PointOutput.GDAL_COLLECTION)
-    document.Meta.save("cell_output_type", CellOutput.GDAL_COLLECTION)
-    document.set_clip(ClipType.SEQNUMS)
-    document.clip.read("../DGGRID/examples/gdalCollection/inputfiles/seqnums.txt")
-
-    # parameters["dggrid_operation"] = "GENERATE_GRID";
-    #     parameters["dggs_type"] = "ISEA3H";
-    #     parameters["dggs_res_spec"] = "2";
-    #     parameters["unwrap_points"] = "true";
-    #     parameters["clip_subset_type"] = "SEQNUMS";
-    #     parameters["longitude_wrap_mode"] = "UNWRAP_EAST";
-    #     parameters["point_output_type"] = "GDAL_COLLECTION";
-    #     parameters["cell_output_type"] = "GDAL_COLLECTION";
-    #     parameters["children_output_type"] = "GDAL_COLLECTION";
-    #     parameters["neighbor_output_type"] = "GDAL_COLLECTION";
-    #     parameters["collection_output_gdal_format"] = "geojson";
+    document.clip_cells("../DGGRID/examples/gdalCollection/inputfiles/seqnums.txt")
+    document.set_collection(True)
 
 
     print(f"---QUERY REQUEST---\n{document}")
     document.run()
     print("---QUERY RESPONSE [CELLS]---\n")
     print(f"COLUMNS: {document.cells.get_columns()}\n")
-    print(f"---[CELLS (TEXT)]---\n{document.cells.get_text()}")
+    print(f"---[CELLS (TEXT)]---\n{document.cells.get_aigen()}")
     print(f"---[CELLS (DataFrame)]---\n{document.cells.get_frame()}")
     print(f"---[CELLS (GeoDataFrame)]---\n{document.cells.get_geoframe()}")
     print(f"---[CELLS (Numpy)]---\n{document.cells.get_numpy()}")
     print("\n---QUERY RESPONSE [POINTS]---\n")
     print(f"COLUMNS: {document.points.get_columns()}\n")
-    print(f"---[POINTS (TEXT)]---\n{document.points.get_text()}")
+    print(f"---[POINTS (TEXT)]---\n{document.points.get_aigen()}")
     print(f"---[POINTS (DataFrame)]---\n{document.points.get_frame()}")
     print(f"---[POINTS (GeoDataFrame)]---\n{document.points.get_geoframe()}")
     print(f"---[POINTS (Numpy)]---\n{document.points.get_numpy()}")
     print("\n---QUERY RESPONSE [COLLECTION]---\n")
     print(f"COLUMNS: {document.collection.get_columns()}\n")
-    print(f"---[COLLECTION (TEXT)]---\n{document.collection.get_text()}")
+    print(f"---[COLLECTION (TEXT)]---\n{document.collection.get_aigen()}")
     print(f"---[COLLECTION (DataFrame)]---\n{document.collection.get_frame()}")
     print(f"---[COLLECTION (GeoDataFrame)]---\n{document.collection.get_geoframe()}")
     print(f"---[COLLECTION (Numpy)]---\n{document.collection.get_numpy()}")

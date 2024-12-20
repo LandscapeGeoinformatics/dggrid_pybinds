@@ -74,6 +74,7 @@ struct SubOpOut : public SubOpBasic {
     std::vector<unsigned char> getPRCells();
    std::vector<unsigned char> getCollection();
    std::vector<unsigned char> getTextOut();
+   std::vector<unsigned char> getDataOut();
 
    // the parameters
    const DgRFBase* pOutRF;     // RF for output addresses

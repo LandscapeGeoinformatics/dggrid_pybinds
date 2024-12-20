@@ -4,6 +4,10 @@ geopandas
 numpy
 pandas
 geojson
+lxml
+geoarrow-pyarrow@ git+https://github.com/geoarrow/geoarrow-python.git#egg=geoarrow-pyarrow&subdirectory=geoarrow-pyarrow
+geoarrow-pandas@ git+https://github.com/geoarrow/geoarrow-python.git#egg=geoarrow-pandas&subdirectory=geoarrow-pandas
+geoarrow-types@ git+https://github.com/geoarrow/geoarrow-python.git#egg=geoarrow-types&subdirectory=geoarrow-types
 
 [test]
 pytest>=6.0

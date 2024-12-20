@@ -35,6 +35,8 @@
 
 #include "dglib/DgInLocStreamFile.h"
 
+static std::vector<std::string> DgInGdalFileEmptyData{};
+
 class DgPolygon;
 class DgGeoSphRF;
 class DgLocationData;
@@ -83,7 +85,6 @@ private:
     bool insideMultiPoly_;
     int multiPolyIndex_;
     int numMultiPolyGeometries_;
-    std::vector<std::string> emptyData{};
 };
 
 ////////////////////////////////////////////////////////////////////////////////

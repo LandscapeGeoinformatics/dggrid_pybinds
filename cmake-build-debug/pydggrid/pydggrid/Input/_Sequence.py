@@ -31,7 +31,9 @@ class Input(InputTemplate):
                           pandas.DataFrame,
                           geopandas.GeoDataFrame,
                           Tuple[int, int],
-                          Tuple[int, int, int]],
+                          Tuple[int, int, int],
+                          pathlib.Path,
+                          str],
              column: [int, str, None] = None) -> None:
         """
         Saves a sequence into the data array
@@ -45,6 +47,8 @@ class Input(InputTemplate):
                 default this index is set to 0, or first column.
             - A tuple with two elements to generate a range from (start, end)
             - A tuple with three elements to generate a range from (start, end, step)
+            - A pathlib.Path that will be routed to read()
+            - A path string that will be routed to read()
         :param column: Column index or name, depending on data provided
             - Integer column index which works for numpy and data-frames.
             - String index which is only used for data frames
@@ -63,7 +67,13 @@ class Input(InputTemplate):
             return self.save_numpy(data, column)
         elif isinstance(data, pandas.DataFrame) or isinstance(data, geopandas.GeoDataFrame):
             return self.save_frame(data, column)
+        elif isinstance(data, str):
+            if os.path.isfile(data):
+                return self.read(pathlib.Path(data))
+        elif isinstance(data, pathlib.Path):
+            return self.read(data)
 
+    # Override
     def read(self, file_path: [str, pathlib.Path]) -> None:
         """
         Reads a file and saves into sequence records

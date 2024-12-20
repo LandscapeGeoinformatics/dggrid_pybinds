@@ -276,7 +276,7 @@ CMAKE_STRIP:FILEPATH=/usr/bin/strip
 CMAKE_VERBOSE_MAKEFILE:BOOL=FALSE
 
 //No help, variable specified on the command line.
-EXAMPLE_VERSION_INFO:UNINITIALIZED=0.0.5
+EXAMPLE_VERSION_INFO:UNINITIALIZED=0.0.7
 
 //Path to the gdal-config tool
 GDAL_CONFIG:FILEPATH=/usr/bin/gdal-config

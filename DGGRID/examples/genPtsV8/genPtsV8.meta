@@ -34,6 +34,7 @@ output_cell_label_type OUTPUT_ADDRESS_TYPE
 output_address_type SEQNUM
 
 output_delimiter ","
+
 precision 7
 
 # output the count of contained input points for each cell?

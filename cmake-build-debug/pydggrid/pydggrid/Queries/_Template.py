@@ -382,9 +382,9 @@ class Template(ABC):
                          on_verify=None)
         # dggs_aperture
         self.Meta.define(name="dggs_aperture_sequence",
-                         data_type=str,
+                         data_type=int,
                          data_options=None,
-                         data_default="333333333333",
+                         data_default=333333333333,
                          on_verify=None)
         # dggs_num_aperture_4_res
         self.Meta.define(name="dggs_num_aperture_4_res",

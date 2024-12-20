@@ -4,7 +4,7 @@ from typing import Any, List, Dict
 import libpydggrid
 
 from pydggrid.Input import Auto, InputTemplate, Sequence, ShapeFile, Array, GDAL, AIGen, Cells
-from pydggrid.Objects import Collection
+from pydggrid.Output import Locations
 from pydggrid.Types import Operation, ClipType, ReadMode, CellOutput, ChildrenOutput, NeighborOutput, \
     InputAddress, PointOutput
 from pydggrid.Queries._Custom import Query as BaseQuery
@@ -25,9 +25,9 @@ class Query(BaseQuery):
         """
         super().__init__(Operation.GENERATE_GRID)
         self.clip: InputTemplate = Auto()
-        self.cells: Collection = Collection()
-        self.points: Collection = Collection()
-        self.collection: Collection = Collection()
+        self.cells: Locations = Locations()
+        self.points: Locations = Locations()
+        self.collection: Locations = Locations()
         self.dgg_meta: str = ""
         self.set_clip(ClipType.WHOLE_EARTH)
         # Set defaults
@@ -37,6 +37,8 @@ class Query(BaseQuery):
         self.Meta.set_default("clip_cell_res")
         self.Meta.on_save("cell_output_type", lambda : self._run_fixes())
         self.Meta.on_save("point_output_type", lambda : self._run_fixes())
+        self.Meta.save("point_output_type", PointOutput.GEOJSON)
+        self.Meta.save("cell_output_type", CellOutput.GEOJSON)
 
     def __bytes__(self) -> bytes:
         """

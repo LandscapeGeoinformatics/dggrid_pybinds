@@ -1,9 +1,11 @@
-from typing import Any, Dict
+import sys
+from typing import Any, Dict, List
 
 import libpydggrid
+import pandas
 
-import pydggrid.Output
-from pydggrid.Input import Auto, InputTemplate, GeoJSON, Location
+from pydggrid.Modules import Input
+from pydggrid.Output import Records
 from pydggrid.Types import Operation, ReadMode, PointDataType
 from pydggrid.Queries._Custom import Query as BaseQuery
 
@@ -22,10 +24,17 @@ class Query(BaseQuery):
         Default constructor
         """
         super().__init__(Operation.BIN_POINT_VALS)
-        self.input: InputTemplate = Auto()
-        self.points: pydggrid.Output.Sequence = pydggrid.Output.Sequence()
+        self.input: Input = Input()
+        self.points: Records = Records()
         self.dgg_meta: str = ""
         self.Meta.save("input_delimiter", "\"|\"")
+        self.Meta.save("output_count", True)
+        self.Meta.save("output_count", True)
+        self.Meta.save("output_mean", True)
+        self.Meta.save("output_num_classes", True)
+        self.Meta.save("output_presence_vector", True)
+        self.Meta.save("point_input_file_type", PointDataType.GDAL)
+        self.Meta.save("input_value_field_name", "1")
         # Set defaults
 
     def __bytes__(self) -> bytes:
@@ -35,44 +44,44 @@ class Query(BaseQuery):
         """
         return self.input.__bytes__()
 
-    def set_input(self,
-                  point_type: [PointDataType, int, None] = None,
-                  input_data: [Any, None] = None,
-                  column: [Dict[str, str], Dict[str, int], None] = None) -> None:
-        """
-        Sets the point presence input query.
-        :param point_type: PointDataType definition
-        :param column: Column name mapping, should be a dictionary, as
-            In the case of PointDataType.TEXT
-                {
-                    "lat": "<lat-equivalent-field>",
-                    "long": "<lat-equivalent-field>",
-                    "id": "<id-equivalent-field>",
-                    "label": "<label-equivalent-field>"
-                }
-
-                .. or, a dictionary of indexes as:
-                {
-                    "lat": 1,
-                    "long": 2,
-                    "id": 0,
-                    "label": 3
-                }
-                this field can be left as none, in which case default mapping as described above will be used.
-            for PointDataType.GDAL
-                The column value is ignored for GDAL PointPresence Queries
-        :param input_data: Input data to process to the input element.
-        :return:
-        """
-        if point_type == PointDataType.TEXT:
-            self.input = Location()
-        elif point_type == PointDataType.GDAL:
-            self.input = GeoJSON()
-            self.Meta.save("point_input_file_type", "GDAL")
-        else:
-            raise Exception("Unsupported PointDataType")
-        if input_data is not None:
-            self.input.save(input_data, column)
+    # def set_input(self,
+    #               point_type: [PointDataType, int, None] = None,
+    #               input_data: [Any, None] = None,
+    #               column: [Dict[str, str], Dict[str, int], None] = None) -> None:
+    #     """
+    #     Sets the point presence input query.
+    #     :param point_type: PointDataType definition
+    #     :param column: Column name mapping, should be a dictionary, as
+    #         In the case of PointDataType.TEXT
+    #             {
+    #                 "lat": "<lat-equivalent-field>",
+    #                 "long": "<lat-equivalent-field>",
+    #                 "id": "<id-equivalent-field>",
+    #                 "label": "<label-equivalent-field>"
+    #             }
+    #
+    #             .. or, a dictionary of indexes as:
+    #             {
+    #                 "lat": 1,
+    #                 "long": 2,
+    #                 "id": 0,
+    #                 "label": 3
+    #             }
+    #             this field can be left as none, in which case default mapping as described above will be used.
+    #         for PointDataType.GDAL
+    #             The column value is ignored for GDAL PointPresence Queries
+    #     :param input_data: Input data to process to the input element.
+    #     :return:
+    #     """
+    #     if point_type == PointDataType.TEXT:
+    #         self.input = Location()
+    #     elif point_type == PointDataType.GDAL:
+    #         self.input = GDAL()
+    #         self.Meta.save("point_input_file_type", "GDAL")
+    #     else:
+    #         raise Exception("Unsupported PointDataType")
+    #     if input_data is not None:
+    #         self.input.save(input_data, column)
 
     # Override
     # noinspection PyPep8Naming
@@ -114,6 +123,29 @@ class Query(BaseQuery):
         """
         byte_data: Dict[str, bytes] = super().exec(self.input.__bytes__())
         self.dgg_meta = bytearray(byte_data["meta"]).decode() if "meta" in byte_data else ""
-        self.points.save(byte_data["points"], ReadMode.SEQUENCE)
+        #
+        print(byte_data)
+        sys.exit(0)
+        record_set: List[Dict[str, Any]] = list()
+        elements: List[str] = bytearray(byte_data["points"]).decode().split("\n")
+        for element_node in elements:
+            if len(element_node.strip()) > 0:
+                vectors: List[str] = element_node.split(" ")
+                names: List[str] = self.points.get_columns()
+                record_set.append({names[i]: self._get_value(i, vectors) for i in range(0, len(names))})
+        self.points.save(pandas.DataFrame(record_set), ReadMode.FRAME)
+
+    # noinspection PyMethodMayBeStatic
+    def _get_value(self, index: int, data: List[str]) -> float:
+        """
+        Converts incoming value
+        :param index: Node Index
+        :param data:  Node Data
+        :return: Node Value
+        """
+        if index < len(data):
+            if len(str(data[index]).strip()) > 0:
+                return float(str(data[index]).strip())
+        return 0.0
 
     # INTERNAL

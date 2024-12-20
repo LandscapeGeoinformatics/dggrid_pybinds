@@ -386,6 +386,8 @@ CMakeFiles/libpydggrid.dir/src/pydggrid/SubOpDGG.cpp.o: \
  /opt/source/ut/libpydggrid/src/pydglib/include/dglib/DgZOrderStringRF.h \
  /opt/source/ut/libpydggrid/src/pydglib/include/dglib/DgZ3RF.h \
  /opt/source/ut/libpydggrid/src/pydglib/include/dglib/DgZ3StringRF.h \
+ /opt/source/ut/libpydggrid/src/pydglib/include/dglib/DgZ7RF.h \
+ /opt/source/ut/libpydggrid/src/pydglib/include/dglib/DgZ7StringRF.h \
  /opt/source/ut/libpydggrid/src/pydggrid/OpBasic.h \
  /opt/source/ut/libpydggrid/src/pydgaplib/include/dgaplib/DgApOperationPList.h \
  /opt/source/ut/libpydggrid/src/pydgaplib/include/dgaplib/DgApOperation.h \

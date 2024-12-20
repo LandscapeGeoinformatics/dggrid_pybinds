@@ -1,5 +1,6 @@
 import os
 import pathlib
+import sys
 from typing import List, Tuple, Dict, Any
 
 import geopandas
@@ -22,7 +23,9 @@ class Input(InputTemplate):
                     geopandas.GeoDataFrame,
                     Dict[str, Any],
                     List[List[Any]],
-                    List[Dict[str, Any]]],
+                    List[Dict[str, Any]],
+                    str,
+                    pathlib.Path],
              column: [Dict[str, int], Dict[str, str], None] = None) -> None:
         """
         Save data override
@@ -55,11 +58,18 @@ class Input(InputTemplate):
         if isinstance(data, pandas.DataFrame) or \
                 isinstance(data, geopandas.GeoDataFrame):
             return self.save_frame(data, column)
-        if isinstance(data, list):
+        elif isinstance(data, list):
             return self.save_list(data[0][0], data, column)
-        if isinstance(data, dict):
+        elif isinstance(data, dict):
             return self.save_dict(data, column)
-        raise ValueError(f"Unsupported data type {type(data)} for {type(self).__name__} type query.")
+        elif isinstance(data, str):
+            if os.path.isfile(data):
+                return self.save(pathlib.Path(data), column)
+
+        elif isinstance(data, pathlib.Path):
+            return self.read(data)
+        else:
+            raise ValueError(f"Unsupported data type {type(data)} for {type(self).__name__} type query.")
 
     # Override
     def copy(self, source_object: Any) -> None:
@@ -74,7 +84,7 @@ class Input(InputTemplate):
 
     # Override
     def read(self,
-             file_path: [str, pathlib.Path],
+             data_string: [str, pathlib.Path],
              ignore_header: bool = False,
              delimiter: str = " ") -> None:
         """
@@ -84,15 +94,13 @@ class Input(InputTemplate):
         :param delimiter The delimiter string, by default this is set to " " (Space)
         :return: None
         """
-        if isinstance(file_path, str):
-            return self.read(pathlib.Path(file_path), ignore_header, delimiter)
-        if isinstance(file_path, pathlib.Path):
-            # index_array: List[int] = list(range(0, len(self.cols)))
-            with open(file_path.absolute(), 'r', encoding='UTF-8') as file:
-                text: str = file.read()
+        if isinstance(data_string, str):
+            if os.path.isfile(data_string):
+                return self.read(pathlib.Path(data_string), ignore_header, delimiter)
+            else:
                 elements: List[str] = list([])
                 elements_d: List[List[str]] = list([list([]), list([]), list([])])
-                elements_t: List[str] = text.split("END")
+                elements_t: List[str] = data_string.split("END")
                 [elements_d[0].extend(n.split(os.linesep)) for n in elements_t]
                 [elements_d[1].extend(n.split(" ")) for n in elements_d[0]]
                 [elements.append(str(n)) for n in elements_d[1] if n.strip() != ""]
@@ -116,6 +124,11 @@ class Input(InputTemplate):
                 record_data: Dict[int, List[List[float]]] = {n["id"]: [] for n in record_set}
                 [record_data[n["id"]].append(list(n.values())) for n in record_set]
                 [self.save_list(n, record_data[n]) for n in record_data]
+        elif isinstance(data_string, pathlib.Path):
+            file_object = open(data_string, "rt")
+            content_string: str = file_object.read()
+            file_object.close()
+            return self.read(content_string, ignore_header, delimiter)
 
     # Override
     def __str__(self) -> str:

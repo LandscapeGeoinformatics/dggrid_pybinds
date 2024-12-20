@@ -11,7 +11,7 @@ import libpydggrid
 
 from pydggrid.System import Constants
 
-from pydggrid.Input import Template as InputTemplate, Auto
+# from pydggrid.Input import Template as InputTemplate, Auto
 from pydggrid.Objects import Attributes, Options, Option
 from pydggrid.Types import Operation, ClipType, ClipMethod, DGGSType, DGGSPoly, Topology, DGGSProjection, Aperture, \
     ProjectionDatum, OrientationType, ResolutionType, AddressField, PointDataType, InputAddress, BinCoverage, \
@@ -35,7 +35,7 @@ class Template(ABC):
         """
         self._op: Operation = Operation(operation)
         self._time: int = int(time.time() * 1000)
-        self.Input: InputTemplate = input_object if isinstance(input_object, InputTemplate) else Auto()
+        # self.Input: InputTemplate = input_object if isinstance(input_object, InputTemplate) else Auto()
         self.Meta: Attributes = Attributes()
         self._load_defaults(self._op)
         #
@@ -65,9 +65,10 @@ class Template(ABC):
         Runs a unit test to pybinds11 layer
         :return: Test response string
         """
-        dictionary: Dict[str, str] = self.Meta.dict()
-        payload: bytes = self.Input.__bytes__()
-        return libpydggrid.UnitTest_ReadPayload(dictionary, payload)
+        # dictionary: Dict[str, str] = self.Meta.dict()
+        # payload: bytes = self.Input.__bytes__()
+        # return libpydggrid.UnitTest_ReadPayload(dictionary, payload)
+        pass
 
     @abstractmethod
     # noinspection PyPep8Naming
@@ -76,9 +77,10 @@ class Template(ABC):
         Runs a unit test to pybinds11 layer
         :return: Test response string
         """
-        dictionary: Dict[str, str] = self.Meta.dict()
-        payload: bytes = self.Input.__bytes__()
-        return libpydggrid.UnitTest_ReadQuery(dictionary, payload)
+        # dictionary: Dict[str, str] = self.Meta.dict()
+        # payload: bytes = self.Input.__bytes__()
+        # return libpydggrid.UnitTest_ReadQuery(dictionary, payload)
+        pass
 
     @abstractmethod
     # noinspection PyPep8Naming
@@ -87,9 +89,10 @@ class Template(ABC):
         Runs a unit test to pybinds11 layer
         :return: Test response string
         """
-        dictionary: Dict[str, str] = self.Meta.dict()
-        payload: bytes = self.Input.__bytes__()
-        return libpydggrid.UnitTest_RunQuery(dictionary, payload)
+        # dictionary: Dict[str, str] = self.Meta.dict()
+        # payload: bytes = self.Input.__bytes__()
+        # return libpydggrid.UnitTest_RunQuery(dictionary, payload)
+        pass
 
     @abstractmethod
     def run(self) -> None:
@@ -115,13 +118,13 @@ class Template(ABC):
         string_array.append("\t" + f"{os.linesep}\t".join(textwrap.wrap(byte_array.hex(), 64)))
         return os.linesep.join(string_array)
 
-    @abstractmethod
-    def __bytes__(self) -> bytes:
-        """
-        Returns the query data as a byte array
-        :return: Byte Array base data
-        """
-        return self.Input.__bytes__()
+    # @abstractmethod
+    # def __bytes__(self) -> bytes:
+    #     """
+    #     Returns the query data as a byte array
+    #     :return: Byte Array base data
+    #     """
+    #     return self.Input.__bytes__()
 
     def print(self) -> None:
         """
@@ -137,8 +140,7 @@ class Template(ABC):
         :return: DGGRID Response Bytes array
         """
         dictionary: Dict[str, str] = self.Meta.dict()
-        payload: bytes = self.Input.__bytes__() if byte_data is None else byte_data
-        return libpydggrid.RunQuery(dictionary, list(payload))
+        return libpydggrid.RunQuery(dictionary, list(byte_data))
 
     def io(self, name: str, data: [Any, None]) -> Any:
         """
@@ -382,9 +384,9 @@ class Template(ABC):
                          on_verify=None)
         # dggs_aperture
         self.Meta.define(name="dggs_aperture_sequence",
-                         data_type=str,
+                         data_type=int,
                          data_options=None,
-                         data_default="333333333333",
+                         data_default=333333333333,
                          on_verify=None)
         # dggs_num_aperture_4_res
         self.Meta.define(name="dggs_num_aperture_4_res",
@@ -503,12 +505,6 @@ class Template(ABC):
                          on_verify=None)
         # input_address_field_type
         self.Meta.define(name="input_address_field_type",
-                         data_type=Options,
-                         data_options=Options(AddressField),
-                         data_default=AddressField.GEO_POINT,
-                         on_verify=None)
-        # input_address_field_type
-        self.Meta.define(name="point_input_file_type",
                          data_type=Options,
                          data_options=Options(AddressField),
                          data_default=AddressField.GEO_POINT,

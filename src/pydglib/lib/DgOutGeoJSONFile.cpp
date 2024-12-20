@@ -104,7 +104,7 @@ DgOutGeoJSONFile::insert (DgLocation& loc, const string* label,
    o << "{\"type\":\"Feature\",";
    o << "\"properties\":{";
    if (label)
-      o << "\"name\":" << *label;
+      o << "\"name\":" << this->getName(label);
    o << "},";
    o << "\"geometry\":{";
    o << "\"type\":\"Point\",";
@@ -130,7 +130,7 @@ DgOutGeoJSONFile::insert (DgLocVector& vec, const string* label,
    o << "{\"type\":\"Feature\",";
    o << "\"properties\":{";
    if (label)
-      o << "\"name\":" << *label;
+      o << "\"name\":" << this->getName(label);
    o << "},";
    o << "\"geometry\":{";
    o << "\"type\":\"Polygon\",";
@@ -164,7 +164,7 @@ DgOutGeoJSONFile::insert (DgPolygon& poly, const string* label,
    o << "{\"type\":\"Feature\",";
    o << "\"properties\":{";
    if (label)
-      o << "\"name\":" << *label;
+      o << "\"name\":" << this->getName(label);
    o << "},";
    o << "\"geometry\":{";
    o << "\"type\":\"Polygon\",";
@@ -184,4 +184,10 @@ DgOutGeoJSONFile::insert (DgPolygon& poly, const string* label,
    o.flush();
 
    return *this;
+}
+
+std::string DgOutGeoJSONFile::getName(const std::string *source)
+{
+    std::string string_data{*source};
+    return (string_data[0] == '"') ? string_data : "\"" + string_data + "\"";
 }

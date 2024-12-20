@@ -527,4 +527,7 @@ CMakeFiles/libpydggrid.dir/src/library.cpp.o: \
  /opt/source/ut/libpydggrid/src/pydglib/include/dglib/DgInLocFile.h \
  /opt/source/ut/libpydggrid/DGGRID/src/lib/shapelib/include/shapelib/shapefil.h \
  /opt/source/ut/libpydggrid/DGGRID/src/lib/shapelib/include/shapelib/shapefil.h \
- /opt/source/ut/libpydggrid/src/pydglib/include/dglib/DgRunningStats.h
+ /opt/source/ut/libpydggrid/src/pydglib/include/dglib/DgRunningStats.h \
+ /opt/source/ut/libpydggrid/src/include/../pydggrid/SubOpStats.h \
+ /opt/source/ut/libpydggrid/src/include/../pydggrid/SubOpBasicMulti.h \
+ /opt/source/ut/libpydggrid/src/pydglib/include/dglib/DgCell.h

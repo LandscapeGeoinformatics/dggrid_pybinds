@@ -1,24 +1,30 @@
 import sys
 from typing import List, Any, Dict, Tuple
 
-import fiona
 import geopandas
 import numpy
 import pandas
 from pydggrid.Output._Template import Template as OutputTemplate
 
-fiona.drvsupport.supported_drivers['kml'] = 'rw'  # enable KML support which is disabled by default
-fiona.drvsupport.supported_drivers['KML'] = 'rw'  # enable KML support which is disabled by default
 pandas.set_option('display.max_columns', None)
 pandas.set_option('display.max_rows', None)
 
 
 class Output(OutputTemplate):
 
-    def __init__(self):
+    def __init__(self, columns: [List[str], None] = None):
         super().__init__()
         self._crs: str = "epsg:4326"
-        self._cols: List[str] = list(["point", "count", "total", "mean", "classes", "vector"])
+        self._cols: List[str] = list(["point", "count", "total", "mean", "classes", "vector"]) if columns is None \
+            else list(columns)
+
+    # Override
+    def get_aigen(self) -> str:
+        """
+        AI Gen text override
+        :return: String
+        """
+        raise ReferenceError("AI Gen text not supported for this output.")
 
     # Override
     def get_frame(self) -> [pandas.DataFrame, None]:
@@ -37,6 +43,10 @@ class Output(OutputTemplate):
                 points: List[Tuple[float, float]] = self._list_points(data_node.geometry)
                 [elements.append({self._cols[index]: n[index] for index in range(0, len(self._cols))}) for n in points]
             return pandas.DataFrame(elements)
+        elif self._type == list:
+            elements: Dict[str, list] = {k: list([]) for k in self._cols}
+            elements[list(elements.keys())[0]] = self._data
+            return pandas.DataFrame(elements)
         else:
             raise NotImplementedError(f"This collection cannot be exported as a DataFrame [ {self._type} ]")
 
@@ -52,6 +62,8 @@ class Output(OutputTemplate):
             return geopandas.GeoDataFrame(self._data)
         elif self._type == geopandas.GeoDataFrame:
             return self._data
+        elif self._type == list:
+            return geopandas.GeoDataFrame(self.get_frame())
         else:
             raise NotImplementedError("This collection cannot be exported as a GeoDataFrame")
 
@@ -63,7 +75,16 @@ class Output(OutputTemplate):
         """
         if self._type == pandas.DataFrame:
             return self._data.to_xml()
-        elif self._type == geopandas.GeoDataFrame:
+        else:
+            raise NotImplementedError("This collection cannot be exported as XML")
+
+    # Override
+    def get_kml(self) -> str:
+        """
+        Returns the XML string of the content
+        :return: XML String
+        """
+        if self._type == geopandas.GeoDataFrame:
             return self._content["kml"]
         else:
             raise NotImplementedError("This collection cannot be exported as XML")
@@ -80,5 +101,7 @@ class Output(OutputTemplate):
             return self._data.to_numpy()
         elif self._type == geopandas.GeoDataFrame:
             return self.get_frame().to_numpy()
+        elif self._type == list:
+            return numpy.array(self._data)
         else:
             raise NotImplementedError("This collection cannot be exported as Numpy NDArray")

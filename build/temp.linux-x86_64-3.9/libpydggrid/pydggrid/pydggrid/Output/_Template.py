@@ -24,8 +24,17 @@ class Template(ABC):
         self._type: [type, None] = None
         self._cols: List[str] = list([])
         self._content: Dict[str, str] = dict({})
+        self._crs: str = "EPSG:4326"
 
-    def save(self, data: bytes, read_mode: ReadMode) -> None:
+    def set_crs(self, crs_type: [str, None] = None) -> None:
+        """
+        Sets the output crs, if set to none default `EPSG:4326` will be used
+        :param crs_type: Crs String IE. `EPSG:4326`
+        :return: None
+        """
+        self._crs = crs_type
+
+    def save(self, data: [bytes, pandas.DataFrame], read_mode: ReadMode) -> None:
         """
         Saves data into byte array
         :param data: Data Bytes
@@ -52,7 +61,7 @@ class Template(ABC):
                     geometry_elements.append(Point(
                         list(coordinate_frame["lat"])[0],
                         list(coordinate_frame["long"])[0]))
-            self._data = geopandas.GeoDataFrame({"id": unique_sets, "geometry": geometry_elements})
+            self._data = geopandas.GeoDataFrame({"id": unique_sets, "geometry": geometry_elements}, crs=self._crs)
             self._type = geopandas.GeoDataFrame
             self._content["kml"] = self._get_kml()
         #
@@ -99,11 +108,17 @@ class Template(ABC):
             self._type = list
             self._data = list(data)
             self._text = os.linesep.join([str(n) for n in self._data])
+        elif read_mode == ReadMode.FRAME:
+            self._type = pandas.DataFrame
+            self._data = pandas.DataFrame(data)
+            self._text = self._data.__str__()
         elif read_mode == ReadMode.NONE:
             return
         else:
             print(read_mode)
             sys.exit(0)
+        # if "id" in self._data:
+        #     self._data["id"] = pandas.to_numeric(self._data['id'], errors='coerce')
 
     def __str__(self) -> str:
         """
@@ -125,12 +140,33 @@ class Template(ABC):
         """
         return self._cols
 
-    def get_text(self) -> str:
+    def get_aigen(self) -> str:
         """
         Returns response data as raw text
         :return: Response Text
         """
-        return self._text
+        record_id_t: str = ""
+        elements: List[str] = list([])
+        if self._data is not None:
+            geometry: pandas.DataFrame = pandas.DataFrame()
+            try:
+                geometry = self._data.get_coordinates(index_parts=True)
+            except Exception:
+                pass
+            for indexes, row in geometry.iterrows():
+                record_index: int = indexes[0]
+                record_id: str = self._data["id"][record_index]
+                record_prefix: str = ""
+                record_suffix: str = ""
+                if record_id_t == "" or record_id_t != record_id:
+                    record_prefix = str(record_id)
+                    if record_id_t != "":
+                        record_suffix = "END\n"
+                    record_id_t = record_id
+                elements.append(f"{record_suffix}{record_prefix}\t{row['x']} {row['y']}")
+            elements.append("END")
+        elements.append("END")
+        return os.linesep.join(elements)
 
     def un_static(self) -> None:
         """
@@ -154,6 +190,14 @@ class Template(ABC):
         :return: Geo Pandas Data Frame
         """
         raise NotImplementedError("This collection cannot be exported as a GeoDataFrame")
+
+    @abstractmethod
+    def get_kml(self) -> str:
+        """
+        Returns the XML string of the content
+        :return: XML String
+        """
+        raise NotImplementedError("This collection cannot be exported as XML")
 
     @abstractmethod
     def get_xml(self) -> str:
@@ -187,7 +231,7 @@ class Template(ABC):
         :return: Extracted Records
         """
         self.un_static()
-        block_id: int = 0
+        block_id: str = ""
         coordinates: List[str] = list(["", ""])
         records: List[Dict[str, Any]] = list([])
         element_blocks: List[str] = string_block.split("\n")
@@ -196,7 +240,7 @@ class Template(ABC):
             if len(elements) < 2:
                 continue
             if len(elements) == 3:
-                block_id = int(elements[0].strip())
+                block_id = str(elements[0].strip())
                 coordinates[0] = elements[1]
                 coordinates[1] = elements[2]
             if len(elements) == 2:

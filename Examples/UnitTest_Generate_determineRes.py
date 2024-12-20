@@ -10,7 +10,6 @@ if __name__ == "__main__":
     document.Meta.save("dggs_res_specify_type", ResolutionType.CELL_AREA)
     document.Meta.save("dggs_res_specify_area", 120000.0)
     document.Meta.save("dggs_res_specify_rnd_down", True)
-    document.Meta.save("cell_output_type", CellOutput.KML)
     document.Meta.save("densification", 1)
 
 
@@ -18,13 +17,13 @@ if __name__ == "__main__":
     document.run()
     print("---QUERY RESPONSE [CELLS]---\n")
     print(f"COLUMNS: {document.cells.get_columns()}\n")
-    print(f"---[CELLS (TEXT)]---\n{document.cells.get_text()}")
+    print(f"---[CELLS (TEXT)]---\n{document.cells.get_aigen()}")
     print(f"---[CELLS (DataFrame)]---\n{document.cells.get_frame()}")
     print(f"---[CELLS (GeoDataFrame)]---\n{document.cells.get_geoframe()}")
     print(f"---[CELLS (Numpy)]---\n{document.cells.get_numpy()}")
     print("\n---QUERY RESPONSE [POINTS]---\n")
     print(f"COLUMNS: {document.points.get_columns()}\n")
-    print(f"---[POINTS (TEXT)]---\n{document.points.get_text()}")
+    print(f"---[POINTS (TEXT)]---\n{document.points.get_aigen()}")
     print(f"---[POINTS (DataFrame)]---\n{document.points.get_frame()}")
     print(f"---[POINTS (GeoDataFrame)]---\n{document.points.get_geoframe()}")
     print(f"---[POINTS (Numpy)]---\n{document.points.get_numpy()}")

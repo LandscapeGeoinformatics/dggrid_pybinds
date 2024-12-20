@@ -3,11 +3,18 @@ import os
 import pathlib
 import sys
 import time
-from typing import List, Any, Dict, TextIO
+from abc import ABC, abstractmethod
+from typing import List, Any, Dict, TextIO, Callable
+
+import geojson
+import geopandas
+import numpy
+import pandas
+import pyarrow
 
 from pydggrid.System import Constants
 from pydggrid.Objects import Attributes, Options, Choice
-from pydggrid.Types import Operation, ClipType, ClipMethod, DGGSType, DGGSPoly, Topology, DGGSProjection
+from pydggrid.Types import Operation, ClipType, ClipMethod, DGGSType, DGGSPoly, Topology, DGGSProjection, DataType
 from pydggrid.Types import Aperture, ProjectionDatum, OrientationType, ResolutionType, AddressField, PointDataType
 from pydggrid.Types import InputAddress, BinCoverage, OutputControl, OutputType, OutputAddress, LongitudeWrap, CellLabel
 from pydggrid.Types import CellOutput, PointOutput, RandPointOutput, NeighborOutput, ChildrenOutput
@@ -285,12 +292,6 @@ class Query:
                                on_verify=None)
         # input_address_field_type
         self.Attributes.define(name="input_address_field_type",
-                               data_type=Options,
-                               data_options=Options(AddressField),
-                               data_default=AddressField.GEO_POINT,
-                               on_verify=None)
-        # input_address_field_type
-        self.Attributes.define(name="point_input_file_type",
                                data_type=Options,
                                data_options=Options(AddressField),
                                data_default=AddressField.GEO_POINT,
@@ -674,6 +675,20 @@ class Query:
         for parameter in parameters:
             self.Attributes.save_str(parameter, parameters[parameter])
 
+    def set_precision(self, precision: int = Constants.DEFAULT_PRECISION) -> int:
+        """
+        Sets the precision factor of the query
+        :param precision: Precision Factor, Defaults to Constants.DEFAULT_PRECISION
+        :return: Integer representing the precision factor
+        """
+        return self.Attributes.as_int("precision")
+
+    # override
+    def __str__(self) -> str:
+        return self.desc()
+
+    # INTERNAL
+
     def _meta_dict(self, lines: [List[str], TextIO]) -> Dict[str, str]:
         """
         converts string parameters to a dictionary of parameters
@@ -698,10 +713,153 @@ class Query:
         """
         pass
 
-    def set_precision(self, precision: int = Constants.DEFAULT_PRECISION) -> int:
+
+class Dataset(ABC):
+
+    def __init__(self):
+        self.crs: str = "EPSG:4326"
+        self.data: List[bytes] = list([])
+        self.elements: List[str] = list([])
+        self.types: List[DataType] = list([])
+        self.callbacks: Dict[str, Callable[[Any, Any], None]] = dict({})
+        self.extensions: Dict[str, Callable[[pathlib.Path, bytes, Any], None]] = dict({})
+
+    def register_call(self, data_type: type, callback: Callable[[Any, Any], None]) -> None:
         """
-        Sets the precision factor of the query
-        :param precision: Precision Factor, Defaults to Constants.DEFAULT_PRECISION
-        :return: Integer representing the precision factor
+        Registers a callback for processing
+        :param data_type: Data Type
+        :param callback: Callback, must be registered as function(records, definition) and return None
+        :return:
         """
-        return self.Attributes.as_int("precision")
+        self.callbacks[str(data_type)] = callback
+
+    def register_extension(self, file_extension: str, callback: Callable[[pathlib.Path, bytes], None] = None) -> None:
+        """
+        Registers callback to a file extension
+        :param file_extension: File extension
+        :param callback: Callback should accept (pathlib, bytes)
+        :return: None
+        """
+        self.extensions[file_extension.lower()] = callback
+
+    def register_io(self, extension: str, callback: Callable[[Any, Any], Any]) -> None:
+        """
+        Registers an extension processing callback
+        :param extension: File extension to trigger on
+        :param callback: Callback to use
+        :return: None
+        """
+        self.extensions[extension] = callback
+
+    def save(self,
+             records: [List,
+                       Dict,
+                       str,
+                       pathlib.Path,
+                       pandas.DataFrame,
+                       geopandas.geoseries,
+                       geopandas.GeoDataFrame,
+                       numpy.ndarray,
+                       pyarrow.Array,
+                       pyarrow.Table,
+                       geojson.GeoJSON],
+             definition: [List[str], List[int], str, None]) -> None:
+        """
+        Saves records into dataset
+        :param records: Records to save into the buffer
+        :param definition: Columns definition data
+        :return: None
+        """
+        type_t: str = str(type(records))
+        if type_t not in self.callbacks:
+            raise ValueError(f"Record data type {type_t} is not supported for this object.")
+        if (type(records) == str and os.path.isfile(records)) or type(records) == pathlib.Path:
+            return self.read(records, definition)
+        callback: Callable[[Any, Any], None] = self.callbacks.get(type_t, None)
+        callback(records, definition)
+
+    def read(self,
+             file_path: [str, pathlib.Path],
+             definition: [List[str], List[int], str, None]) -> None:
+        """
+        Reads data from a file
+        :param file_path: File path to read
+        :param definition: Definition base
+        :return: None
+        """
+        if isinstance(file_path, str):
+            return self.read(pathlib.Path(file_path), definition)
+        file_extension: str = file_path.suffix.lower()[1:]
+        if file_extension not in self.extensions.keys():
+            raise ValueError(f"Extension type not supported in object {file_extension}")
+        else:
+            file = open(file_path.absolute(), "rb")
+            file_data: bytes = file.read()
+            file.close()
+            callback: Callable[[pathlib.Path, bytes, Any], None] = self.extensions[file_extension]
+            callback(file_path, file_data, definition)
+
+    def write(self, data: Any, data_type: DataType) -> None:
+        """
+        Writes data to the buffer
+        :param data: Buffer Data
+        :param data_type: Data Type definition
+        :return: None
+        """
+        if isinstance(data, str):
+            byte_data: List[bytes] = list([])
+            byte_data.append(DataType.INT.convert_bytes(len(data)))
+            byte_data.append(str(data).encode())
+            self.data.append(b''.join(byte_data))
+            self.types.append(data_type)
+        elif isinstance(data, pathlib.Path):
+            file = open(pathlib.Path(data).absolute(), "rb")
+            byte_data: bytes = file.read()
+            file.close()
+            byte_array: List[bytes] = list([])
+            byte_array.append(DataType.INT.convert_bytes(len(byte_data)))
+            byte_array.append(byte_data)
+            self.data.append(b''.join(byte_array))
+            self.types.append(data_type)
+        elif isinstance(data, list):
+            byte_array: List[bytes] = list([])
+            byte_array.append(DataType.INT.convert_bytes(len(data)))
+            [byte_array.append(data_type.convert_bytes(n)) for n in data]
+            self.data.append(b''.join(byte_array))
+            self.types.append(data_type)
+            [self.elements.append(str(n)) for n in data]
+        elif isinstance(data, bytes):
+            self.data.append(data)
+            self.types.append(data_type)
+        else:
+            raise ValueError("Unrecognized input values")
+        
+    def integer_list(self, delimiter: str = " ") -> str:
+        """
+        returns data set as an integer list
+        :param delimiter: Integer delimiter
+        :return: Integer List array
+        """
+        return delimiter.join(self.elements)
+
+    def size(self) -> int:
+        """
+        Returns record count
+        :return: Record Count
+        """
+        return len(self.data)
+
+    # Override
+    def __bytes__(self) -> bytes:
+        """
+        Renders DataSet Bytes
+        :return:
+        """
+        byte_array: List[bytes] = list()
+        index_range: List[int] = list(range(0, self.size()))
+        byte_array.append(DataType.INT.convert_bytes(self.size()))
+        for index in index_range:
+            byte_array.append(DataType.INT.convert_bytes(int(self.types[index])))
+            byte_array.append(DataType.INT.convert_bytes(len(self.data[index])))
+            byte_array.append(self.data[index])
+        return b''.join(byte_array)

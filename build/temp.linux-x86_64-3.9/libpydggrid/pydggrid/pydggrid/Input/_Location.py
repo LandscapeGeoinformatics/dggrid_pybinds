@@ -24,15 +24,15 @@ class Input(InputTemplate):
         self.cols: List[str] = list(self.frame.columns.tolist())
 
     # Override
-    def copy(self, source_object: Any) -> None:
-        """
-        Copies the source object to local
-        :return:
-        """
-        if isinstance(source_object, Input):
-            self.frame = source_object.frame
-            self.cols = source_object.cols
-            super().copy(source_object)
+    # def copy(self, source_object: Any) -> None:
+    #     """
+    #     Copies the source object to local
+    #     :return:
+    #     """
+    #     if isinstance(source_object, Input):
+    #         self.frame = source_object.frame
+    #         self.cols = source_object.cols
+    #         super().copy(source_object)
 
     # Override
     def save(self,
@@ -103,13 +103,13 @@ class Input(InputTemplate):
         return os.linesep.join(elements)
 
     # Override
-    def __bytes__(self) -> bytes:
-        """
-        Returns input bytes
-        :return: Inptu Bytes
-        """
-        self.records.save(self._export_frame(self.frame), DataType.LOCATION)
-        return self.records.__bytes__()
+    # def __bytes__(self) -> bytes:
+    #     """
+    #     Returns input bytes
+    #     :return: Inptu Bytes
+    #     """
+    #     self.records.save(self._export_frame(self.frame), DataType.LOCATION)
+    #     return self.records.__bytes__()
 
     # Override
     def read(self,
@@ -139,13 +139,15 @@ class Input(InputTemplate):
                             and not line_t.strip() == "":
                         try:
                             nodes: List[str] = line_t.split(delimiter)
+                            while len(nodes) < len(self.cols):
+                                nodes.append("0")
                             elements: Dict[str, Any] = {self.cols[n]: nodes[n].strip() for n in index_array}
                             self.insert(lat=float(elements["lat"]),
                                         long=float(elements["long"]),
                                         index_id=int(elements["id"]),
                                         label=str(elements["label"]))
-                        except Exception:
-                            continue
+                        except Exception as exc:
+                            raise exc
 
     def insert(self, lat: float, long: float, index_id: int, label: str = "UNKNOWN") -> None:
         """

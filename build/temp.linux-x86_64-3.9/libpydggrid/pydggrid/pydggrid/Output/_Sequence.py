@@ -45,7 +45,7 @@ class Output(OutputTemplate):
         else:
             raise NotImplementedError("This collection cannot be exported as Numpy NDArray")
 
-    def get_xml(self) -> str:
+    def get_kml(self) -> str:
         """
         Returns the XML string of the content
         :return: XML String

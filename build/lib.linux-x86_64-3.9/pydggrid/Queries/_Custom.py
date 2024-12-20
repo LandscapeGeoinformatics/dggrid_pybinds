@@ -22,7 +22,7 @@ class Query(QueryTemplate):
         """
         super().__init__(operation, input_object)
 
-    # Override
+    # Overridepara idde
     def __bytes__(self) -> bytes:
         """
         Returns query bytes

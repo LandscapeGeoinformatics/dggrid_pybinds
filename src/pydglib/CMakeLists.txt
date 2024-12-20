@@ -103,7 +103,10 @@ add_library(pydglib SHARED
         lib/DgUtil.cpp
         lib/DgZ3RF.cpp
         lib/DgZ3StringRF.cpp
+        lib/DgZ7RF.cpp
+        lib/DgZ7StringRF.cpp
         lib/DgZOrderRF.cpp
+        lib/DgIVec3D.cpp
         lib/DgZOrderStringRF.cpp
 )
 

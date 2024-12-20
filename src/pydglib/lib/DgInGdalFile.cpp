@@ -43,11 +43,12 @@
 #include "dglib/DgDataField.h"
 
 #include <sstream>
+
 ////////////////////////////////////////////////////////////////////////////////
 DgInGdalFile::DgInGdalFile (const DgRFBase& rfIn,
                             const string* fileNameIn,
                             DgReportLevel failLevel)
-    : DgInLocStreamFile (rfIn, emptyData, fileNameIn, false, failLevel),
+    : DgInLocStreamFile (rfIn, DgInGdalFileEmptyData, fileNameIn, false, failLevel),
       forcePolyLine_ (false), forceCells_ (false),
       gdalDataset_ (nullptr), oFeature_ (nullptr),
       insideMultiPoly_ (false), multiPolyIndex_ (0), numMultiPolyGeometries_ (0)

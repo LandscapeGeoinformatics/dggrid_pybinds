@@ -15,6 +15,8 @@ add_executable(pydggrid_test
         src/pydggrid/SubOpBasic.cpp
         src/pydggrid/SubOpBasicMulti.cpp
         src/pydggrid/SubOpGenHelper.cpp
+        src/pydggrid/SubOpStats.cpp
+        src/pydggrid/SubOpTransform.cpp
         src/pydggrid/clipper.cpp
         src/pydggrid/DgHexSF.cpp)
 pybind11_add_module(libpydggrid
@@ -30,6 +32,8 @@ pybind11_add_module(libpydggrid
         src/pydggrid/SubOpBasic.cpp
         src/pydggrid/SubOpBasicMulti.cpp
         src/pydggrid/SubOpGenHelper.cpp
+        src/pydggrid/SubOpStats.cpp
+        src/pydggrid/SubOpTransform.cpp
         src/pydggrid/clipper.cpp
         src/pydggrid/DgHexSF.cpp)
 #

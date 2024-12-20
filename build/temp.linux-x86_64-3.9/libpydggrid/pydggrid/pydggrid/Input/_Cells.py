@@ -1,10 +1,12 @@
 import os
 import pathlib
+import sys
 from typing import List, Any, Tuple
 
 import geopandas
 import numpy
 import pandas
+import pyarrow
 
 from pydggrid.Input._Template import Template as InputTemplate
 from pydggrid.Types import DataType
@@ -63,6 +65,8 @@ class Input(InputTemplate):
             return self.save_list(data)
         elif isinstance(data, numpy.ndarray):
             return self.save_numpy(data, column)
+        elif isinstance(data, pyarrow.Array):
+            return self.save_frame(geoarrow.pyarrow.to_geopandas(data), column)
         elif isinstance(data, pandas.DataFrame) or isinstance(data, geopandas.GeoDataFrame):
             return self.save_frame(data, column)
 
@@ -138,6 +142,8 @@ class Input(InputTemplate):
         :param column: Column name or numeric index to retrieve sequence from
         :return: None
         """
+        print(data)
+        sys.exit(0)
         index_t: int = column if isinstance(column, int) else data.columns.get_loc(column)
         self.data.extend(list(data.iloc[:, index_t].tolist()))
         self._export_frame()

@@ -3,12 +3,14 @@
 #include <string>
 #include <vector>
 #include <map>
+#include <cstdio>
 #include <sstream>
 #include <filesystem>
 #include "Functions.h"
 #include "Constants.h"
 #include "Bytes.h"
 #include "../pydggrid/OpBasic.h"
+#include "../pydggrid/SubOpStats.h"
 #include <dglib/DgOWStream.h>
 
 namespace pydggrid
@@ -60,12 +62,13 @@ namespace pydggrid
                 this->response["cells"] = this->operation->outOp.getCells();
                 this->response["points"] = this->operation->outOp.getPoints();
                 this->response["collection"] = this->operation->outOp.getCollection();
-                this->response["points"] = this->operation->outOp.getPoints();
                 this->response["pr_cells"] = this->operation->outOp.getPRCells();
                 this->response["r_points"] = this->operation->outOp.getRPoints();
                 this->response["collection"] = this->operation->outOp.getCollection();
+                this->response["statistics"] = this->statisticBlocks();
+                this->response["dataset"] = this->operation->outOp.getDataOut();
                 if (this->isPointQuery())
-                    { this->response["points"] = this->operation->outOp.getTextOut(); }
+                    { this->response["dataset"] = this->operation->outOp.getTextOut(); }
                 this->operation->cleanup();
                 if (this->isOutFile("cell"))
                     { this->response["cells"] = this->getData("cell"); }
@@ -270,7 +273,8 @@ namespace pydggrid
              */
             void writeBinaries()
             {
-                for (size_t index = 0; index < this->getInputSize(); index++)
+                size_t input_size = this->getInputSize();
+                for (size_t index = 0; index < input_size; index++)
                 {
                     // Write shape file
                     if ((this->getDataType(index) == Constants::DataTypes::SHAPE_BINARY))
@@ -279,7 +283,8 @@ namespace pydggrid
                         char filename[] = "/tmp/PYDGGRID.XXXXXX"; // template for our file.
                         int fd = mkstemp(filename);
                         std::string base = std::string(filename);
-                        for (auto const &_ : Constants::shapefile_extensions)
+                        int element_size = bytes.getInt();
+                        for (size_t element_index = 0; element_index < element_size; element_index++)
                         {
                             std::string file_extension = bytes.getString();
                             std::vector<unsigned char> file_data = bytes.getBytes();
@@ -287,11 +292,7 @@ namespace pydggrid
                             Functions::writeBinary(file_name.c_str(),
                                                    file_data.data(),
                                                    file_data.size());
-                            // only use the .shp to register
-                            if (file_extension == "shp")
-                            {
-                                this->REGF.emplace_back(file_name);
-                            }
+                            if (file_extension == "shp") { this->REGF.emplace_back(file_name); }
                             this->IOGC.emplace_back(file_name);
                         }
                     }
@@ -368,6 +369,10 @@ namespace pydggrid
                     {
                         this->parameters["input_files"] = region_files.str();
                     }
+                    if (this->isTransformQuery())
+                    {
+                        this->parameters["input_file_name"] = region_files.str();
+                    }
                     this->REGF.clear();
                     this->REGF.resize(0);
                 }
@@ -434,7 +439,17 @@ namespace pydggrid
             {
                 if (this->parameters.find("dggrid_operation")->second == "BIN_POINT_PRESENCE") { return true; }
                 if (this->parameters.find("dggrid_operation")->second == "BIN_POINT_VALS") { return true; }
+                if (this->parameters.find("dggrid_operation")->second == "GENERATE_GRID_FROM_POINTS") { return true; }
                 return false;
+            }
+
+            /**
+             * Returns true if the query is of point presence or point value type
+             * @return True if BIN_POINT_PRESENCE or BIN_POINT_VALS
+             */
+            bool isTransformQuery()
+            {
+                return (this->parameters.find("dggrid_operation")->second == "TRANSFORM_POINTS");
             }
 
             /**
@@ -558,6 +573,38 @@ namespace pydggrid
                 std::string file_f = Functions::string_format("%s_output_file_name", dataIndex);
                 this->parameters[file_f] = this->tmpFile();
                 this->IOGC.emplace_back(this->parameters[file_f]);
+            }
+
+            /**
+             * Retrieves statistic blocks for object
+             * @return Statistic blocks string
+             */
+            std::vector<unsigned char> statisticBlocks()
+            {
+                if (this->parameters.find("dggrid_operation")->second == "OUTPUT_STATS")
+                {
+                    std::vector<unsigned char> elements{};
+                    size_t statisticSize = this->operation->statisticBlocks.size();
+                    for (size_t statistic_index = 0; statistic_index < statisticSize; statistic_index++)
+                    {
+                        size_t cellSize = this->operation->statisticBlocks[statistic_index].size();
+                        for (size_t cell_index = 0; cell_index < cellSize; cell_index++)
+                        {
+                            char end_character = (cell_index == (cellSize - 1)) ? '\n' : '|';
+                            std::string statistic_value = this->operation->statisticBlocks[statistic_index][cell_index];
+                            std::vector<unsigned char> statistic_element(statistic_value.data(),
+                                                                         statistic_value.data() +
+                                                                         statistic_value.length() + 1);
+
+                            elements.insert(elements.end(),
+                                            statistic_element.begin(),
+                                            statistic_element.end());
+                            elements.emplace_back((unsigned char) end_character);
+                        }
+                    }
+                    return elements;
+                }
+                return std::vector<unsigned char>{};
             }
     };
 }

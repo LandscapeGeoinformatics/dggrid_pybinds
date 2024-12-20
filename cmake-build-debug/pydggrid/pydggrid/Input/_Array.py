@@ -1,4 +1,5 @@
 import os.path
+import os.path
 import pathlib
 import sys
 from typing import List, Tuple, Any
@@ -27,6 +28,7 @@ class Input(InputTemplate):
             self.data = source_object.data
             super().copy(source_object)
 
+    # Override
     def save(self, data: [List[int],
                           numpy.ndarray,
                           pandas.DataFrame,
@@ -65,26 +67,27 @@ class Input(InputTemplate):
         elif isinstance(data, pandas.DataFrame) or isinstance(data, geopandas.GeoDataFrame):
             return self.save_frame(data, column)
 
-    def read(self, file_path: [str, pathlib.Path]) -> None:
+    # Override
+    def read(self, source: [str, pathlib.Path]) -> None:
         """
         Reads a file and saves into sequence records
-        :param file_path: File path to read, this target file must be a text file containing a sequence number for
+        :param source: File path to read, this target file must be a text file containing a sequence number for
             each individual line.
         :return: None
         """
-        if isinstance(file_path, str):
-            if not os.path.isfile(file_path):
-                raise FileNotFoundError(f"Invalid file path {file_path}'")
-            return self.read(pathlib.Path(file_path))
-        elif isinstance(file_path, pathlib.Path):
+        if isinstance(source, str):
+            if not os.path.isfile(source):
+                raise FileNotFoundError(f"Invalid file path {source}'")
+            return self.read(pathlib.Path(source))
+        elif isinstance(source, pathlib.Path):
             elements: List[str] = list([])
-            with open(file_path.absolute(), 'r', encoding='UTF-8') as file:
+            with open(source.absolute(), 'r', encoding='UTF-8') as file:
                 while line := file.readline():
                     line_t: str = line.strip()
                     if line_t:
                         elements.append(str(line_t))
             if len(elements) > 0:
-                self.save_list(elements)
+                return self.save_list(elements)
 
     def save_range(self, start: int, end: int, step: int = 1) -> None:
         """
@@ -94,7 +97,7 @@ class Input(InputTemplate):
         :param step: Step per integer, default is set to 1
         :return: None
         """
-        self.save_list([str(n) for n in list(range(start, end, step))])
+        return self.save_list([str(n) for n in list(range(start, end, step))])
 
     def save_list(self, data: List[str]) -> None:
         """
@@ -116,7 +119,7 @@ class Input(InputTemplate):
         :return: None
         """
         column_t: int = 0 if column is None else column
-        self.save_list(list(data[:, column_t].tolist()))
+        return self.save_list(list(data[:, column_t].tolist()))
 
     def save_frame(self, data: [pandas.DataFrame, geopandas.GeoDataFrame], column: [int, str] = 0) -> None:
         """
@@ -126,7 +129,7 @@ class Input(InputTemplate):
         :return: None
         """
         index_t: int = column if isinstance(column, int) else data.columns.get_loc(column)
-        self.save_list(list(data.iloc[:, index_t].tolist()))
+        return self.save_list(list(data.iloc[:, index_t].tolist()))
 
     # Override
     def __str__(self) -> str:

@@ -2,8 +2,10 @@ import os
 import pathlib
 from typing import List, Tuple, Dict, Any
 
+# import geoarrow.pyarrow
 import geopandas
 import pandas
+import pyarrow as arrow
 
 from pydggrid.Input._Template import Template as InputTemplate
 from pydggrid.Types import DataType
@@ -22,7 +24,8 @@ class Input(InputTemplate):
                     geopandas.GeoDataFrame,
                     Dict[str, Any],
                     List[List[Any]],
-                    List[Dict[str, Any]]],
+                    List[Dict[str, Any]],
+                    arrow.Array],
              column: [Dict[str, int], Dict[str, str], None] = None) -> None:
         """
         Save data override
@@ -52,11 +55,14 @@ class Input(InputTemplate):
         if isinstance(data, pandas.DataFrame) or \
                 isinstance(data, geopandas.GeoDataFrame):
             return self.save_frame(data, column)
-        if isinstance(data, list):
+        elif isinstance(data, list):
             return self.save_list(data, column)
-        if isinstance(data, dict):
+        # elif isinstance(data, arrow.Array):
+        #     return self.save_frame(geoarrow.pyarrow.to_geopandas(data), column)
+        elif isinstance(data, dict):
             return self.save_dict(data, column)
-        raise ValueError("Invalid data passed to location input.")
+        else:
+            raise ValueError("Invalid data passed to location input.")
 
     # Override
     def copy(self, source_object: Any) -> None:

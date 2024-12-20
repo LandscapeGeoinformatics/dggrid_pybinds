@@ -93,6 +93,7 @@ class DgOutGeoJSONFile : public DgOutLocTextFile
       // GeoJSON helpers:
       void preamble();
       void postamble();
+      std::string getName(const std::string *source);
 };
 
 #endif

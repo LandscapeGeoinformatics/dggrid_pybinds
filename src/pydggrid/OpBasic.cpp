@@ -67,7 +67,6 @@ OpBasic::initialize (bool force)
            }
        }
    }
-
    mainOp.setupOp();
    string opName = mainOp.operation;
    mainOp.reset();
@@ -76,20 +75,26 @@ OpBasic::initialize (bool force)
    //cout << "operation: " << opName << endl;
 
    if (opName == "GENERATE_GRID")
-      primarySubOp = new SubOpGen(*this);
-//   else if (opName == "GENERATE_GRID_FROM_POINTS")
+       this->opContainer = std::make_unique<SubOpGen>(*this);
+//      primarySubOp = new SubOpGen(*this);
+   else if (opName == "GENERATE_GRID_FROM_POINTS")
+        this->opContainer = std::make_unique<SubOpBinPts>(*this);
 //      primarySubOp = new SubOpBinPts(*this);
-//   else if (opName == "OUTPUT_STATS")
+   else if (opName == "OUTPUT_STATS")
+        this->opContainer = std::make_unique<SubOpStats>(*this);
 //      primarySubOp = new SubOpStats(*this);
    else if (opName == "BIN_POINT_VALS")
-      primarySubOp = new SubOpBinPts(*this);
+//      primarySubOp = new SubOpBinPts(*this);
+        this->opContainer = std::make_unique<SubOpBinPts>(*this);
    else if (opName == "BIN_POINT_PRESENCE")
-      primarySubOp = new SubOpBinPts(*this);
-//   else if (opName == "TRANSFORM_POINTS")
-//      primarySubOp = new SubOpTransform(*this);
+//      primarySubOp = new SubOpBinPts(*this);
+        this->opContainer = std::make_unique<SubOpBinPts>(*this);
+   else if (opName == "TRANSFORM_POINTS")
+        this->opContainer = std::make_unique<SubOpTransform>(*this);
+//    primarySubOp = new SubOpTransform(*this);
    else
       report(string("invalid operation ") + mainOp.operation, DgBase::Fatal);
-
+   this->primarySubOp = this->opContainer.get();
    // now reset the plist using the correct primary sub operation
    return DgApOperationPList::initialize();
 
@@ -100,6 +105,8 @@ int
 OpBasic::cleanup (bool force)
 {
    int result = DgApOperationPList::cleanup(force);
+    cleanupAll(this->primarySubOp);
+    this->primarySubOp = NULL;
    // cleanup should have called cleanupOp on the primarySubOp
 //   if (primarySubOp) { delete primarySubOp; }
 

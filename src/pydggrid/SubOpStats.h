@@ -34,7 +34,7 @@ struct OpBasic;
 ////////////////////////////////////////////////////////////////////////////////
 struct SubOpStats : public SubOpBasicMulti {
 
-   SubOpStats (OpBasic& _op, bool _activate = true)
+   explicit SubOpStats (OpBasic& _op, bool _activate = true)
       : SubOpBasicMulti (_op, _activate)
    {
       // turn-on/off the available sub operations

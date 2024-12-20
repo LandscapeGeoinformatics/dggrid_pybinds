@@ -99,7 +99,6 @@ SubOpTransform::executeOp (void) {
 
       DgLocationData* loc = op.inOp.getNextLoc();
       if (!loc) break; // reached EOF on last input file
-
       //op.outOp.pOutRF->convert(loc);
       dgg.convert(loc);
 

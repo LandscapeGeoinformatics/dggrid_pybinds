@@ -1,5 +1,25 @@
-# Version 0.0.6
+# Version 0.0.7
 # Change Log
+
+- **0.0.7**
+  - Memory leak fixes with original DGGRID library.
+  - Implement and test Bin Points Query types
+  - Implement and test Transform Query types
+  - Implement and test Statistics Query types
+  - Moved main operation object to unique pointer
+  - Fixes to input handler object AIGen
+  - Fixes to input handler object AIGen
+  - Fixes to input handler object GDAL
+  - Fixes to input handler object Location
+  - Fixes to input handler object Sequence
+  - Fixes to input handler object Shapefile
+  - Added ZORDER types
+  - Implemented Table output to handle statistics table
+  - Created Statistics Query Module
+  - Created Transform Query Module
+  - Implemented GeoArrow for Location type output
+  - Migration of DGGRID source updates
+  - AIgen support for geometries
 
 - **0.0.6**
   - Location data type

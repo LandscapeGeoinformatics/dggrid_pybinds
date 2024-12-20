@@ -60,7 +60,7 @@ class Output(OutputTemplate):
             raise NotImplementedError("This collection cannot be exported as a GeoDataFrame")
 
     # Override
-    def get_xml(self) -> str:
+    def get_kml(self) -> str:
         """
         Returns the XML string of the content
         :return: XML String

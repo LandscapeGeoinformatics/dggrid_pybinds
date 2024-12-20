@@ -61,7 +61,9 @@ struct OpBasic : public DgApOperationPList {
    SubOpOut outOp;
    SubOpBasicMulti* primarySubOp;
    std::string metaResponse;
+   std::vector<std::vector<std::string> > statisticBlocks{};
    std::map<std::string, std::vector<std::string> > stringStreamData{};
+   std::unique_ptr<SubOpBasicMulti> opContainer;
 };
 
 ////////////////////////////////////////////////////////////////////////////////

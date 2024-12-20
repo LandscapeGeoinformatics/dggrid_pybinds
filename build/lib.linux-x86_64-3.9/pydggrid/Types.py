@@ -72,14 +72,28 @@ class DataType(TypeDef):
         """
         if self.value == DataType.INT:
             return int(input_value)
-        if self.value == DataType.SHORT:
+        elif self.value == DataType.SHORT:
             return int(input_value)
-        if self.value == DataType.FLOAT:
+        elif self.value == DataType.FLOAT:
             return float(input_value)
-        if self.value == DataType.BINARY:
+        elif self.value == DataType.BINARY:
             return struct.pack('<f', input_value)
-        if self.value == DataType.STRING:
+        elif self.value == DataType.STRING:
             input_value.encode("utf8")
+
+    def default_value(self) -> Any:
+        """
+        Returns default value for the data type
+        :return: Defualt empty value for data type
+        """
+        if self.value == DataType.FLOAT:
+            return self.cast(0.0)
+        elif self.value == DataType.BINARY:
+            return self.cast(b'')
+        elif self.value == DataType.STRING:
+            return self.cast("")
+        else:
+            return self.cast(0)
 
     def convert_bytes(self, input_value: Any) -> bytes:
         """
@@ -117,7 +131,7 @@ class InputAddress(TypeDef):
     'VERTEX2DD', # vertex number, triangle number, and (x, y) coordinates on ISEA plane
     'AIGEN'  # Arc/Info Generate file format
     """
-    NONE: 0
+    NONE = 0
     GEO = 1
     Q2DI = 2
     SEQNUM = 3
@@ -125,7 +139,9 @@ class InputAddress(TypeDef):
     PROJTRI = 5
     VERTEX2DD = 6
     AIGEN = 7
-    Z3 = 8
+    Z3 = 8,
+    Z7 = 9,
+    ZORDER = 10
 
 
 class OutputAddress(TypeDef):
@@ -151,6 +167,9 @@ class OutputAddress(TypeDef):
     VERTEX2DD = 8
     AIGEN = 9
     Z3 = 10
+    Z7 = 11
+    Z7_STRING = 12
+    ZORDER = 13
 
 
 class Topology(TypeDef):
@@ -205,6 +224,7 @@ class ClipType(TypeDef):
     POINTS: int = 7
     COARSE_CELLS: int = 8
     INPUT_ADDRESS_TYPE: int = 9
+    GEOARROW = 10
 
 
 class DGGSType(TypeDef):
@@ -240,6 +260,7 @@ class DGGSType(TypeDef):
     FULLER4D = 12
     FULLER43H = 13
     FULLER7H = 14
+    IGEO7 = 15
 
 
 class DGGSPoly(TypeDef):
@@ -346,6 +367,7 @@ class PointDataType(TypeDef):
     NONE = 1
     TEXT = 2
     GDAL = 3
+    GEOJSON = 4
 
 
 class BinCoverage(TypeDef):
@@ -461,6 +483,7 @@ class ReadMode(TypeDef):
     SHAPEFILE = 6
     GDAL_COLLECTION = 7
     SEQUENCE = 8
+    FRAME = 9
 
 
 class RandPointOutput(TypeDef):
@@ -517,3 +540,6 @@ class GDALFormat(TypeDef):
     """
     KML = 4
     GEOJSON = 5
+    # these should be more performant acttually
+    # FlatGeobuf = 6
+    # GPKG = 7
