@@ -176,7 +176,7 @@ class Query(BaseQuery):
             element_lines: List[str] = statistics_string.split("\n")
             for element_line in element_lines:
                 element_cells: List[str] = element_line.split("|")
-                if element_cells[0] is not "":
+                if element_cells[0] != "":
                     statistics_array.append({
                         "Res": int(element_cells[0]),
                         "Cells": int(element_cells[1]),

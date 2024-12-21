@@ -8,6 +8,7 @@
   - Resolved cell input issue in shared input object
   - Depreciate unused files
   - Updated Statistics query to new architecture.
+  - Literal syntax fix
 
 - **0.0.7**
   - Memory leak fixes with original DGGRID library.
