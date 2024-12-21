@@ -30,7 +30,7 @@ class Query(BaseQuery):
         """
         super().__init__(Operation.OUTPUT_STATS)
         self._clip: Clip = Clip()
-        self.table: Records = Records(["Res", "Cells", "Area", "CLS"])
+        self.records: Records = Records(["Res", "Cells", "Area", "CLS"])
         self.dgg_meta: str = ""
         # Set defaults
         self.Meta.set_default("clip_cell_densification")
@@ -182,7 +182,7 @@ class Query(BaseQuery):
                         "Cells": int(element_cells[1]),
                         "Area": float(element_cells[2]),
                         "CLS": float(element_cells[3])})
-            self.table.save(statistics_array, ReadMode.FRAME)
+            self.records.save(statistics_array, ReadMode.FRAME)
 
     # INTERNAL
 

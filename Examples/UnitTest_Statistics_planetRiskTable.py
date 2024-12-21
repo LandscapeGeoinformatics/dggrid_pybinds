@@ -12,11 +12,11 @@ if __name__ == "__main__":
     #
     print(f"---QUERY REQUEST---\n{document}")
     document.run()
-    print("---QUERY RESPONSE [TABLE]---\n")
-    print(f"COLUMNS: {document.table.get_columns()}\n")
-    print(f"---[CELLS (DataFrame)]---\n{document.table.get_frame()}")
-    print(f"---[CELLS (GeoDataFrame)]---\n{document.table.get_geoframe()}")
-    print(f"---[CELLS (Numpy)]---\n{document.table.get_numpy()}")
+    print("---QUERY RESPONSE [RECORDS]---\n")
+    print(f"COLUMNS: {document.records.get_columns()}\n")
+    print(f"---[RECORDS (DataFrame)]---\n{document.records.get_frame()}")
+    print(f"---[RECORDS (GeoDataFrame)]---\n{document.records.get_geoframe()}")
+    print(f"---[RECORDS (Numpy)]---\n{document.records.get_numpy()}")
 
 # ################################################################################
 # #
