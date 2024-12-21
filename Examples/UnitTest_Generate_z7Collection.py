@@ -11,8 +11,8 @@ if __name__ == "__main__":
     document.Meta.save("dggs_res_spec", 2)
     document.Meta.save("longitude_wrap_mode", LongitudeWrap.UNWRAP_EAST)
     document.Meta.save("unwrap_points", True)
-    document.clip.cells("../DGGRID/examples/z7Collection/inputfiles/seqnums.txt", cell_type=InputAddress.Z7)
-    document.cell_type(OutputAddress.Z7_STRING)
+    document.clip_cells("../DGGRID/examples/z7Collection/inputfiles/seqnums.txt", address_type=InputAddress.Z7)
+    document.address_type(OutputAddress.Z7_STRING)
     document.set_collection(True)
     #
     print(f"---QUERY REQUEST---\n{document}")

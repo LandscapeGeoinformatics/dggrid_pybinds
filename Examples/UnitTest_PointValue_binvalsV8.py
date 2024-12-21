@@ -13,7 +13,7 @@ if __name__ == "__main__":
     document.Meta.save("output_address_type", OutputAddress.SEQNUM)
     document.Meta.save("cell_output_control", OutputControl.OUTPUT_OCCUPIED)
     document.Meta.save("input_value_field_name", "LENGTH_FT")
-    document.input.shape("../DGGRID/examples/binvalsV8/inputfiles/bridges_2020_WGS84/bridges_2020_WGS84.shp")
+    document.input_shape("../DGGRID/examples/binvalsV8/inputfiles/bridges_2020_WGS84/bridges_2020_WGS84.shp")
     document.run()
     print("\n---QUERY RESPONSE [RECORDS]---\n")
     print(f"COLUMNS: {document.records.get_columns()}\n")

@@ -7,9 +7,9 @@ if __name__ == "__main__":
     document: Generate = Generate()
     document.Meta.save("dggs_type", DGGSType.ISEA7H)
     document.Meta.save("dggs_res_spec", 5)
-    document.clip_cells("/opt/source/ut/DGGRID/examples/z7Nums/inputfiles/z7a.txt", cell_type=InputAddress.Z7)
-    document.clip_cells("/opt/source/ut/DGGRID/examples/z7Nums/inputfiles/z7b.txt", cell_type=InputAddress.Z7)
-    document.cell_type(OutputAddress.Z7_STRING)
+    document.clip_cells("/opt/source/ut/DGGRID/examples/z7Nums/inputfiles/z7a.txt", address_type=InputAddress.Z7)
+    document.clip_cells("/opt/source/ut/DGGRID/examples/z7Nums/inputfiles/z7b.txt", address_type=InputAddress.Z7)
+    document.address_type(OutputAddress.Z7_STRING)
 
     print(f"---QUERY REQUEST---\n{document}")
     document.run()

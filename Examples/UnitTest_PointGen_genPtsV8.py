@@ -11,7 +11,7 @@ if __name__ == "__main__":
     document.Meta.save("dggs_res_spec", 10)
     document.set_coverage(BinCoverage.PARTIAL)
     document.set_output(OutputControl.OUTPUT_OCCUPIED)
-    document.input.geometry("../DGGRID/examples/genPtsV8/inputfiles/airport_point.geojson")
+    document.input_points("../DGGRID/examples/genPtsV8/inputfiles/airport_point.geojson")
     document.run()
 
     print("\n---QUERY RESPONSE [CELLS]---\n")

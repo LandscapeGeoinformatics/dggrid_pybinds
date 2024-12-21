@@ -16,7 +16,7 @@ if __name__ == "__main__":
     document.clip_cells(list(["8400000000000000",
                               "a400000000000000",
                               "b000000000000000"]),
-                        cell_type=InputAddress.ZORDER)
+                        address_type=InputAddress.ZORDER)
 
     print(f"---QUERY REQUEST---\n{document}")
     document.run()

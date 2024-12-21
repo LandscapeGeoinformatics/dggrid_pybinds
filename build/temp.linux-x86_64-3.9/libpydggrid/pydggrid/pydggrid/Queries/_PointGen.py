@@ -5,7 +5,7 @@ import libpydggrid
 import pandas
 
 from pydggrid.Modules import Input
-from pydggrid.Output import Records, Locations
+from pydggrid.Output import Records, Geometry
 from pydggrid.Types import Operation, ReadMode, PointDataType, OutputType, OutputAddress, CellOutput, OutputControl, \
     BinCoverage, PointOutput
 from pydggrid.Queries._Custom import Query as BaseQuery
@@ -26,8 +26,8 @@ class Query(BaseQuery):
         """
         super().__init__(Operation.GENERATE_GRID_FROM_POINTS)
         self.input: Input = Input()
-        self.cells: Locations = Locations()
-        self.points: Locations = Locations()
+        self.cells: Geometry = Geometry()
+        self.points: Geometry = Geometry()
         self.indexes: Records = Records()
         self.dgg_meta: str = ""
         self.Meta.save("point_input_file_type", PointDataType.GDAL)

@@ -1,8 +1,12 @@
-import sys
+import pathlib
 from typing import Any, Dict, List
 
+import geojson
+import geopandas
 import libpydggrid
+import numpy
 import pandas
+import pyarrow
 
 from pydggrid.Modules import Input
 from pydggrid.Output import Records
@@ -24,7 +28,7 @@ class Query(BaseQuery):
         Default constructor
         """
         super().__init__(Operation.BIN_POINT_VALS)
-        self.input: Input = Input()
+        self._input: Input = Input()
         self.records: Records = Records()
         self.dgg_meta: str = ""
         self.Meta.save("output_count", True)
@@ -32,7 +36,6 @@ class Query(BaseQuery):
         self.Meta.save("output_mean", True)
         self.Meta.save("output_num_classes", True)
         self.Meta.save("output_presence_vector", True)
-        self.Meta.save("point_input_file_type", PointDataType.GDAL)
         self.Meta.save("input_value_field_name", "1")
         # Set defaults
 
@@ -41,46 +44,63 @@ class Query(BaseQuery):
         Returns query bytes
         :return: Clip Bytes
         """
-        return self.input.__bytes__()
+        return self._input.__bytes__()
 
-    # def set_input(self,
-    #               point_type: [PointDataType, int, None] = None,
-    #               input_data: [Any, None] = None,
-    #               column: [Dict[str, str], Dict[str, int], None] = None) -> None:
-    #     """
-    #     Sets the point presence input query.
-    #     :param point_type: PointDataType definition
-    #     :param column: Column name mapping, should be a dictionary, as
-    #         In the case of PointDataType.TEXT
-    #             {
-    #                 "lat": "<lat-equivalent-field>",
-    #                 "long": "<lat-equivalent-field>",
-    #                 "id": "<id-equivalent-field>",
-    #                 "label": "<label-equivalent-field>"
-    #             }
-    #
-    #             .. or, a dictionary of indexes as:
-    #             {
-    #                 "lat": 1,
-    #                 "long": 2,
-    #                 "id": 0,
-    #                 "label": 3
-    #             }
-    #             this field can be left as none, in which case default mapping as described above will be used.
-    #         for PointDataType.GDAL
-    #             The column value is ignored for GDAL PointPresence Queries
-    #     :param input_data: Input data to process to the input element.
-    #     :return:
-    #     """
-    #     if point_type == PointDataType.TEXT:
-    #         self.input = Location()
-    #     elif point_type == PointDataType.GDAL:
-    #         self.input = GDAL()
-    #         self.Meta.save("point_input_file_type", "GDAL")
-    #     else:
-    #         raise Exception("Unsupported PointDataType")
-    #     if input_data is not None:
-    #         self.input.save(input_data, column)
+    def input_points(self,
+                     records: [List,
+                               Dict,
+                               str,
+                               pathlib.Path,
+                               pandas.DataFrame,
+                               geopandas.geoseries,
+                               geopandas.GeoDataFrame,
+                               numpy.ndarray,
+                               pyarrow.Array,
+                               pyarrow.Table,
+                               geojson.GeoJSON],
+                     definition: [List[str],
+                                  List[int],
+                                  str,
+                                  None] = None) -> None:
+        """
+        Inputs point collection
+        :param records: Records to save into the buffer, this parameter can be:
+            - A path string or a pathlib.Path object point to file that is readable by the read parameter.
+            - A List of X, Y points as tuples.
+            - A string value containing either space delimited or csv data
+            - a pandas dataframe, which should contain X, Y and optionally ID and Label fields.
+            - a geopandas dataframe, which should contain a geometry field with points
+            - a 2 dimensional numpy array which contains x, y coordinates
+            - A dictionary or a list of dictionaries containing an x, y, and optionally an id and label column
+            - a geojson dictionary object
+            - A pyarrow geometry Array containing x, y coordinates
+            - a pyarrow table with x, y coordinate columns with optional id and label columns
+            field is assumed as `geometry`.
+        :param definition: Columns definition data, for most items this is a string declaring the geometry columns used.
+            Example:
+                {
+                    "x": <column index or name pointing to x field, default is 0 or "x" or "X">
+                    "y": <column index or name pointing to y field, default is 1 or "y" or "Y">,
+                    "id": <optional field pointing to an id column or column index, by default point index will be
+                    used.>
+                    "label": <optional field pointing to a label column or column index, by default 'point-(index + 1)
+                    will be used.>,
+                    "geometry": Geometry column to use, optionally this field can be provided in lue of x, y columns
+                }
+        :return: None
+        """
+        self.Meta.save("point_input_file_type", PointDataType.GDAL)
+        self._input.points(records, definition)
+
+    def input_shape(self, records: [str, pathlib.Path], definition: str = None) -> None:
+        """
+        Loads a shape binary
+        :param records: Records to save into the buffer, this parameter can be:
+            - A path string or a pathlib.Path object point to file that is readable by the read parameter.
+        :param definition: Field value to use for the query
+        :return:
+        """
+        return self._input.shape(records, definition) if records is not None else None
 
     # Override
     # noinspection PyPep8Naming
@@ -89,7 +109,7 @@ class Query(BaseQuery):
         Runs a unit test to pybinds11 layer
         :return: Test response string
         """
-        return libpydggrid.UnitTest_ReadPayload(self.Meta.dict(), self.input.__bytes__())
+        return libpydggrid.UnitTest_ReadPayload(self.Meta.dict(), self._input.__bytes__())
 
     # Override
     # noinspection PyPep8Naming
@@ -99,7 +119,7 @@ class Query(BaseQuery):
         :return: Test response string
         """
         dictionary: Dict[str, str] = self.Meta.dict()
-        payload: bytearray = bytearray(self.input.__bytes__())
+        payload: bytearray = bytearray(self._input.__bytes__())
         return libpydggrid.UnitTest_ReadQuery(dictionary, list(payload))
 
     # Override
@@ -110,7 +130,7 @@ class Query(BaseQuery):
         :return: Test response string
         """
         dictionary: Dict[str, str] = self.Meta.dict()
-        payload: bytearray = bytearray(self.input.__bytes__())
+        payload: bytearray = bytearray(self._input.__bytes__())
         return libpydggrid.UnitTest_RunQuery(dictionary, list(payload))
 
     # Override
@@ -120,8 +140,7 @@ class Query(BaseQuery):
         :param byte_data byte payload, if left blank Input.__bytes__() will be used
         :return: None
         """
-        self.Meta.save("point_input_file_type", self.input.object.type)
-        byte_data: Dict[str, bytes] = super().exec(self.input.__bytes__())
+        byte_data: Dict[str, bytes] = super().exec(self._input.__bytes__())
         self.dgg_meta = bytearray(byte_data["meta"]).decode() if "meta" in byte_data else ""
         #
         record_set: List[Dict[str, Any]] = list()

@@ -10,7 +10,7 @@ if __name__ == "__main__":
     document.Meta.save("dggs_type", DGGSType.ISEA3H)
     document.Meta.save("dggs_res_spec", 9)
     document.Meta.save("output_address_type", OutputAddress.ZORDER)
-    document.input.points("../DGGRID/examples/zTransform/inputfiles/geo.txt")
+    document.input_points("../DGGRID/examples/zTransform/inputfiles/geo.txt")
     document.run()
     print("---QUERY RESPONSE [RECORDS]---\n")
     print(f"COLUMNS: {document.records.get_columns()}\n")

@@ -4,7 +4,7 @@ from typing import Any, List, Dict
 import libpydggrid
 
 from pydggrid.Input import Auto, InputTemplate
-from pydggrid.Output import Locations, Table
+from pydggrid.Output import Geometry, Table
 from pydggrid.Types import Operation, ClipType, ReadMode, CellOutput, ChildrenOutput, NeighborOutput, \
     InputAddress, PointOutput, OutputAddress, DataType
 from pydggrid.Queries._Custom import Query as BaseQuery
@@ -26,9 +26,9 @@ class Query(BaseQuery):
         super().__init__(Operation.TRANSFORM_POINTS)
         self.input: InputTemplate = Auto()
         self.table: Table = Table(["A", "B", "Name"], [DataType.INT, DataType.INT, DataType.STRING])
-        self.cells: Locations = Locations()
-        self.points: Locations = Locations()
-        self.collection: Locations = Locations()
+        self.cells: Geometry = Geometry()
+        self.points: Geometry = Geometry()
+        self.collection: Geometry = Geometry()
         self.dgg_meta: str = ""
         # Set defaults
         self.Meta.set_default("clip_cell_densification")

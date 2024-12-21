@@ -7,7 +7,7 @@ int main()
     std::string hexString = pydggrid::Functions::readString(shapeFile_test);
     pydggrid::Bytes bytes(hexString.c_str());
     std::map<std::string, std::string> parameters;
-//
+
     parameters["dggrid_operation"] = "BIN_POINT_VALS";
     parameters["dggs_type"] = "ISEA3H";
     parameters["dggs_res_spec"] = "10";
@@ -16,29 +16,6 @@ int main()
     parameters["point_input_file_type"] = "GDAL";
     parameters["input_value_field_name"] = "LENGTH_FT";
     parameters["output_address_type"] = "SEQNUM";
-
-//
-//# specify the operation
-//dggrid_operation BIN_POINT_VALS
-//
-//# specify the DGG
-//
-//dggs_type ISEA3H
-//dggs_res_spec 9
-//
-//# specify bin controls
-//
-//bin_coverage PARTIAL
-//input_files inputfiles/20k.txt inputfiles/50k.txt inputfiles/100k.txt inputfiles/200k.txt
-//input_delimiter " "
-//
-//# specify text file output
-//output_file_type TEXT
-//output_file_name outputfiles/popval3h9.txt
-//output_address_type SEQNUM
-//output_delimiter ","
-//precision 7
-//cell_output_control OUTPUT_OCCUPIED
 
     std::vector<unsigned char> blocksEmpty{};
 //    pydggrid::Query query(parameters, blocksEmpty);

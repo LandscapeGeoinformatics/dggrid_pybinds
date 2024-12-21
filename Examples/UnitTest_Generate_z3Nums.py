@@ -16,15 +16,15 @@ if __name__ == "__main__":
                               "1214680000000000",
                               "1216500000000000",
                               "1260a40000000000"]),
-                        cell_type=InputAddress.Z3)
+                        address_type=InputAddress.Z3)
     document.clip_cells(list(["1100000000000000",
                               "1010000000000000",
                               "1010000000000000",
                               "1120000000000000",
                               "1020000000000000",
                               "1200000000000000"]),
-                        cell_type=InputAddress.Z3)
-    document.cell_type(OutputAddress.Z3)
+                        address_type=InputAddress.Z3)
+    document.address_type(OutputAddress.Z3)
 
     print(f"---QUERY REQUEST---\n{document}")
     document.run()

@@ -1,5 +1,13 @@
 # Version 0.0.7
 # Change Log
+- **0.0.8**
+  - Input and Clip object routed to private domain.
+  - Added input and clip methods to main query objects.
+  - Removed unnecessary imports from libraries
+  - Updated PointValue and PointPresence queries to new input methods.
+  - Resolved cell input issue in shared input object
+  - Depreciate unused files
+  - Updated Statistics query to new architecture.
 
 - **0.0.7**
   - Memory leak fixes with original DGGRID library.

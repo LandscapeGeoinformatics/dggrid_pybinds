@@ -9,7 +9,7 @@ if __name__ == "__main__":
     document: Transform = Transform()
     document.Meta.save("dggs_type", DGGSType.ISEA3H)
     document.Meta.save("dggs_res_spec", 9)
-    document.input.points("../DGGRID/examples/transform/inputfiles/20k.txt")
+    document.input_points("../DGGRID/examples/transform/inputfiles/20k.txt")
     #
     document.run()
     print("---QUERY RESPONSE [RECORDS]---\n")

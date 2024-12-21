@@ -16,7 +16,7 @@ if __name__ == "__main__":
                               "016fffffffffffff",
                               "002fffffffffffff",
                               "1037ffffffffffff"]),
-                        cell_type=InputAddress.Z7)
+                        address_type=InputAddress.Z7)
     print(f"---QUERY REQUEST---\n{document}")
     document.run()
     print("---QUERY RESPONSE [CELLS]---\n")

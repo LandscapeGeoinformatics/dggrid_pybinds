@@ -7,7 +7,7 @@ if __name__ == "__main__":
     document: Generate = Generate()
     document.Meta.save("dggs_type", DGGSType.ISEA3H)
     document.Meta.save("dggs_res_spec", 4)
-    document.cell_type(OutputAddress.Z3)
+    document.address_type(OutputAddress.Z3)
 
     print(f"---QUERY REQUEST---\n{document}")
     document.run()

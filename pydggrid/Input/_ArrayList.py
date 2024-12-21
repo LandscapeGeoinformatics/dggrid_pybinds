@@ -225,7 +225,7 @@ class Input(Dataset):
         :param records: Records DataFrame
         :return: None
         """
-        self.write(records, DataType.STRING)
+        self.write(os.linesep.join(records), DataType.STRING)
 
     def _anti_static(self) -> None:
         """

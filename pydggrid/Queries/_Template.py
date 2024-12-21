@@ -11,7 +11,6 @@ import libpydggrid
 
 from pydggrid.System import Constants
 
-# from pydggrid.Input import Template as InputTemplate, Auto
 from pydggrid.Objects import Attributes, Options, Option
 from pydggrid.Types import Operation, ClipType, ClipMethod, DGGSType, DGGSPoly, Topology, DGGSProjection, Aperture, \
     ProjectionDatum, OrientationType, ResolutionType, AddressField, PointDataType, InputAddress, BinCoverage, \
@@ -109,22 +108,11 @@ class Template(ABC):
         :return: Query Description
         """
         string_array: List[str] = list()
-        byte_array: bytes = self.__bytes__()
         string_array.append(f"Type: {self.type().name}")
         string_array.append(f"Time Stamp: {datetime.datetime.fromtimestamp(self.time() / 1000.0)}")
         string_array.append(f"Parameters:")
         string_array.append("\t" + f"{os.linesep}\t".join(self.Meta.__str__().split(os.linesep)))
-        string_array.append(f"Binary Data [{len(byte_array)} bytes]:")
-        string_array.append("\t" + f"{os.linesep}\t".join(textwrap.wrap(byte_array.hex(), 64)))
         return os.linesep.join(string_array)
-
-    # @abstractmethod
-    # def __bytes__(self) -> bytes:
-    #     """
-    #     Returns the query data as a byte array
-    #     :return: Byte Array base data
-    #     """
-    #     return self.Input.__bytes__()
 
     def print(self) -> None:
         """

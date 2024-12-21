@@ -338,7 +338,7 @@ class Input(Dataset):
         :return: None
         """
         if Library.is_geojson(records):
-            return self._GeoFrame(geopandas.read_file(StringIO(json.dumps(records))), definition)
+            self.write(json.dumps(records), DataType.STRING)
 
     def _ArrowArray(self,
                     records: pyarrow.Array,

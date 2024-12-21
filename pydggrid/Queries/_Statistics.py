@@ -1,12 +1,17 @@
-import sys
+import pathlib
 from typing import Any, List, Dict
 
+import geojson
+import geopandas
 import libpydggrid
+import numpy
+import pandas
+import pyarrow
 
-from pydggrid.Input import Auto, InputTemplate
-from pydggrid.Output import TableObject
+from pydggrid.Modules import Clip
+from pydggrid.Output import Records
 from pydggrid.Types import Operation, ClipType, ReadMode, CellOutput, ChildrenOutput, NeighborOutput, \
-    InputAddress, PointOutput, DataType
+    InputAddress, PointOutput
 from pydggrid.Queries._Custom import Query as BaseQuery
 
 
@@ -24,12 +29,9 @@ class Query(BaseQuery):
         Default constructor
         """
         super().__init__(Operation.OUTPUT_STATS)
-        self.clip: InputTemplate = Auto()
-        self.table: TableObject = TableObject(
-            ["Res", "Cells", "Area", "CLS"],
-            [DataType.INT, DataType.INT, DataType.FLOAT, DataType.FLOAT])
+        self._clip: Clip = Clip()
+        self.table: Records = Records(["Res", "Cells", "Area", "CLS"])
         self.dgg_meta: str = ""
-        self.set_clip(ClipType.WHOLE_EARTH)
         # Set defaults
         self.Meta.set_default("clip_cell_densification")
         self.Meta.set_default("clipper_scale_factor")
@@ -43,42 +45,83 @@ class Query(BaseQuery):
         Returns query bytes
         :return: Clip Bytes
         """
-        return self.clip.records.__bytes__()
+        return self._clip.__bytes__()
 
-    # def set_clip(self,
-    #              clip_type: [ClipType, int, None] = None,
-    #              data: [Any, None] = None,
-    #              columns: [List[Any], None] = None) -> None:
-    #     """
-    #     Sets the query clip
-    #     :param clip_type: ClipType definition from pydggrid.Types
-    #     :param data: Data to use with the clipping this is optional and can be set after the clip type has been
-    #         configured
-    #     :param columns: Used to send column information with the clip options, this field is optional but allows you to
-    #         customize the order and index of columns to choose from using pandas dataframes, numpy ndarray objects and
-    #         dictionaries.
-    #     :return: None
-    #     """
-    #     if clip_type is not None:
-    #         type_t: ClipType = ClipType(clip_type)
-    #         if type_t == ClipType.WHOLE_EARTH:
-    #             self.clip = Auto()
-    #         elif type_t == ClipType.SEQNUMS:
-    #             self.clip = Sequence()
-    #         elif type_t == ClipType.SHAPEFILE:
-    #             self.clip = ShapeFile()
-    #         elif type_t == ClipType.INPUT_ADDRESS_TYPE:
-    #             self.clip = Array()
-    #         elif type_t == ClipType.GDAL:
-    #             self.clip = GDAL()
-    #         elif type_t == ClipType.AIGEN:
-    #             self.clip = AIGen()
-    #         elif type_t == ClipType.COARSE_CELLS:
-    #             self.clip = Cells()
-    #         else:
-    #             raise AttributeError(f"Requested clip type({clip_type}) is not supported")
-    #     self.Meta.save("clip_subset_type", clip_type)
-    #     return self.clip.save(data, columns) if data is not None else None
+    def clip_geometry(self,
+                      records: [List,
+                                Dict,
+                                str,
+                                pathlib.Path,
+                                pandas.DataFrame,
+                                geopandas.geoseries,
+                                geopandas.GeoDataFrame,
+                                numpy.ndarray,
+                                pyarrow.Array,
+                                pyarrow.Table,
+                                geojson.GeoJSON],
+                      definition: [List[str],
+                                   List[int],
+                                   str,
+                                   None] = None) -> None:
+        """
+        Clips to geometry
+        :param records: Records to save into the buffer, this parameter can be:
+            - A path string or a pathlib.Path object point to file that is readable by the read parameter.
+            - A List of geometry strings, a polygon buffer which includes x, y, z, and optionally m points.
+            - A string value containing either geojson or csv data
+            - a pandas dataframe, which in this case must provide the name of the geometry column as a string, if
+            this value is not provided the column name is assumed as `geometry`.
+            - a geopandas dataframe, which in this case must provide the name of the geometry column as a string, if
+            this value is not provided the column name is assumed as `geometry`.
+            - a 2 dimensional numpy array which contains x, y, z, or m geometries.  Polygon offsets are sent as blank.
+            - A dictionary or a list of dictionaries containing a geometry column declared by the definition argument
+            as a string.
+            - a geojson dictionary object
+            - A pyarrow geometry Array
+            - a pyarrow table with the geometry column defined as a string in the definition argument, by default this
+            field is assumed as `geometry`.
+            - None which in case dataset must be loaded with the save() or read() keywords.
+        :param definition: Columns definition data, for most items this is a string declaring the geometry columns used.
+        :return:
+        """
+        self._clip.geometry(records, definition)
+        self.Meta.save("clip_subset_type", ClipType.GDAL)
+
+    def clip_cells(self,
+                   records: [str,
+                             List[str],
+                             List[int],
+                             pathlib.Path,
+                             pandas.DataFrame,
+                             geopandas.geoseries,
+                             geopandas.GeoDataFrame,
+                             numpy.ndarray,
+                             pyarrow.Array,
+                             pyarrow.Table],
+                   definition: [int, str, None] = None,
+                   address_type: InputAddress = InputAddress.SEQNUM) -> None:
+        """
+        Clips to squence numbers
+        :param records: Records to save into the buffer, this parameter can be:
+            - A path string or a pathlib.Path object point to file that is readable by the read parameter.
+            - A List of sequence numbers as string or integers
+            - A string value containing a flat text file containing sequence numbers
+            - a pandas dataframe, which in this case must provide the name of the sequence column as a string, if
+            this value is not provided the column name is assumed as the first column.
+            - a geopandas dataframe, which in this must provide the name of the sequence column as a string, if
+            this value is not provided the column name is assumed as the first column.
+            - a 1 dimensional numpy array containing sequence numbers
+            - A pyarrow geometry Array containing sequence numbers
+            - a pyarrow table with the sequence column defined as a string in the definition argument, by default this
+            field is assumed as the first column name.
+        :param definition: Column name or index, respectively as a string or an index
+        :param address_type: Input cell type, by default this value is set to SEQNUM
+        :return:
+        """
+        self._clip.cells(records, definition)
+        self.Meta.save("clip_subset_type", ClipType.COARSE_CELLS)
+        self.Meta.save("clip_cell_addresses", self._clip.object.integer_list(" "))
+        self.Meta.save("input_address_type", address_type)
 
     # Override
     # noinspection PyPep8Naming
@@ -88,7 +131,7 @@ class Query(BaseQuery):
         :return: Test response string
         """
         self._alter_payload()
-        return libpydggrid.UnitTest_ReadPayload(self.Meta.dict(), self.clip.__bytes__())
+        return libpydggrid.UnitTest_ReadPayload(self.Meta.dict(), self._clip.__bytes__())
 
     # Override
     # noinspection PyPep8Naming
@@ -99,7 +142,7 @@ class Query(BaseQuery):
         """
         self._alter_payload()
         dictionary: Dict[str, str] = self.Meta.dict()
-        payload: bytearray = bytearray(self.clip.__bytes__())
+        payload: bytearray = bytearray(self._clip.__bytes__())
         return libpydggrid.UnitTest_ReadQuery(dictionary, list(payload))
 
     # Override
@@ -111,7 +154,7 @@ class Query(BaseQuery):
         """
         self._alter_payload()
         dictionary: Dict[str, str] = self.Meta.dict()
-        payload: bytearray = bytearray(self.clip.__bytes__())
+        payload: bytearray = bytearray(self._clip.__bytes__())
         return libpydggrid.UnitTest_RunQuery(dictionary, list(payload))
 
     # Override
@@ -122,11 +165,11 @@ class Query(BaseQuery):
         :return: None
         """
         self._alter_payload()
-        byte_data: Dict[str, bytes] = super().exec(self.clip.__bytes__())
+        byte_data: Dict[str, bytes] = super().exec(self._clip.__bytes__())
         self.dgg_meta = bytearray(byte_data["meta"]).decode() if "meta" in byte_data else ""
         if "statistics" in byte_data.keys():
             statistics_string: str = ""
-            statistics_array: List[List[Any]] = []
+            statistics_array: List[Dict[Any]] = []
             for bit_char in byte_data["statistics"]:
                 statistics_string += chr(bit_char)
             statistics_string = statistics_string.replace("\x00", "")
@@ -134,12 +177,12 @@ class Query(BaseQuery):
             for element_line in element_lines:
                 element_cells: List[str] = element_line.split("|")
                 if element_cells[0] is not "":
-                    statistics_array.append([
-                        int(element_cells[0]),
-                        int(element_cells[1]),
-                        float(element_cells[2]),
-                        float(element_cells[3])])
-            self.table.save(statistics_array)
+                    statistics_array.append({
+                        "Res": int(element_cells[0]),
+                        "Cells": int(element_cells[1]),
+                        "Area": float(element_cells[2]),
+                        "CLS": float(element_cells[3])})
+            self.table.save(statistics_array, ReadMode.FRAME)
 
     # INTERNAL
 
@@ -194,6 +237,6 @@ class Query(BaseQuery):
         """
         if self.Meta.as_int("clip_subset_type") == ClipType.COARSE_CELLS:
             # noinspection PyUnresolvedReferences
-            self.Meta.save("clip_cell_addresses", " ".join([str(n) for n in self.clip.data]))
+            self.Meta.save("clip_cell_addresses", " ".join([str(n) for n in self._clip.data]))
             self.Meta.save("input_address_type", InputAddress.SEQNUM)
 

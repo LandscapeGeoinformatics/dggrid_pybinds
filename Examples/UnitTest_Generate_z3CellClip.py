@@ -11,8 +11,8 @@ if __name__ == "__main__":
     document.Meta.save("dggs_res_spec", 5)
     document.Meta.save("clip_cell_res", 1)
     document.Meta.save("geodetic_densify", 0.0)
-    document.clip_cells(list([2000000000000000, 3800000000000000, 1800000000000000]), cell_type=InputAddress.Z3)
-    document.cell_type(OutputAddress.Z3)
+    document.clip_cells(list([2000000000000000, 3800000000000000, 1800000000000000]), address_type=InputAddress.Z3)
+    document.address_type(OutputAddress.Z3)
 
     print(f"---QUERY REQUEST---\n{document}")
     document.run()

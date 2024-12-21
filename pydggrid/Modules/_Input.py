@@ -1,16 +1,14 @@
 import pathlib
-import sys
-from typing import Dict
+from typing import Dict, List
 
 import geojson
 import geopandas
 import numpy
 import pandas
 import pyarrow
-from fiona.ogrext import List
 
-from pydggrid.Input import Auto, Geometry, ArrayList, PointList, PointBinary
-from pydggrid.Types import ClipType, InputAddress
+from pydggrid.Input import Auto, ArrayList, PointList, PointBinary
+from pydggrid.Types import InputAddress
 
 
 class Module:
@@ -103,7 +101,7 @@ class Module:
               definition: [int, str, None] = None,
               cell_type: InputAddress = InputAddress.SEQNUM) -> None:
         """
-        Clips to squence numbers
+        Clips to sequence numbers
         :param records: Records to save into the buffer, this parameter can be:
             - A path string or a pathlib.Path object point to file that is readable by the read parameter.
             - A List of sequence numbers as string or integers

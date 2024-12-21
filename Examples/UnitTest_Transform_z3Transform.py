@@ -1,7 +1,7 @@
 import sys
 
 from pydggrid.Queries import Transform
-from pydggrid.Types import ClipType, InputAddress, DGGSType, PointOutput
+from pydggrid.Types import ClipType, InputAddress, DGGSType, PointOutput, OutputAddress
 
 if __name__ == "__main__":
     #
@@ -9,8 +9,10 @@ if __name__ == "__main__":
     document: Transform = Transform()
     document.Meta.save("dggs_type", DGGSType.ISEA3H)
     document.Meta.save("dggs_res_spec", 9)
-    document.input.points("../DGGRID/examples/z3Transform/inputfiles/geo.txt")
+    document.Meta.save("output_address_type", OutputAddress.Z3)
+    document.input_points("../DGGRID/examples/z3Transform/inputfiles/geo.txt")
     document.run()
+
     print("---QUERY RESPONSE [RECORDS]---\n")
     print(f"COLUMNS: {document.records.get_columns()}\n")
     print(f"---[RECORDS (DataFrame)]---\n{document.records.get_frame()}")

@@ -3,7 +3,6 @@ import json
 import os.path
 import pathlib
 import string
-import sys
 from typing import List, Dict, Any
 
 import geojson

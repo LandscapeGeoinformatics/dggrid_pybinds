@@ -10,9 +10,9 @@ if __name__ == "__main__":
     document.Meta.save("dggs_type", DGGSType.ISEA3H)
     document.Meta.save("dggs_res_spec", 4)
     document.Meta.save("longitude_wrap_mode", LongitudeWrap.UNWRAP_EAST)
-    document.clip_cells("../DGGRID/examples/zNums/inputfiles/zorder1.txt", cell_type=InputAddress.ZORDER)
-    document.clip_cells("../DGGRID/examples/zNums/inputfiles/zorder2.txt", cell_type=InputAddress.ZORDER)
-    document.cell_type(OutputAddress.ZORDER)
+    document.clip_cells("../DGGRID/examples/zNums/inputfiles/zorder1.txt", address_type=InputAddress.ZORDER)
+    document.clip_cells("../DGGRID/examples/zNums/inputfiles/zorder2.txt", address_type=InputAddress.ZORDER)
+    document.address_type(OutputAddress.ZORDER)
     #
     print(f"---QUERY REQUEST---\n{document}")
     document.run()

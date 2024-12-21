@@ -10,7 +10,7 @@ if __name__ == "__main__":
     document.Meta.save("dggs_type", DGGSType.ISEA7H)
     document.Meta.save("dggs_res_spec", 9)
     document.Meta.save("output_address_type", OutputAddress.Z7_STRING)
-    document.input.cells("../DGGRID/examples/z7Transform/inputfiles/seqNum.txt")
+    document.input_cells("../DGGRID/examples/z7Transform/inputfiles/seqNum.txt")
     document.run()
     print("---QUERY RESPONSE [RECORDS]---\n")
     print(f"COLUMNS: {document.records.get_columns()}\n")

@@ -1,17 +1,14 @@
-import os.path
 import pathlib
-import sys
-from typing import Dict
+from typing import Dict, List
 
 import geojson
 import geopandas
 import numpy
 import pandas
 import pyarrow
-from fiona.ogrext import List
 
 from pydggrid.Input import Auto, Geometry, ArrayList
-from pydggrid.Types import ClipType, InputAddress
+from pydggrid.Types import InputAddress
 
 
 class Module:
@@ -21,8 +18,6 @@ class Module:
         Default constructor
         """
         self.object: Auto = Auto()
-        self.type: ClipType = ClipType(ClipType.WHOLE_EARTH)
-        self.address_type: InputAddress = InputAddress.SEQNUM
 
     def auto(self) -> None:
         """
@@ -30,7 +25,6 @@ class Module:
         :return: None
         """
         self.object: Auto = Auto()
-        self.type: ClipType = ClipType(ClipType.WHOLE_EARTH)
 
     def geometry(self,
                  records: [List,
@@ -69,8 +63,7 @@ class Module:
         :param definition: Columns definition data, for most items this is a string declaring the geometry columns used.
         :return:
         """
-        self.type = ClipType(ClipType.GDAL)
-        self.object: Geometry = Geometry()
+        if not isinstance(self.object, Geometry): self.object: Geometry = Geometry()
         return self.object.save(records, definition) if records is not None else None
 
     def cells(self,
@@ -104,9 +97,7 @@ class Module:
         :param cell_type: Input cell type, by default this value is set to SEQNUM
         :return:
         """
-        self.object: ArrayList = ArrayList()
-        self.address_type = InputAddress(cell_type)
-        self.type = ClipType(ClipType.COARSE_CELLS)
+        if not isinstance(self.object, ArrayList): self.object: ArrayList = ArrayList()
         return self.object.save(records, definition) if records is not None else None
 
     def __bytes__(self) -> bytes:

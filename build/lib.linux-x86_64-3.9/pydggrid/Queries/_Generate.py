@@ -4,7 +4,7 @@ from typing import Dict
 import libpydggrid
 
 from pydggrid.Modules import Clip
-from pydggrid.Output import Locations
+from pydggrid.Output import Geometry
 from pydggrid.System import Constants
 from pydggrid.Types import Operation, ClipType, ReadMode, CellOutput, ChildrenOutput, NeighborOutput, \
     InputAddress, PointOutput, GDALFormat, DataType, OutputAddress, CellLabel
@@ -26,9 +26,9 @@ class Query(BaseQuery):
         """
         super().__init__(Operation.GENERATE_GRID)
         self.clip: Clip = Clip()
-        self.cells: Locations = Locations()
-        self.points: Locations = Locations()
-        self.collection: Locations = Locations()
+        self.cells: Geometry = Geometry()
+        self.points: Geometry = Geometry()
+        self.collection: Geometry = Geometry()
         self.dgg_meta: str = ""
         # Set defaults
         self.Meta.set_default("clip_cell_densification")
