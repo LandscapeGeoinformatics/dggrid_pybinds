@@ -125,7 +125,7 @@ class CMakeBuild(build_ext):
 
 setup(
     name="pydggrid",
-    version="0.0.7",
+    version="0.0.8",
     author="Qbist",
     author_email="q@arqimedes.com",
     description="DGGRID Adaptation for python using pybind11.",
